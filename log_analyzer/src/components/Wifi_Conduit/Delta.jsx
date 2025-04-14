@@ -56,7 +56,7 @@ export const Delta = ({setselectedAntenne, setselectedBande, setfetchResult}) =>
     useEffect(() => {
         const fetchTestResults = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/results/with-delta-desc/");
+                const response = await axios.get("http://127.0.0.1:8000/api/wifi-conduit/results/with-delta-desc/");
                 setTestResults(response.data.results);
             } catch (error) {
                 console.error("Error fetching test results", error);

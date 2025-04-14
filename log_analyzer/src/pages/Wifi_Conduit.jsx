@@ -31,7 +31,7 @@ function Wifi_Conduit() {
   useEffect(() => {
     const fetchTestResults = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/results/without-delta-desc/");
+        const response = await axios.get("http://127.0.0.1:8000/api/wifi-conduit/results/without-delta-desc/");
         setTestResults(response.data.results);
       } catch (error) {
         console.error("Error fetching test results", error);

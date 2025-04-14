@@ -56,7 +56,7 @@ const Test_Wifi = () => {
     useEffect(() => {
         const fetchTestResults = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/versions/");
+                const response = await axios.get("http://127.0.0.1:8000/api/environnement-test/test_environnement/");
                 setTestResults(response.data);
                 console.log(response.data);
             } catch (error) {
