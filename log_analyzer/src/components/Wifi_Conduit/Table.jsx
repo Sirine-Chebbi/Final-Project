@@ -106,6 +106,7 @@ const Table = ({setMesure, selectedFrequency, selectedAntenne, testResults, setL
         <table className="min-w-full divide-gray-200 text-white text-sm text-center">
           <thead className="ltr:text-left rtl:text-right text-lg text-cyan-400">
             <tr>
+              <th className="px-4 py-4 font-medium whitespace-nowrap">Nom du fichier</th>
               <th className="px-4 py-4 font-medium whitespace-nowrap">Bande</th>
               <th className="px-4 py-4 font-medium whitespace-nowrap">Frequence</th>
               <th className="px-4 py-4 font-medium whitespace-nowrap">Ant</th>
@@ -130,6 +131,7 @@ const Table = ({setMesure, selectedFrequency, selectedAntenne, testResults, setL
           <tbody className="divide-y divide-gray-200">
             {filteredResults.map((result, index) => (
               <tr key={index}>
+                <td className="px-4 py-2">{result.nom_fichier}</td>
                 <td className="px-4 py-2">{result.type_gega}</td>
                 <td className="px-4 py-2">{result.frequence}</td>
                 <td className="px-4 py-2">{result.ant}</td>

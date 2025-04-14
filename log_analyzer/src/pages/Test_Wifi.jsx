@@ -1,4 +1,4 @@
-import Uploadtest from "../components/Test/Uploadtest"
+import Upload from "../components/Wifi_Conduit/Upload"
 import { useState, useEffect } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
@@ -28,11 +28,13 @@ const Test_Wifi = () => {
         const result = testResults[0];
       
         const rows = [
+          ["APPLICATION_VERSION", result.APPLICATION_VERSION],
+          ["IQFACT_VERSION", result.IQFACT],
           ["Scos Version", result.BOOTFS1],
           ["MCU_FIRMWARE", result.MCU_FIRMWARE],
-          ["Version MVRAM", result.SROM],
+          ["MVRAM_VERSION", result.SROM],
           ["IQMEASURE_VERSION", result.IQMEASURE_VERSION],
-          ["IQTESTER_HW_VERSION_01", result.IQTESTER_HW_VERSION_01],
+          ["IQTESTER_HW_VERSION", result.IQTESTER_HW_VERSION_01],
           ["Tester_1_SN", result.Tester_1_SN],
           ["Firmware_revision", result.Firmware_revision],
           ["Ligne de test", nbligne],
@@ -74,7 +76,7 @@ const Test_Wifi = () => {
             <div>
                 <div className=" flex justify-between h-fit ml-20 mr-20 -mt-2 p-5 ">
                     <div className='-mt-10 mr-20'>
-                        <Uploadtest></Uploadtest><br />
+                        <Upload></Upload><br />
                         <input onChange={onChangeHandler} type="text" placeholder="ligne de test" className="border-2 border-cyan-400 rounded-xl p-5 outline-none text-cyan-400 h-10 text-xl"/><br />
                         <button
                             onClick={() => exportPDF(`Environnement des tests`, testResults)}
@@ -87,6 +89,13 @@ const Test_Wifi = () => {
                         <table>
                             {testResults.map((result, index) => (
                                 <tbody key={index}>
+                                    <tr>
+                                        <td className="text-cyan-400 font-bold">APPLICATION VERSION</td>
+                                        <td className="py-5 px-20">{result.APPLICATION_VERSION}</td>
+                                    </tr><tr>
+                                        <td className="text-cyan-400 font-bold">IQFACT_VERSION</td>
+                                        <td className="py-5 px-20">{result.IQFACT}</td>
+                                    </tr>
                                     <tr>
                                         <p className="text-yellow-400 font-bold font-underline text-4xl py-2 border-b-2 w-fit">Scos-version</p>
                                     </tr>
