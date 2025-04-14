@@ -215,51 +215,49 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
     });
   }
 
-  const exportPDF = (graph) => {
-
-    let currentRef;
-    if (graph == "power") {
-      currentRef = powerGraphRef.current;
-    } else if (graph == "evm") {
-      currentRef = evmGraphRef.current;
-    } else if (graph == "rss") {
-      currentRef = rssGraphRef.current;
-    }else if (graph == "delta") {
-      currentRef = deltaraphRef.current;
-    }
-
-
-    console.log(graph);
-
-
-    if (!currentRef) return;
-
-    html2canvas(currentRef, { scale: 3, backgroundColor: "#fff" }).then(
-      (canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("landscape");
-
-        // Position du graphique
-        const imgX = 15;
-        const imgY = 30;
-        const imgWidth = 180;
-        const imgHeight = 140;
-
-        pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
-
-        // Position du tableau à droite de l'image
-        const tableX = imgX + imgWidth + 25; // Décalé de 10 unités à droite
-        const tableY = imgY + 5;
-
-        let data = [
-          ["Nombre de cartes", nbrf],
-          ["Cible", mean.toFixed(2)],
-          ["Écart-type", stdDev.toFixed(2)],
-          ["LSI", Lmin],
-          ["LSS", Lmax],
-        ];
-
-        if (graph == "evm") {
+  const exportAllGraphsToPDF = async () => {
+    const pdf = new jsPDF("landscape");
+    
+    // Liste de tous les graphiques à exporter
+    const graphs = [
+      { type: "power", ref: powerGraphRef.current },
+      { type: "evm", ref: evmGraphRef.current },
+      { type: "rss", ref: rssGraphRef.current },
+      { type: "delta", ref: deltaraphRef.current }
+    ];
+  
+    // Filtrer les graphiques qui existent
+    const validGraphs = graphs.filter(graph => graph.ref !== null);
+  
+    for (let i = 0; i < validGraphs.length; i++) {
+      const graph = validGraphs[i];
+      
+      // Créer un canvas pour chaque graphique
+      const canvas = await html2canvas(graph.ref, { scale: 3, backgroundColor: "#fff" });
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Ajouter une nouvelle page sauf pour la première
+      if (i > 0) {
+        pdf.addPage();
+      }
+  
+      // Position du graphique
+      const imgX = 15;
+      const imgY = 30;
+      const imgWidth = 180;
+      const imgHeight = 140;
+  
+      pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
+  
+      // Position du tableau à droite de l'image
+      const tableX = imgX + imgWidth + 25;
+      const tableY = imgY + 5;
+  
+      // Déterminer les données en fonction du type de graphique
+      let data, power, title;
+  
+      switch(graph.type) {
+        case "evm":
           data = [
             ["Nombre de cartes", nbrf],
             ["Cible", mean_evm.toFixed(2)],
@@ -267,7 +265,16 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             ["LSI", Lmin_evm],
             ["LSS", Lmax_evm],
           ];
-        } else if (graph == "rss") {
+          power = [
+            ["Cp", cp_evm.toFixed(2)],
+            ["Pp", pp_evm.toFixed(2)],
+            ["Cpk", cpk_evm.toFixed(2)],
+            ["Ppk", ppk_evm.toFixed(2)],
+          ];
+          title = `PK_EVM_DB_AVG_S1 ${selectedFrequency} A${selectedAntenne} || Caisson: ${selectedCaisson}`;
+          break;
+        
+        case "rss":
           data = [
             ["Nombre de cartes", nbrf],
             ["Cible", mean_rss.toFixed(2)],
@@ -275,7 +282,16 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             ["LSI", Lmin_rss],
             ["LSS", Lmax_rss],
           ];
-        }else if (graph == "delta") {
+          power = [
+            ["Cp", cp_rss.toFixed(2)],
+            ["Pp", pp_rss.toFixed(2)],
+            ["Cpk", cpk_rss.toFixed(2)],
+            ["Ppk", ppk_rss.toFixed(2)],
+          ];
+          title = `${selectedFrequency} RSSI_RX${selectedAntenne} || Caisson: ${selectedCaisson}`;
+          break;
+        
+        case "delta":
           data = [
             ["Nombre de cartes", nbrf],
             ["Cible", mean_delta.toFixed(2)],
@@ -283,102 +299,78 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             ["LSI", 0],
             ["LSS", 0],
           ];
-        }
-    
-
-        pdf.setFontSize(13);
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Caractéristiques du procédé", 215, 40);
-
-        // Génération du tableau avec styles ajustés
-        autoTable(pdf, {
-          startY: tableY,
-          margin: { left: tableX }, // Positionner à droite du graphique
-          head: [["", ""]], // Séparé du titre principal
-          body: data,
-          styles: {
-            fontSize: 12, // Augmenter la taille du texte dans le tableau
-            halign: "left", // Centrer le texte dans chaque cellule
-            cellPadding: 3, // Ajouter un padding pour plus de lisibilité
-          },
-          theme: "plain", // Ajoute un léger cadre aux cellules
-        });
-
-        let power = [
-          ["Cp", cp.toFixed(2)],
-          ["Pp", pp.toFixed(2)],
-          ["Cpk", cpk.toFixed(2)],
-          ["Ppk", ppk.toFixed(2)],
-        ];
-
-        if (graph == "evm") {
-          power = [
-            ["Cp", cp_evm.toFixed(2)],
-            ["Pp", pp_evm.toFixed(2)],
-            ["Cpk", cpk_evm.toFixed(2)],
-            ["Ppk", ppk_evm.toFixed(2)],
-          ];
-        } else if (graph == "rss") {
-          power = [
-            ["Cp", cp_rss.toFixed(2)],
-            ["Pp", pp_rss.toFixed(2)],
-            ["Cpk", cpk_rss.toFixed(2)],
-            ["Ppk", ppk_rss.toFixed(2)],
-          ];
-        }else if (graph == "delta") {
           power = [
             ["Cp", 0],
             ["Pp", 0],
             ["Cpk", 0],
             ["Ppk", 0],
           ];
-        }
-
-        pdf.setFontSize(13);
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Capabilité globale", 225, 110);
-
-        autoTable(pdf, {
-          startY: tableY + 70,
-          margin: { left: tableX }, // Positionner à droite du graphique
-          head: [["", ""]], // Séparé du titre principal
-          body: power,
-          styles: {
-            fontSize: 12, // Augmenter la taille du texte dans le tableau
-            halign: "left", // Centrer le texte dans chaque cellule
-            cellPadding: 3, // Ajouter un padding pour plus de lisibilité
-          },
-          theme: "plain", // Ajoute un léger cadre aux cellules
-        });
-
-        // Titre principal centré
-        pdf.setFontSize(18);
-        pdf.setTextColor("#0000FF");
-
-        let title = ""
-
-        if (graph == "power") {
-          title = `POWER_RMS_AVG_VSA1 ${selectedFrequency} A${selectedAntenne} || Caisson: ${selectedCaisson}`;
-        }
-        else if (graph == "evm") {
-          title = `PK_EVM_DB_AVG_S1 ${selectedFrequency} A${selectedAntenne} || Caisson: ${selectedCaisson}`;
-        }
-        else if (graph == "rssi"){
-          title = `${selectedFrequency} RSSI_RX${selectedAntenne} || Caisson: ${selectedCaisson}`;
-        }
-        else if (graph == "delta") {
           title = `a-delta-${Antenne} pour la bande ${Bande} || Caisson: ${selectedCaisson}`;
-        }
-
-        const titleX =
-          (pdf.internal.pageSize.width - pdf.getTextWidth(title)) / 2;
-          pdf.text(title, titleX, 15);
-
-        pdf.save(`graph_export_${selectedFrequency}_A${selectedAntenne}.pdf`);
+          break;
+        
+        default: // "power"
+          data = [
+            ["Nombre de cartes", nbrf],
+            ["Cible", mean.toFixed(2)],
+            ["Écart-type", stdDev.toFixed(2)],
+            ["LSI", Lmin],
+            ["LSS", Lmax],
+          ];
+          power = [
+            ["Cp", cp.toFixed(2)],
+            ["Pp", pp.toFixed(2)],
+            ["Cpk", cpk.toFixed(2)],
+            ["Ppk", ppk.toFixed(2)],
+          ];
+          title = `POWER_RMS_AVG_VSA1 ${selectedFrequency} A${selectedAntenne} || Caisson: ${selectedCaisson}`;
       }
-    );
+  
+      // Titre principal
+      pdf.setFontSize(18);
+      pdf.setTextColor("#0000FF");
+      const titleX = (pdf.internal.pageSize.width - pdf.getTextWidth(title)) / 2;
+      pdf.text(title, titleX, 15);
+  
+      // Tableau des caractéristiques
+      pdf.setFontSize(13);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Caractéristiques du procédé", 215, 40);
+      
+      autoTable(pdf, {
+        startY: tableY,
+        margin: { left: tableX },
+        head: [["", ""]],
+        body: data,
+        styles: {
+          fontSize: 12,
+          halign: "left",
+          cellPadding: 3,
+        },
+        theme: "plain",
+      });
+  
+      // Tableau de capabilité
+      pdf.setFontSize(13);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Capabilité globale", 225, 110);
+      
+      autoTable(pdf, {
+        startY: tableY + 70,
+        margin: { left: tableX },
+        head: [["", ""]],
+        body: power,
+        styles: {
+          fontSize: 12,
+          halign: "left",
+          cellPadding: 3,
+        },
+        theme: "plain",
+      });
+    }
+  
+    // Sauvegarder le PDF
+    pdf.save(`graphs_export_${selectedFrequency}_A${selectedAntenne}.pdf`);
   };
-
   const cp = stdDev > 0 ? (Lmax - Lmin) / (6 * stdDev) : 0;
   const pp = stdDev > 0 ? (Lmax - Lmin) / (6 * stdDev) : 0;
   const cpk =
@@ -457,7 +449,7 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             </ResponsiveContainer>
           </div>
           <button
-            onClick={async () => exportPDF("power")}
+            onClick={async () => exportAllGraphsToPDF()}
             className="mt-0 px-4 py-2 bg-cyan-400 hover:text-cyan-400 hover:bg-black duration-150 border-2 border-cyan-400 rounded-xl cursor-pointer text-black" >
               Exporter en PDF
           </button>
