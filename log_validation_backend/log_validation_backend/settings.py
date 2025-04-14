@@ -58,11 +58,6 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  
 ]
-CSRF_COOKIE_SAMESITE = 'Lax'  # ou 'Strict'
-CSRF_COOKIE_HTTPONLY = False  # Permet à JavaScript d'accéder au cookie
-CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()  # Autoriser React
-CORS_ALLOW_CREDENTIALS = True  # Permet l'envoi de cookies
-
 
 ROOT_URLCONF = 'log_validation_backend.urls'
 

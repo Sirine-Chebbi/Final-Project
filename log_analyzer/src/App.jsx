@@ -8,9 +8,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Wifi_Conduit/>} />
+        <Route path="/wifi" element={<Wifi_Conduit/>} />
         <Route path="/test" element={<Test_Wifi/>} />
-        <Route path="/Sign_in" element={<Sign_in/>} />
+        <Route path="/" element={<Sign_in/>} />
         <Route path="/nft" element={<NFT/>} />
       </Routes>
     </Router>

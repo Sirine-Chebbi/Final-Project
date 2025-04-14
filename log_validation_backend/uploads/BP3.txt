@@ -1,0 +1,300 @@
+ [17:56:21:102] ===================> Attente retrait GTW <================================================
+
+[17:56:21:217] Perte Ping OK
+[17:56:21:267] ===================> Attente Demarrage Gateway <==========================================
+
+[17:56:21:437] ===================> DEBUT DE TEST <======================================================
+
+[17:56:21:437] ######## CONFIGURATION #######################
+[17:56:21:437] conf_GTW_BP3_verif_soft                   : [uname -a{Tags:root@f5696b:~#}{Pass:#}]
+               conf_GTW_BP3_DHCP_ENABLE                  : [ifconfig{Tags:root@f5696b:~#}{Pass:root@f5696b:~#}][scos-dhcp enable{Tags:root@f5696b:~#}{Pass:root@f5696b:~#}][scos-dhcp add eth1 {Tags:root@f5696b:~#}{Pass:root@f5696b:~#}][udhcpc -i eth1{Tags:root@f5696b:~#}{Pass:adding dns}]
+               conf_GTW_BP3_CONFIG                       : ifconfig eth1
+               conf_GTW_BP3_udhcpc                       : [scos-dhcp setup {Tags:root@f5694ofr:~#}{Pass:adding dns}{Fail:ERROR: Failed to configure eth1 via DHCP}]
+               conf_GTW_BP3_BP3_STATUS                   : bp3 status
+               conf_GTW_BP3_FLAG_FLASHAGE                : 1
+               conf_GTW_BP3_TimeOut                      : 120
+               cmd_ID_BP3_LOGIN                          : root
+               cmd_ID_BP3_PREFIX_PWD                     : Password:
+               cmd_ID_BP3_PREFIX_LOGIN                   : f5696b login:
+               cmd_ID_BP3_PWD                            : root
+               conf_GTW_BP3_FLAG_DFA                     : true
+               conf_GTW_BP3_CONFIG_DFA                   : [scos-manuf-data -b file get dfa{Pass:#}{R2%}]
+               conf_GTW_BP3_Nombre_Char_DFA              : 9
+               conf_GTW_BP3_TAG_DFA                      : R2
+               flag_GTW_BP3_TRACA                        : 1
+               cmd_ID_BP3_SUFF_PWD                       : root@f5696b:~#
+               conf_GTW_BP3_TempsDemarrage               : 70
+               conf_GTW_BP3_DHCP_disable                 : scos-dhcp disable
+               conf_GTW_BP3_DHCP_remove                  : scos-dhcp remove eth1
+               conf_GTW_BP3_service                      : bp3 service -A|-P 8080
+               conf_GTW_BP3_DELAY                        : 3
+               conf_GTW_BP3_VERSION_APPLICATION          : V1.0.0.3
+               conf_GTW_BP3_SERVEUR                      : 10.153.249.148|9897
+               flag_GTW_LICENCE_BP3                      : 1
+               conf_GTW_LIMITE_LICENCE_BP3               : 2000
+               
+[17:56:21:437] 
+[17:56:21:487] ===================> Flashage SFC <=======================================================
+
+[17:56:21:547] =====> Nom du PC 
+[17:56:21:547] EZR-BBS30504
+[17:56:21:547] ===================> Flashage SFC <=======================================================
+
+[17:56:25:097] ===================> Flashage SFC <=======================================================
+
+[17:59:15:292] 
+[17:59:15:303] 254107584C1SC000R2429800217
+[17:59:15:303] Flashage SFC OK
+[17:59:15:303] ===================> Attente Demarrage Gateway <==========================================
+
+[17:59:20:322] ===>
+[17:59:20:330] Demarrage Carte OK
+[17:59:20:330] =====> Connexion Telnet 
+[17:59:24:914] Communication DUT OK
+[17:59:24:925] ===================> AUTORISATION DE PASSAGE <============================================
+
+[17:59:25:035]  Autorisation de Passage 
+[17:59:25:035] Sn Cie: 254107584C1SC000R2429800217
+
+[17:59:25:035] --------> Appel Traça  : Informations SFC : Début <--------
+[17:59:25:075] --------> Appel Traça  : Informations SFC : Fin   <--------
+[17:59:25:075] --------> Appel Traça  : SNSFC - Start : Début <--------
+[17:59:25:165] --------> Appel Traça  : SNSFC - Start : Fin   <--------
+[17:59:25:165] Traitement effectué avec succès
+[17:59:25:165] Autorisation de Passage OK
+[17:59:25:175] ===================> Test BP3 <===========================================================
+
+[17:59:26:348] bp3 status
+------------------------
+Chip SN: 75FB000000005956
+Product ID: 0x00068572
+Provisioned: false
+------------------------
+[52]:[BP3_FEATURE_EGPHY0]:[ENABLED]
+[53]:[BP3_FEATURE_EGPHY1]:[ENABLED]
+[54]:[BP3_FEATURE_EGPHY2]:[ENABLED]
+[55]:[BP3_FEATURE_EGPHY3]:[ENABLED]
+[64]:[BP3_FEATURE_DDR3]:[ENABLED]
+[65]:[BP3_FEATURE_DDR4]:[ENABLED]
+[66]:[BP3_FEATURE_LPDDR4]:[ENABLED]
+[67]:[BP3_FEATURE_LPDDR4X]:[ENABLED]
+[68]:[BP3_FEATURE_LPDDR5]:[ENABLED]
+[71]:[BP3_FEATURE_USB0]:[ENABLED]
+[72]:[BP3_FEATURE_USB1]:[ENABLED]
+[88]:[BP3_FEATURE_SLAN_2_5]:[ENABLED]
+[89]:[BP3_FEATURE_SLAN_5]:[ENABLED]
+[90]:[BP3_FEATURE_SLAN_10]:[ENABLED]
+[91]:[BP3_FEATURE_SLAN_4_2_5]:[ENABLED]
+[96]:[BP3_FEATURE_QLAN0_2_5]:[ENABLED]
+[97]:[BP3_FEATURE_QLAN0_5]:[ENABLED]
+[98]:[BP3_FEATURE_QLAN0_10]:[ENABLED]
+[104]:[BP3_FEATURE_QLAN1_2_5]:[ENABLED]
+[105]:[BP3_FEATURE_QLAN1_5]:[ENABLED]
+[106]:[BP3_FEATURE_QLAN1_10]:[ENABLED]
+[112]:[BP3_FEATURE_QLAN2_2_5]:[ENABLED]
+[113]:[BP3_FEATURE_QLAN2_5]:[ENABLED]
+[114]:[BP3_FEATURE_QLAN2_10]:[ENABLED]
+[120]:[BP3_FEATURE_QLAN3_2_5]:[ENABLED]
+[121]:[BP3_FEATURE_QLAN3_5]:[ENABLED]
+[122]:[BP3_FEATURE_QLAN3_10]:[ENABLED]
+[178]:[BP3_FEATURE_RESERVED]:[ENABLED]
+[185]:[BP3_FEATURE_RESERVED]:[ENABLED]
+root@f5696b:~#
+[17:59:26:361] [PC > GTW]  ifconfig
+[17:59:26:531] ifconfig
+
+br-lan    Link encap:Ethernet  HWaddr 8E:48:51:A1:6B:0E  
+          inet6 addr: fe80::8c48:51ff:fea1:6b0e/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:12 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:984 (984.0 B)
+
+eth0      Link encap:Ethernet  HWaddr 28:9E:FC:48:DC:E1  
+          inet addr:192.168.5.1  Bcast:0.0.0.0  Mask:255.255.255.0
+          inet6 addr: fe80::2a9e:fcff:fe48:dce1/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:279 errors:0 dropped:3 overruns:0 frame:0
+          TX packets:95 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:30476 (29.7 KiB)  TX bytes:8348 (8.1 KiB)
+
+eth1      Link encap:Ethernet  HWaddr 28:9E:FC:F7:41:C4  
+          inet addr:10.153.0.105  Bcast:10.153.3.255  Mask:255.255.252.0
+          inet6 addr: fe80::2a9e:fcff:fef7:41c4/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:206 errors:0 dropped:56 overruns:0 frame:0
+          TX packets:19 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:20659 (20.1 KiB)  TX bytes:2650 (2.5 KiB)
+
+eth2      Link encap:Ethernet  HWaddr 28:9E:FC:D5:8D:D8  
+          inet addr:192.168.7.1  Bcast:0.0.0.0  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@f5696b:~#
+[17:59:26:531] [PC > GTW]  scos-dhcp enable
+[17:59:26:701] scos-dhcp enable
+
+root@f5696b:~#
+[17:59:26:701] [PC > GTW]  scos-dhcp add eth1
+[17:59:26:871] scos-dhcp add eth1
+
+root@f5696b:~#
+[17:59:26:871] [PC > GTW]  udhcpc -i eth1
+[17:59:27:082] udhcpc -i eth1
+
+udhcpc: started, v1.35.0
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.153.0.105, server 10.153.253.2
+udhcpc: lease of 10.153.0.105 obtained from 10.153.253.2, lease time 60
+deleting routers
+adding dns
+[17:59:27:087] DHCP OK
+[17:59:28:209] ifconfig eth1
+eth1      Link encap:Ethernet  HWaddr 28:9E:FC:F7:41:C4  
+          inet addr:10.153.0.105  Bcast:10.153.3.255  Mask:255.255.252.0
+          inet6 addr: fe80::2a9e:fcff:fef7:41c4/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:210 errors:0 dropped:57 overruns:0 frame:0
+          TX packets:21 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:21602 (21.0 KiB)  TX bytes:3342 (3.2 KiB)
+
+root@f5696b:~#
+[17:59:28:209] CONFIG OK
+[17:59:28:209] 10.153.0.105
+[17:59:32:208] --------------------------------- Tentative 1 ---------------------------------
+[17:59:37:217] 
+
+> Host: 10.153.249.148:5000
+
+> User-Agent: curl/7.81.0
+
+> accept: */*
+
+> Content-Length: 0
+
+> Content-Type: application/x-www-form-urlencoded
+
+> 
+
+< HTTP/1.1 200 OK
+
+< Date: Fri, 25 Oct 2024 16:59:36 GMT
+
+< Content-Type: text/plain; charset=utf-8
+
+< Server: Kestrel
+
+< Transfer-Encoding: chunked
+
+< 
+
+Provision succeededroot@f5696b:~
+[17:59:37:225] BP3 service OK
+[17:59:47:230]  bp3 service -A 10.153.0.105 -P 8080
+SSDP listening on 10.153.0.105:8080
+Platform: TELCO (V2)
+Provision succeeded
+
+[17:59:47:230] Licence OK
+[17:59:48:341] scos-dhcp remove eth1
+root@f5696b:~#
+[17:59:49:469] scos-dhcp remove eth1
+root@f5696b:~#
+[17:59:50:601] scos-dhcp disable
+root@f5696b:~#
+[17:59:51:726] bp3 status
+------------------------
+Chip SN: 75FB000000005956
+Product ID: 0x00068572
+Provisioned: true
+------------------------
+[0]:[BP3_FEATURE_SPEED_SERVICE]:[ENABLED]
+[1]:[BP3_FEATURE_SW_TCP_SPEED_SERVICE]:[ENABLED]
+[12]:[BP3_FEATURE_VOICE_2_CHANNELS]:[ENABLED]
+[13]:[BP3_FEATURE_VOICE_4_CHANNELS]:[ENABLED]
+[33]:[BP3_FEATURE_SHA256]:[ENABLED]
+[48]:[BP3_FEATURE_PCIE0]:[ENABLED]
+[49]:[BP3_FEATURE_PCIE1]:[ENABLED]
+[50]:[BP3_FEATURE_PCIE2]:[ENABLED]
+[52]:[BP3_FEATURE_EGPHY0]:[ENABLED]
+[53]:[BP3_FEATURE_EGPHY1]:[ENABLED]
+[54]:[BP3_FEATURE_EGPHY2]:[ENABLED]
+[55]:[BP3_FEATURE_EGPHY3]:[ENABLED]
+[64]:[BP3_FEATURE_DDR3]:[ENABLED]
+[65]:[BP3_FEATURE_DDR4]:[ENABLED]
+[66]:[BP3_FEATURE_LPDDR4]:[ENABLED]
+[67]:[BP3_FEATURE_LPDDR4X]:[ENABLED]
+[71]:[BP3_FEATURE_USB0]:[ENABLED]
+[72]:[BP3_FEATURE_USB1]:[ENABLED]
+[73]:[BP3_FEATURE_GPON]:[ENABLED]
+[74]:[BP3_FEATURE_10G_GPON]:[ENABLED]
+[75]:[BP3_FEATURE_EPON]:[ENABLED]
+[76]:[BP3_FEATURE_10G_EPON]:[ENABLED]
+[88]:[BP3_FEATURE_SLAN_2_5]:[ENABLED]
+[89]:[BP3_FEATURE_SLAN_5]:[ENABLED]
+[90]:[BP3_FEATURE_SLAN_10]:[ENABLED]
+[91]:[BP3_FEATURE_SLAN_4_2_5]:[ENABLED]
+[96]:[BP3_FEATURE_QLAN0_2_5]:[ENABLED]
+[104]:[BP3_FEATURE_QLAN1_2_5]:[ENABLED]
+[112]:[BP3_FEATURE_QLAN2_2_5]:[ENABLED]
+[120]:[BP3_FEATURE_QLAN3_2_5]:[ENABLED]
+[160]:[BP3_FEATURE_ACTIVE_ETH_2_5]:[ENABLED]
+[162]:[BP3_FEATURE_ACTIVE_ETH_5]:[ENABLED]
+[164]:[BP3_FEATURE_ACTIVE_ETH_10]:[ENABLED]
+[177]:[BP3_FEATURE_RESERVED]:[ENABLED]
+[185]:[BP3_FEATURE_RESERVED]:[ENABLED]
+root@f5696b:~#
+[17:59:51:736] --------> Appel Traça  : Collect SFC Data : Début <--------
+[17:59:51:796] --------> Appel Traça  : Collect SFC Data : Fin   <--------
+[17:59:51:806] BP3 status OK
+[17:59:51:806] TEST BP3 OK
+[17:59:51:806] ==> Temps de test est: 31.485001
+[17:59:51:806] ===================> TRACA BDD <==========================================================
+
+[17:59:51:916] ==============> Assemblage des données GTW en Traçabilité
+
+[17:59:51:916] --------> Appel Traça  : Complete : Début <--------
+[17:59:52:046] --------> Appel Traça  : Complete : Fin   <--------
+[17:59:52:046] Traçabilite OK
+[17:59:52:046] ===================> BP3 OK  <============================================================
+
+[17:59:52:106] ===================> Attente retrait GTW <================================================
+
+[17:59:52:166] ===================> FIN DE TEST <========================================================
+
+[17:59:52:166] ############ PASSAGE OK ###########
+
+[17:59:52:166] SOFT VERSION : V1.0.0.3_0
+
+[17:59:52:166] <CIE>  Nom                                : CIE 5696b EDERSON Main V2.7 DEV
+               <CIE>  Référence                          : 254107584
+               <CIE>  Indice                             : C01
+               <SFIN> Nom                                : CIE 5696b EDERSON Main V2.7 DEV
+               <SFIN> Référence                          : 254107584
+               <SFIN> Indice                             : C01
+               
+[17:59:52:166] Sn SFC                                    : 254107584C1SC000R2429800217
+               
+[17:59:52:176] 
+[17:59:52:176] Mesure <MES_BP3_DUREE_TEST>               : temps de test - Status 0
+                                                           0.000000 s < ... < 1000.000000 s
+                                                           31.485001 s
+                                                           Duree 3000 ms
+               

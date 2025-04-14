@@ -28,7 +28,7 @@ def process_nft_file(file_content):
             mesure=match.group('mesure'),
             bande=bande,
             antenne=antenne,
-            power=int(float(match.group('power'))),  # Conversion en entier
+            power=float(match.group('power')),  # Conversion en entier
             lim_min=int(float(match.group('lim_min'))),
             lim_max=int(float(match.group('lim_max')))
         )

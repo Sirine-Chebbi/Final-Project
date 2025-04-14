@@ -5,7 +5,6 @@ const UploadNFT = () => {
 
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
-  const [messagetest, setMessagetest] = useState("");
 
   const handleFileChange = (event) => {
     setFile(event.target.files);
@@ -25,26 +24,18 @@ const UploadNFT = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload/",
+        "http://127.0.0.1:8000/api/wifi-nft/upload-nft-results/",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      const response2 = await axios.post(
-        "http://127.0.0.1:8000/api/upload_version/",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
+      
       setMessage(response.data.message);
-      setMessagetest(response2.data.messagetest);
 
     } catch (error) {
       console.error("Erreur lors de l'envoi:", error);
-      setMessage(error.response?.data.error || "Erreur inconnue");
+      setMessage(error.response?.data.error);
     }
 
     window.location.reload();
@@ -74,8 +65,7 @@ const UploadNFT = () => {
             Télécharger les logs ici !
           </h4>
         </div>
-        {message && <p className="mt-4 text-l text-red-500 mx-auto">{message}</p>}
-        {messagetest && <p className="mt-4 text-l text-red-500 mx-auto">{messagetest}</p>}
+        {message && <p className="mt-4 text-l text-cyan-400 mx-auto">{message}</p>}
         <div className="flex gap-10 mr-5">
           <label>
             <input multiple onChange={handleFileChange} type="file" hidden />
