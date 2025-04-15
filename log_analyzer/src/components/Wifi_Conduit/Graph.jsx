@@ -536,7 +536,7 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             </ResponsiveContainer>
           </div>
           <button
-            onClick={async () => exportPDF("evm")}
+            onClick={async () => exportAllGraphsToPDF()}
             className="mt-0 px-4 py-2 bg-cyan-400 hover:text-cyan-400 hover:bg-black duration-150 border-2 border-cyan-400 rounded-xl cursor-pointer text-black"
           >
             Exporter en PDF
@@ -623,7 +623,7 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             </ResponsiveContainer>
           </div>
           <button
-            onClick={async () => exportPDF("rss")}
+            onClick={async () => exportAllGraphsToPDF()}
             className="mt-0 px-4 py-2 bg-cyan-400 hover:text-cyan-400 hover:bg-black duration-150 border-2 border-cyan-400 rounded-xl cursor-pointer text-black"
           >
             Exporter en PDF
@@ -707,7 +707,7 @@ export const Graph = ({testResults, selectedFrequency, selectedAntenne, Bande, A
             </ResponsiveContainer>
           </div>
           <button
-            onClick={async () => exportPDF("delta")}
+            onClick={async () => exportAllGraphsToPDF()}
             className="mt-0 px-4 py-2 bg-yellow-400 hover:text-yellow-400 hover:bg-black duration-150 border-2 border-yellow-400 rounded-xl cursor-pointer text-black"
           >
             Exporter en PDF

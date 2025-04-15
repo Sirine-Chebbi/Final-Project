@@ -23,6 +23,12 @@ const TableNFT = ({ testResults, antenne, mesure, bande, setSelectedMin, setSele
   const maxLimit = Math.max(...filteredResults.map((result) => parseFloat(result.lim_max)));
 
   useEffect(() => {
+    if (minLimit === Infinity || maxLimit === -Infinity) {
+      setSelectedMin(0);
+      setSelectedMax(0);
+      return;
+    }
+    
     setSelectedMin(minLimit);
     setSelectedMax(maxLimit);
   }, [minLimit, maxLimit, setSelectedMin, setSelectedMax]);

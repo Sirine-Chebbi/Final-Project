@@ -1,0 +1,369 @@
+ [07:15:30:256] Ping KO !!!
+[07:15:30:276] ===================> Attente retrait GTW <================================================
+
+[07:15:30:297] Perte Ping OK
+[07:15:30:316] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:15:30:346] ===================> DEBUT DE TEST <======================================================
+
+[07:15:30:356] ######## CONFIGURATION BDT #######################
+[07:15:30:387] conf_GTW_AQ_IpAdresse                     : 192.168.1.254
+               conf_GTW_AQ_FlagUSB                       : 1
+               conf_GTW_AQ_FXS                           : 1
+               conf_GTW_AQ_WIFI_5G                       : 1
+               conf_GTW_AQ_WIFI_2G                       : 1
+               conf_GTW_AQ_RESET                         : 1
+               conf_GTW_AQ_FLAG_FLASHAGE                 : 1
+               conf_GTW_AQ_Version_Prod                  : AQ_V5.0.7
+               conf_GTW_AQ_INIT_GTW                      : 1
+               conf_GTW_AQ_MAC_BASE                      : 1
+               conf_GTW_AQ_Flashe_MAC                    : 1
+               conf_GTW_AQ_ETH2                          : 1
+               conf_GTW_AQ_ETH3                          : 1
+               conf_GTW_AQ_GUI_PROX                      : 1
+               conf_GTW_AQ_PWGUI                         : 1
+               conf_GTW_AQ_MAC_BASE_flash                : 1
+               conf_GTW_AQ_OLT                           : 1
+               conf_GTW_AQ_PWD_GPON                      : ETAT_PP_IMP_SNGPON
+               conf_GTW_AQ_PWD_WIFI                      : ETAT_PP_IMP_WIFIKEY1
+               conf_GTW_AQ_PWD_GUI                       : ETAT_PP_IMP_WANMAC
+               conf_GTW_AQ_PWD_MAC                       : ETAT_PP_IMP_WANMAC
+               conf_GTW_AQ_FlagGPON                      : 1
+               conf_GTW_AQ_BRIDGE                        : 2501
+               conf_GTW_AQ_MAC_RESERVE                   : 4
+               conf_GTW_AQ_Script_Pyhthon                : C:/Python27/get_lb_info.py -t
+               conf_GTW_AQ_PWDWIFI                       : 1
+               conf_GTW_AQ_TIME                          : 30
+               conf_GTW_AQ_WIFI_6G                       : 1
+               conf_GWT_AQ_FlagGPON_XGSPON               : 1
+               
+[07:15:30:406] 
+[07:15:30:427] @ IP OLT : 10.153.160.22
+[07:15:30:447] SLOT OLT : 5/2/20
+[07:15:30:467] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:15:55:264] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:16:14:265] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:16:34:261] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:16:54:269] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:17:13:252] ===================> Attente Demarrage Gateway  <=========================================
+
+[07:17:13:272] Demarrage Carte OK
+[07:17:13:292] ===================> Flashage LK Manuel <=================================================
+
+[07:18:35:171] ****  Test Reset du Produit  ****
+
+[07:18:35:201] Lecture SFC OK
+[07:18:35:221] LK24241DP900133
+[07:18:35:241] ===================> AUTORISATION DE PASSAGE <============================================
+
+[07:18:35:261]  Récup Info SFC & Autorisation de Passage
+
+[07:18:35:281] 
+
+[07:18:35:301] --------> Appel Traça  : Informations SFC : Début <--------
+[07:18:35:381] --------> Appel Traça  : Informations SFC : Fin   <--------
+[07:18:35:401] Recuperation Info SFC LK24241DP900133 : 254060744 _ A01
+
+[07:18:35:421] --------> Appel Traça  : SNSFC - Start : Début <--------
+[07:18:35:552] --------> Appel Traça  : SNSFC - Start : Fin   <--------
+[07:18:35:571] ****  Test Reset du Produit  ****
+
+[07:18:35:601] Traitement effectué avec succès
+[07:18:36:733] ****  Test Reset du Produit  ****
+
+[07:18:36:763] Lecture MAC OK
+[07:18:36:783] 6CFFCED30F80
+[07:18:36:803] ===================> Récupération PWD GPON <==============================================
+
+[07:18:36:823] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[07:18:36:953] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[07:18:36:983] Récupération SN GPON terminée : SMBS029DEAEE
+[07:18:37:003] La propriété SN récupérée est: SMBS029DEAEE
+
+[07:18:37:023] ****  Test Reset du Produit  ****
+
+[07:18:37:043] Recuperation SN GPON OK
+[07:18:37:063] 029DEAEE
+[07:18:37:083] ===================> Recuperation Adresse MAC Base <======================================
+
+[07:18:37:103] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[07:18:37:223] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[07:18:37:243] Récupération Propriété terminée : 6CFFCED30F80
+[07:18:39:269] L''adresse MAC du SN récupérée est: 6CFFCED30F80
+
+[07:18:39:289] ****  Test Reset du Produit  ****
+
+[07:18:39:309] Recuperation Adresse MAC OK
+[07:18:39:329] 6CFFCED30F80
+[07:18:39:359] ===================> Recuperation PWD WIFI Base <=========================================
+
+[07:18:39:379] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[07:18:39:459] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[07:18:39:479] Récupération Propriété terminée : wUhdZh2aYe5zVu7TbD
+[07:18:39:499] Sn Cie: wUhdZh2aYe5zVu7TbD
+
+[07:18:39:519] ****  Test Reset du Produit  ****
+
+[07:18:39:539] Lecture Clé WIFI OK
+[07:18:52:272] wUhdZh2aYe5zVu7TbD
+[07:18:52:302] ===================> TEST Coherence MAC base avec MAC Etiquette <=========================
+
+[07:18:52:322] ****  Contrôle correspondance @ MAC flashé et @ MAC traça  ****
+
+[07:18:52:342] 
+=======> Correspondance @ MAC flashé et @ MAC traça OK
+[07:18:52:362] ===================> TEST Coherence MAC ARP avec MAC base <===============================
+
+[07:18:52:382] ****  Contrôle correspondance @ MAC flashé et @ MAC ARP  ****
+
+[07:18:52:402] 
+=======> Correspondance @ MAC flashé et @ MAC Base OK
+[07:18:52:422] ===================> Test PING ETH2 <=====================================================
+
+[07:18:52:452] ****  Vérification Ping ETH2  ****
+
+[07:18:54:638] 
+=======> Test PING ETH2 OK
+[07:18:54:658] ===================> Test PING ETH3 <=====================================================
+
+[07:18:54:678] ****  Vérification Ping ETH3  ****
+
+[07:18:55:249] 
+=======> Test PING ETH3 OK
+[07:18:55:279] ===================> Test USB <===========================================================
+
+[07:18:55:299] ****  Vérification USB  ****
+
+[07:18:55:559] ****  Vérification USB  ****
+
+[07:18:55:589] 
+=======> Connexion USB OK
+[07:18:55:649] ===================> Configuration Wifi  2.4 Ghz <========================================
+
+[07:18:55:669] ****  Connexion WIFI 2G  ****
+
+[07:19:32:363] ****  Connexion WIFI 2G  ****
+
+[07:19:32:383] 
+=======> Connexion 2G OK
+[07:19:32:433] ===================> Configuration Wifi  5 Ghz <==========================================
+
+[07:19:32:453] =====> Configuration Wifi  5 Ghz
+[07:19:32:473] ****  Connexion WIFI 5G  ****
+
+[07:19:33:284] 
+=======> Connexion 5G OK
+[07:19:33:304] ****  Connexion WIFI 5G  ****
+
+[07:19:34:165] 
+=======> Connexion 6G OK
+[07:19:34:185] ****  Test FXS  ****
+
+[07:19:34:205] ===================> Test FXS <===========================================================
+
+[07:19:36:101] ****  Test FXS  ****
+
+[07:19:36:121] 
+=======> Test FXS OK
+[07:19:36:141] ===================> Test Optique_OLT <===================================================
+
+[07:19:36:171] ****  Test OLT GPON OU XGSPON ****
+
+[07:20:34:748] TEST GPON
+[07:20:34:768] ===================> Test Optique_OLT <===================================================
+
+[07:20:34:788] ****  Test OLT GPON  ****
+
+[07:20:37:808] [PC < GTW]  
+[07:20:37:848] 
+[07:20:42:883] [PC < GTW]  admin
+                           password:
+[07:20:42:903] admin
+password:
+[07:20:49:953] [PC < GTW]  
+                           zSH>
+[07:20:49:983] 
+
+zSH>
+[07:20:50:003] Authentification OLT OK 
+[07:20:55:046] [PC < GTW]  onu clear 5/2/20
+                           Onu 5/2/20 (previously with serial number SMBS 43903679 / 029DEABF ) has been cleared
+                           zSH>
+[07:20:55:077] onu clear 5/2/20
+
+Onu 5/2/20 (previously with serial number SMBS 43903679 / 029DEABF ) has been cleared
+
+zSH>
+[07:20:55:097] Suppression ONU port OK 
+[07:21:00:143] [PC < GTW]  onu set 5/2/20 vendorid SMBS serno fsan 029DEAEE meprof zhone-2501
+                           Onu 20 successfully enabled with serial number SMBS 029DEAEE
+                           ONU 5/2/20 has been set
+                           zSH>
+[07:21:00:183] onu set 5/2/20 vendorid SMBS serno fsan 029DEAEE meprof zhone-2501
+
+Onu 20 successfully enabled with serial number SMBS 029DEAEE
+
+ONU 5/2/20 has been set
+
+zSH>
+[07:21:00:203] Creation et configuration ONU port OK 
+[07:21:05:266] [PC < GTW]  onu resync 5/2/20
+                           zSH>
+[07:21:12:329] [PC < GTW]  onu inventory 5/2/20
+                                                      Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+                           ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+                           === ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+                           20  1-5-2-20             029DEAEE   SMBS      -        -              -      error     error          0.0000
+                           zSH>
+[07:21:12:353] onu inventory 5/2/20
+
+                           Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+
+ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+
+=== ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+
+20  1-5-2-20             029DEAEE   SMBS      -        -              -      error     error          0.0000
+
+zSH>
+[07:21:19:404] [PC < GTW]  onu inventory 5/2/20
+                                                      Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+                           ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+                           === ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+                           20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.3 dBm      0.0953
+                           zSH>
+[07:21:19:425] onu inventory 5/2/20
+
+                           Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+
+ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+
+=== ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+
+20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.3 dBm      0.0953
+
+zSH>
+[07:21:26:474] [PC < GTW]  onu inventory 5/2/20
+                                                      Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+                           ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+                           === ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+                           20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.3 dBm      0.0953
+                           zSH>
+[07:21:26:505] onu inventory 5/2/20
+
+                           Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+
+ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+
+=== ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+
+20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.3 dBm      0.0953
+
+zSH>
+[07:21:33:556] [PC < GTW]  onu inventory 5/2/20
+                                                      Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+                           ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+                           === ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+                           20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.3 dBm      0.0953
+                           zSH>
+[07:21:33:576] onu inventory 5/2/20
+
+                           Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+
+ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+
+=== ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+
+20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.3 dBm      0.0953
+
+zSH>
+[07:21:40:629] [PC < GTW]  onu inventory 5/2/20
+                                                      Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+                           ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+                           === ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+                           20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.5 dBm      0.0953
+                           zSH>
+[07:21:40:649] onu inventory 5/2/20
+
+                           Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+
+ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+
+=== ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+
+20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.5 dBm      0.0953
+
+zSH>
+[07:21:47:703] [PC < GTW]  onu inventory 5/2/20
+                                                      Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+                           ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+                           === ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+                           20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.5 dBm      0.0953
+                           zSH>
+[07:21:47:723] onu inventory 5/2/20
+
+                           Serial    Vendor  Model       Active    Standby     ONT       OLT     Distance
+
+ID       Interface         Number      ID     ID       S/W Ver     S/W Ver   Rx Power  Rx Power   (KM)
+
+=== ==================== ========== ======= ====== ============== ========== ========= ========= ===========
+
+20  1-5-2-20             029DEAEE   SMBS    F@st    12824.02.26              -26.7 dBm -27.5 dBm      0.0953
+
+zSH>
+[07:21:47:743] TEST GPON OK
+[07:21:47:763] ===================> Test RESET <=========================================================
+
+[07:21:47:783] ****  Test Reset du Produit  ****
+
+[07:22:05:446] 
+=======> Reset Produit OK
+
+[07:22:05:466] Re-Demarrage Carte OK
+[07:22:05:496] ===================> TRACA BDD <==========================================================
+
+[07:22:05:516] ==============> Assemblage des données GTW en Traçabilité
+
+[07:22:05:536] --------> Appel Traça  : Complete : Début <--------
+[07:22:05:747] --------> Appel Traça  : Complete : Fin   <--------
+[07:22:05:767] ****  Test Reset du Produit  ****
+
+[07:22:05:787] 
+=======> Traçabilite OK
+[07:22:05:807] ===================> TEST AQ OK  <========================================================
+
+[07:22:05:827] ===================> Attente retrait GTW <================================================
+
+[07:22:05:858] ===================> FIN DE TEST <========================================================
+
+[07:22:05:877] ############ PASSAGE OK ###########
+
+[07:22:05:898] DUREE DU TEST : 0 secondes
+
+[07:22:05:918] SOFT VERSION : AQ_V5.0.7_0
+
+[07:22:05:938] <CIE>  Nom                                : PACK FAST 5696b Ederson
+               <CIE>  Référence                          : 254060744
+               <CIE>  Indice                             : A01
+               <SFIN> Nom                                : PACK FAST 5696b Ederson
+               <SFIN> Référence                          : 254060744
+               <SFIN> Indice                             : A01
+               
+[07:22:05:958] Sn SFIN                                   : LK24241DP900133
+               Sn CIE                                    : LK24241DP900133
+               Libelle erreur                            : Carte pas démarré
+               Code erreur                               : Carte pas démarré
+               
+[07:22:05:978] 
+[07:22:05:998] Mesure <M_SYNCHRO_OLT_G>                  : Valeur de Synchro - Status 0
+                                                           -30.000000  < ... < -26.000000 
+                                                           -26.700001 
+               Mesure <M_SYNCHRO_OLT_XGSG>               : Mesure pour le poste AQ - Status 2
+                                                           -30.000000 dBm < ... < -25.000000 dBm
+               
+[07:22:06:018] 

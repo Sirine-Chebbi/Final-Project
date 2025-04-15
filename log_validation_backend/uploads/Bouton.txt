@@ -1,0 +1,295 @@
+ [03:58:16:159] ===================> DEBUT DE TEST <======================================================
+
+[03:58:16:159] ######## CONFIGURATION BTL #######################
+[03:58:16:159] conf_GTW_BTL_Flag_Test_Reset              : [scos-keys monitor{Pass:KEY_RESTART:RELEASED}{Fail:Failed}]
+               conf_GTW_BTL_sVersionSoft                 : 1.0.54
+               conf_GTW_BTL_Flag_Test_LED                : [scos-leds on aw910x:red:1{Pass:#}{Fail:Failed}][scos-leds on aw910x:blue:0{Pass:#}{Fail:Failed}][scos-leds on aw910x:green:2{Pass:#}{Fail:Failed}][scos-leds on aw910x:white:3{Pass:#}{Fail:Failed}]
+               conf_GTW_BTL_IP_Produit                   : 192.168.5.1
+               conf_GTW_BTL_IP_Produit2                  : 192.168.6.1
+               conf_GTW_BTL_Flag_LED                     : 1
+               conf_GTW_BTL_Flag_Reset                   : 1
+               conf_GTW_BTL_Flag_WIFI                    : 0
+               conf_GTW_BTL_Flag_WPS                     : 0
+               conf_GTW_BTL_Flag_Test_WIFI               : [scos-keys monitor KEY_WLAN{Pass:KEY_WLAN:RELEASED}{Fail:Failed}]
+               conf_GTW_BTL_Flag_Test_WPS                : [scos-keys monitor KEY_WPS_BUTTON{Pass:KEY_WPS_BUTTON:RELEASED}{Fail:Failed}]
+               conf_GTW_BTL_Flag_Power                   : 1
+               conf_GTW_BTL_Flag_Mode_KPN                : 0
+               conf_GTW_BTL_Flag_OK                      : 0
+               conf_GTW_BTL_Flag_RCD                     : 0
+               conf_GTW_BTL_Flag_RCG                     : 0
+               conf_GTW_BTL_Flag_LED_OFF                 : 0
+               conf_GTW_BTL_Test_LED_OFF                 : [scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3{Pass:#}{Fail:Failed}]
+               conf_GTW_BTL_Flag_Test_ALL                : 0
+               conf_GTW_BTL_iNombrePatins                : 1
+               conf_GTW_BTL_Flag_TesBuzzer               : 0
+               conf_GTW_BTL_Flag_ChaineConfiance         : 0
+               conf_GTW_BTL_Flag_TestAvecMembrane        : 1
+               conf_GTW_BTL_Flag_SERVICE                 : 1
+               conf_GTW_BTL_Test_SERVICE                 : [scos-keys monitor BTN_TOUCH{Pass:BTN_TOUCH:RELEASED}{Fail:Failed}]/n
+               conf_GTW_BTL_Flag_Test_Mode               : 0
+               conf_GTW_BTL_Flag_Reset_Bistable          : 0
+               conf_GTW_BTL_Flag_Bouton_LED              : 0
+               conf_GTW_BTL_Flag_INITIALISATION          : 0
+               conf_GTW_BTL_Flag_Test_INITIALISATION     : [rm /tmp/fxs{Pass:#}{Fail:fail}][scos-voice -b fxs kill{Pass:#}{Fail:fail}][scos-voice -b fxs init{Pass:FR}{Fail:fail}][dmesg > /tmp/fxs{Pass:#}{Fail:fail}][tail -12 /tmp/fxs &{Pass:dhio_enable: enabled channel 0}{Fail:mode ''talk''}][tail -12 /tmp/fxs &{Pass:dhio_enable: enabled channel 1}{Fail:mode ''talk''}]
+               conf_GTW_BTL_Flag_VODA_286F               : 0
+               conf_GTW_BTL_Test_ChaineConfiance         : [btrmcfg set btrm_enable{Pass:#}{Fail:Fail}]
+               conf_GTW_BTL_Flag_FlashageMode            : 0
+               conf_GTW_BTL_Flag_DFA                     : 1
+               conf_GTW_BTL_Flag_FlashageColibri         : 0
+               conf_GTW_BTL_Flag_Cognex                  : 0
+               conf_GTW_BTL_Flag_Retry                   : 1
+               conf_GTW_BTL_Flag_Presence_Bouchon        : 0
+               conf_GTW_BTL_Flag_Feasa                   : 1
+               conf_GTW_BTL_Limit_Feasa_Led_ON           : 60
+               conf_GTW_BTL_Limit_Feasa_Led_OFF          : 40
+               conf_GTW_BTL_Test_LED_RED                 : [scos-leds on aw910x:red:1{Pass:#}{Fail:Failed}]
+               conf_GTW_BTL_Limit_Feasa_Led_RED          : 110
+               conf_GTW_BTL_NbLED                        : 1
+               conf_GTW_BTL_Flag_VODA_PT                 : 1
+               conf_GTW_BTL_Flag_DISPLAY                 : 0
+               conf_GTW_BTL_Flag_Test_DISPLAY            : [scos-keys monitor BTN_TOUCH{Pass:BTN_TOUCH:RELEASED}{Fail:Failed}]
+               conf_GTW_BTL_Flag_Membrane_Bistable       : 1
+               conf_GTW_BTL_Flag_CapteurVisNonRattache   : 0
+               conf_GTW_BTL_Flag_Sans_Traca              : 0
+               conf_GTW_BTL_Test_Verif_BOSA              : [i2c_util get txp{Pass:-inf dBm}{Fail:failed}]
+               conf_GTW_BTL_Flag_VERIF_BOSA              : 0
+               conf_GTW_BTL_Flag_VODA_286F_AIRTIES       : 0
+               conf_GTW_BTL_Flag_ETH                     : 1
+               conf_GTW_BTL_Flag_LED_RED                 : 0
+               conf_GTW_BTL_Flag_LED_GREEN               : 0
+               conf_GTW_BTL_Limit_FEASA_LED_GREEN        : 40
+               conf_GTW_BTL_Flag_NVRAM                   : 0
+               conf_GTW_BTL_Flag_Test_NVRAM              : [scos-wifi mfg {Pass:0}{Fail:1}]
+               conf_GTW_BTL_Flag_LED_BLANC               : 0
+               conf_GTW_BTL_Flag_LED_RED_OFF             : 0
+               conf_GTW_BTL_FLAG_FINALISATION            : 0
+               conf_GTW_BTL_Flag_SN_BOSA                 : 0
+               conf_GTW_BTL_Test_SN_BOSA                 : [i2cdump -f -y  0 0x50 b]
+               conf_GTW_BTL_Flag_SMART4_V2               : 0
+               conf_GTW_BTL_Test_DFA                     : [scos-manuf-data -b file get dfa{Pass:#}{R%}]/r/n
+               conf_GTW_BTL_Flag_Low_Light               : 0
+               conf_GTW_BTL_Flag_MESURES                 : 1
+               conf_GTW_BTL_Flag_LED_BLUE                : 0
+               conf_GTW_BTL_Test_LED_BLUE                : [scos-leds on aw910x:blue:0{Pass:#}{Fail:Failed}]
+               conf_GTW_BTL_Limit_FEASA_LED_BLUE         : 20
+               conf_GTW_BTL_Test_LED_GREEN               : [scos-leds on aw910x:green:2{Pass:#}{Fail:Failed}]
+               conf_GTW_BTL_Flag_UPDATE_MAC              : 0
+               conf_GTW_BTL_couleur_led                  : [RED][BLUE][GREEN][RGBI]
+               conf_GTW_BTL_Flag_START_BUTON             : 1
+               conf_GTW_BTL_Flag_WAIT_TIME               : 5000
+               conf_GTW_BTL_Flag_REMOVE_REMAIN           : 1
+               conf_GTW_BTL_Flag_SAFRAN                  : 1
+               conf_GTW_BTL_LOGIN_DUT                    : [root{Pass:Password:}][root{Pass:#}]
+               conf_GTW_BTL_DFA_LENGTH                   : 10
+               conf_GTW_BTL_TAG_DFA                      : R
+               conf_GTW_BTL_Flag_SAFRAN                  : 1
+               flag_GTW_BTL_FLAG_PERSONNALIS             : 0
+               flag_GTW_BTL_FLAG_TEMPS_DEM_GTW           : 0
+               conf_GTW_BTL_CMD_TEMPS_DEM_GTW            : cut -d. -f1 /proc/uptime
+               flag_GTW_BTL_FLAG_DFA_FILLE               : 0
+               conf_GTW_BTL_CONFIG_DFA_FILLE             : [scos-manuf-data -b wifi_brcm_eeprom -- -o get dfa{Pass:#}{wl0 DFA =00%}]
+               conf_GTW_BNFT_TEMPS_DEM_GTW               : 70
+               conf_GTW_BTL_Nombre_Char_DFA_FILLE        : 10
+               conf_GTW_BTL_NOMBRE_DISP                  : 1
+               conf_GTW_BTL_Test_LED_BLANC               : [scos-leds on aw910x:white:3{Pass:#}{Fail:Failed}]
+               conf_Resultat_Path                        : C:/Resultat
+               conf_GTW_BTL_Flag_REGLISSE                : 1
+               conf_GTW_BTL_Flag_VOIXIP                  : 1
+               conf_Resultat_VOIXIP                      : [rm /tmp/fxs{Tags:#}{Pass:#}{Fail:fail}][dmesg -C{Tags:#}{Pass:#}{Fail:fail}][scos-voice -b fxs kill{Tags:#}{Pass:#}{Fail:fail}][scos-voice -b fxs init{Tags:#}{Pass:#}{Fail:fail}][dmesg > /tmp/fxs{Tags:#}{Pass:#}{Fail:fail}][grep -A 15 "slicslac registered" /tmp/fxs{Tags:#}{Pass:enabled channel 0}{Pass:enabled channel 1}{Fail:''talk''}]
+               
+[03:58:16:194] Attente Presence Gateway ...
+[03:58:22:036] Appuyer sur le bouton Départ cycle
+[03:58:24:025] TEST PATIN VIS ...
+[03:58:26:059] TEST VIS/PATINS OK ...
+[03:58:26:874] Attente demarrage de produit
+[03:58:28:610] [PC > GTW]  Ping  192.168.5.1 
+[03:58:30:613] [PC > GTW]  Ping  192.168.5.1 
+[03:58:32:613] [PC > GTW]  Ping  192.168.5.1 
+[03:58:32:615] [PC > GTW]  Ping  192.168.5.1 
+[03:58:32:615] [PC < GTW]  
+[03:58:32:615] Démarrage Carte OK
+[03:58:33:390] [PC > GTW]  root
+[03:58:33:791] [PC < GTW]  root
+[03:58:33:999] [PC > GTW]  root
+[03:58:34:400] [PC < GTW]  root
+[03:58:34:400] Connexion Telnet OK
+[03:58:34:464] Lecture DFAB
+[03:58:34:671] [PC > GTW]  scos-manuf-data -b file get dfa
+[03:58:35:072] [PC < GTW]  scos-manuf-data -b file get dfa
+[03:58:35:073] R2429905677
+[03:58:35:073] Lecture DFAB OK
+[03:58:35:128] Vérification Autorisation de passage
+[03:58:35:129] R2429905677
+
+[03:58:35:129] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[03:58:35:165] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[03:58:35:165] SFC Trouvé pour ce DFA : 254107584C1SC000R2429800217
+
+[03:58:35:165] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[03:58:35:183] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[03:58:35:184] SFC PFIN : 254107584C1SC000R2429800217 - Déjà Existant
+
+[03:58:35:185] SFC PFIN : 254107584C1SC000R2429800217 - Déjà Existant
+
+[03:58:35:185] --------> Appel Traça  : Informations SFC : Début <--------
+[03:58:35:225] --------> Appel Traça  : Informations SFC : Fin   <--------
+[03:59:23:819] Autorisation de passage OK
+[03:59:24:139] [PC > GTW]  scos-keys monitor > /tmp/btn
+[03:59:26:155] [PC < GTW]  scos-keys monitor > /tmp/btn
+[03:59:26:158] scos-keys monitor > /tmp/btn
+
+root@f5696b:~# 
+root@f5696b:~# grep -e "RELEASED" -e ":PRESSED "  /tmp/btn
+KEY_RESTART:RELEASED
+[03:59:26:158] Test bouton RESET OK
+[03:59:26:373] [PC > GTW]  scos-keys monitor BTN_TOUCH > /tmp/btn
+[03:59:28:394] [PC < GTW]  scos-keys monitor BTN_TOUCH > /tmp/btn
+[03:59:28:397] scos-keys monitor BTN_TOUCH > /tmp/btn
+
+root@f5696b:~# 
+root@f5696b:~# grep -e "RELEASED" -e ":PRESSED "  /tmp/btn
+BTN_TOUCH:RELEASED
+[03:59:28:605] scos-keys monitor BTN_TOUCH > /tmp/btn
+
+root@f5696b:~# 
+root@f5696b:~# grep -e "RELEASED" -e ":PRESSED "  /tmp/btn
+BTN_TOUCH:RELEASED
+[03:59:28:605] Test BTN_TOUCH OK
+[03:59:28:811] [PC > GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:29:811] [PC < GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:30:030] [PC > GTW]  scos-leds on aw910x:red:1
+[03:59:31:030] [PC < GTW]  scos-leds on aw910x:red:1
+[03:59:34:755]  Test Led 1 RED OK
+[03:59:34:756] 253
+[03:59:34:756] 01386
+[03:59:34:757] 253 002 000 01386
+[03:59:35:077] [PC > GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:36:077] [PC < GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:36:296] [PC > GTW]  scos-leds on aw910x:blue:0
+[03:59:37:296] [PC < GTW]  scos-leds on aw910x:blue:0
+[03:59:41:016]  Test Led 1 BLUE OK
+[03:59:41:017] 230
+[03:59:41:018] 04414
+[03:59:41:018] 001 024 230 04414
+[03:59:41:343] [PC > GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:42:343] [PC < GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:42:561] [PC > GTW]  scos-leds on aw910x:green:2
+[03:59:43:562] [PC < GTW]  scos-leds on aw910x:green:2
+[03:59:47:289]  Test Led 1 GREEN OK
+[03:59:47:293] 228
+[03:59:47:296] 02459
+[03:59:47:298] 001 228 025 02459
+[03:59:47:623] [PC > GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:48:624] [PC < GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:48:842] [PC > GTW]  scos-leds on aw910x:white:3
+[03:59:49:843] [PC < GTW]  scos-leds on aw910x:white:3
+[03:59:53:795]  Test Led 1 RGBI OK
+[03:59:53:796] 038
+[03:59:53:797] 121
+[03:59:53:797] 096
+[03:59:53:798] 02949
+[03:59:53:798] 038 121 096 02949
+[03:59:54:123] [PC > GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:55:123] [PC < GTW]  scos-leds off aw910x:green:2 && scos-leds off aw910x:blue:0 && scos-leds off aw910x:red:1 && scos-leds off aw910x:white:3
+[03:59:55:124] Test LED ON OK
+[04:00:22:824] TEST VOIXIP 
+[04:00:22:824] [PC > GTW]  rm /tmp/fxs
+[04:00:23:072] [PC < GTW]  rm /tmp/fxs
+                           rm: can''t remove ''/tmp/fxs'': No such file or directory
+                           root@f5696b:~#
+[04:00:23:072] [PC > GTW]  dmesg -C
+[04:00:23:326] [PC < GTW]  dmesg -C
+                           root@f5696b:~#
+[04:00:23:326] [PC > GTW]  scos-voice -b fxs kill
+[04:00:23:593] [PC < GTW]  scos-voice -b fxs kill
+                           [1;33mWARNING: Voice daemon is not running. Start it with "scos-voice-fxs init"[0m
+                           root@f5696b:~#
+[04:00:23:593] [PC > GTW]  scos-voice -b fxs init
+[04:00:26:927] [PC < GTW]  scos-voice -b fxs init
+                           Using country: FR
+                           root@f5696b:~#
+[04:00:26:927] [PC > GTW]  dmesg > /tmp/fxs
+[04:00:27:190] [PC < GTW]  dmesg > /tmp/fxs
+                           root@f5696b:~#
+[04:00:27:190] [PC > GTW]  grep -A 15 "slicslac registered" /tmp/fxs
+[04:00:27:456] [PC < GTW]  grep -A 15 "slicslac registered" /tmp/fxs
+                           [  276.024061] dgasp: kerSysRegisterDyingGaspHandler: slicslac registered 
+                           [  276.393194] /x1b[0;35m[SLICSLAC] /x1b[0msiCommonModeControl: ept 0, SLIC entering mode ''standby''
+                           [  276.400377] /x1b[0;32m[DSPHAL] /x1b[0mdhio_enable: enabled channel 0
+                           [  276.712787] /x1b[0;32m[DSPHAL] /x1b[0mdhio_enable: enabled channel 1
+                           [  276.713210] /x1b[0;35m[SLICSLAC] /x1b[0msiCommonModeControl: ept 1, SLIC entering mode ''standby''
+                           root@f5696b:~#
+[04:00:27:457] 
+[04:00:27:459] TEST VOIXIP OK
+[04:00:27:460] Appuyer sur le bouton OFF
+[04:00:28:823] Test PERTE PING/POWER OK
+[04:00:28:824] ==============> Assemblage des données STB en Traçabilité
+
+[04:00:28:825] --------> Appel Traça  : Log Parametric Data Tableau: Début <--------
+[04:00:28:929] --------> Appel Traça  : Log Parametric Data Tableau: Fin   <--------
+[04:00:28:940] Traçabilité OK
+[04:00:28:943] ===================> FIN DE TEST <========================================================
+
+[04:00:28:943] ############ PASSAGE OK ###########
+
+[04:00:28:943] DUREE DU TEST : 116 secondes
+
+[04:00:28:943] SOFT VERSION : 1.0.54_0
+
+[04:00:28:943] <CIE>  Nom                                : ;serveur tracacom de production ==STC==
+               <CIE>  Référence                          : 254107584
+               <CIE>  Indice                             : C01
+               <SFIN> Nom                                : N_3, Tdll_ITFE1_L_PATIN_4, Tdll_ITFE1_L_PRESENCE, Tdll_ITFE1_L_PRESENCE2, Tdll_ITFE1_L_ROUGE, Tdll_ITFE1_L_VBas, Tdll_ITFE1_L_VBridage, Tdll_ITFE1_L_VDisplay, Tdll_ITFE1_L_VEMembrane, Tdll_ITFE1_L_VEMoteur, Tdll_ITFE1_L_VEntrerConnectique, Tdll_ITFE1_L_VEReset, Tdll_ITFE1_L_VERTE, Tdll_ITFE1_L_VHaut, Tdll_ITFE1_L_VIS_1, Tdll_ITFE1_L_VIS_2, Tdll_ITFE1_L_VIS_3, Tdll_ITFE1_L_VIS_4, Td Ï
+               <SFIN> Référence                          : 254107584
+               <SFIN> Indice                             : C01
+               
+[04:00:28:943] Sn SFIN                                   : 254107584C1SC000R2429800217
+               Sn CIE                                    : R2429905677
+               
+[04:00:28:943] 
+[04:00:28:943] Mesure <MES_LED1_ON>                      : Mes_Led1_ON - Status 2
+                                                           50.000000  < ... < 65.000000 
+               Mesure <MES_duree_test>                   : mesure du temps de test bouton - Status 2
+                                                           0.000000 s < ... < 70.000000 s
+               Mesure <MES_LED1_R>                       : mesure de LED1 rouge - Status 0
+                                                           235.000000  < ... < 255.000000 
+                                                           253.000000 
+               Mesure <MES_LED1_G>                       : mesure LED 1 vert - Status 0
+                                                           220.000000  < ... < 255.000000 
+                                                           228.000000 
+               Mesure <MES_LED1_B>                       : mesure LED 1 bleue - Status 0
+                                                           220.000000  < ... < 255.000000 
+                                                           230.000000 
+               Mesure <MES_Led1_RI>                      : mesure intensité led 1 rouge - Status 0
+                                                           80.000000  < ... < 3000.000000 
+                                                           1386.000000 
+               Mesure <MES_Led1_ONI>                     : Intensité LED white 1 - Status 2
+                                                           80.000000  < ... < 3000.000000 
+               Mesure <MES_Led1_GI>                      : mesure intensité led 1 vert - Status 0
+                                                           80.000000  < ... < 10000.000000 
+                                                           2459.000000 
+               Mesure <MES_Led1_BI>                      : mesure intensité led 1 bleu - Status 0
+                                                           80.000000  < ... < 10000.000000 
+                                                           4414.000000 
+               Mesure <MES_Led1_IRGB>                    : Mesure intensité RGBI - Status 0
+                                                           500.000000  < ... < 10000.000000 
+                                                           2949.000000 
+               Mesure <MES_Led1_GRGB>                    : Mesure GREEN RGBI - Status 0
+                                                           100.000000  < ... < 130.000000 
+                                                           121.000000 
+               Mesure <MES_Led1_BRGB>                    : Mesure BLEU RGBI - Status 0
+                                                           80.000000  < ... < 115.000000 
+                                                           96.000000 
+               Mesure <MES_Led1_RRGB>                    : Mesure RED RGBI - Status 0
+                                                           10.000000  < ... < 50.000000 
+                                                           38.000000 
+               
+[04:00:28:943] 
+[04:00:28:943] --------> Appel Traça  : Collect OF depuis SFC: Début <--------
+[04:00:28:985] --------> Appel Traça  : Collect OF depuis SFC: Fin  <--------
+[04:00:28:987] ==============> Assemblage des données STB en Traçabilité
+
+[04:00:28:987] --------> Appel Traça  : Log Parametric Data Tableau: Début <--------
+[04:00:29:077] --------> Appel Traça  : Log Parametric Data Tableau: Fin   <--------
+[04:00:32:395] ATTENTE RETRAIT
+[04:00:34:220] --------> Appel Traça  : Enregistrement Log : Début <--------
