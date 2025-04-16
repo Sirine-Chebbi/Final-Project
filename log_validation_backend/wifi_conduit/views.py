@@ -1,5 +1,8 @@
 import os
 import re
+import numpy as np
+
+from .statistics import calculate_gaussian
 from django.core.files.storage import default_storage
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -276,26 +279,44 @@ def upload_log(request):
 
 @api_view(['GET'])
 def results_without_delta_desc(request):
-
     exclude_fields = {'description', 'delta'}
     fields = [f.name for f in ConduitResult._meta.get_fields() 
              if f.name not in exclude_fields and not f.is_relation]
     
     queryset = ConduitResult.objects.filter(delta__isnull=True, description__isnull=True)
     results = list(queryset.values(*fields))
-    return Response({"results": results})
+    
+    # Calculs statistiques pour chaque métrique
+    metrics = ['rssi', 'power_rms_avg', 'evm']
+    statistics = {}
+    
+    for metric in metrics:
+        values = [r[metric] for r in results if r[metric] is not None]
+        if values:
+            statistics[metric] = {
+                'count': len(values),
+                'mean': np.mean(values),
+                'std': np.std(values),
+                'min': np.min(values),
+                'max': np.max(values),
+                'gaussian': calculate_gaussian(values)
+            }
+        else:
+            statistics[metric] = None
+    
+    return Response({
+        "results": results,
+        "statistics": statistics
+    })
 
 @api_view(['GET'])
 def results_with_delta_desc(request):
-
     try:
-        # Get all concrete fields (excluding relations) from the model
         fields = [
             f.name for f in ConduitResult._meta.get_fields() 
             if not f.is_relation and f.concrete
         ]
         
-        # Filter for non-None delta and description
         queryset = ConduitResult.objects.exclude(
             delta__isnull=True
         ).exclude(
@@ -305,14 +326,40 @@ def results_with_delta_desc(request):
             description__isnull=False
         )
         
-        # Convert to list of dictionaries with all fields
         results = list(queryset.values(*fields))
         
         if not results:
-            return Response({ "message": "No results found with both delta and description values", "results": [] }, status=200)
+            return Response({ 
+                "message": "No results found with both delta and description values", 
+                "results": [] 
+            }, status=200)
             
-        return Response({ "count": len(results), "results": results })
+        # Calculs statistiques pour delta et autres métriques
+        metrics = ['delta', 'rssi', 'power_rms_avg', 'evm']
+        statistics = {}
+        
+        for metric in metrics:
+            values = [r[metric] for r in results if r[metric] is not None]
+            if values:
+                statistics[metric] = {
+                    'count': len(values),
+                    'mean': np.mean(values),
+                    'std': np.std(values),
+                    'min': np.min(values),
+                    'max': np.max(values),
+                    'gaussian': calculate_gaussian(values)
+                }
+            else:
+                statistics[metric] = None
+        
+        return Response({ 
+            "count": len(results), 
+            "results": results,
+            "statistics": statistics
+        })
         
     except Exception as e:
-        return Response({"error": str(e),"message": "An error occurred while processing your request" }, status=500)
-    
+        return Response({
+            "error": str(e),
+            "message": "An error occurred while processing your request" 
+        }, status=500)

@@ -37,3 +37,24 @@ class ConduitResult(models.Model):
 
     def __str__(self):
         return f"{self.code} - {self.type_gega} - {self.frequence}MHz - ANT{self.ant}"
+    
+
+    class Meta:
+        indexes = [
+            # Index basique pour les champs de filtrage
+            models.Index(fields=['delta'], name='conduit_delta_idx'),
+            models.Index(fields=['description'], name='conduit_desc_idx'),
+            
+            # Index pour l'analyse statistique
+            models.Index(fields=['rssi'], name='conduit_rssi_idx'),
+            models.Index(fields=['power_rms_avg'], name='conduit_power_idx'),
+            models.Index(fields=['evm'], name='conduit_evm_idx'),
+            
+            # Index composite (exemple)
+            models.Index(
+                fields=['delta', 'description'], 
+                name='conduit_delta_desc_idx'
+            ),
+        ]
+
+

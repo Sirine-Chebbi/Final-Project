@@ -37,7 +37,6 @@ const NFT = () => {
   const [bande, setSelectedBande] = useState('');
   const [min, setSelectedMin] = useState('');
   const [max, setSelectedMax] = useState('');
-  const [chartInstance, setChartInstance] = useState(null);
 
   useEffect(() => {
     const fetchTestResults = async () => {
@@ -108,7 +107,7 @@ const NFT = () => {
     if (!stats) return { datasets: [] };
 
     // Création de l'histogramme
-    const binSize = 0.5; // Taille des bins de l'histogramme
+    const binSize = 0.2; // Taille des bins de l'histogramme
     const histogram = {};
     stats.powerValues.forEach(value => {
       const bin = Math.round(value / binSize) * binSize;
