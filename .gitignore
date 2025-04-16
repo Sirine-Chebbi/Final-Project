@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+db.sqlite3
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Django
+*.sqlite3
+/migrations/

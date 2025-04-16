@@ -1,11 +1,17 @@
 # views.py
 import re
+import numpy as np
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import NftResults
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.files.storage import default_storage
+
+from .statistics import calculate_gaussian
+
 
 def process_nft_file(content, filename=None):
     rf_pattern = re.compile(
@@ -16,7 +22,7 @@ def process_nft_file(content, filename=None):
     )
 
     matches = list(rf_pattern.finditer(content))
-
+    
     for match in matches:
         try:
             NftResults.objects.create(
@@ -48,6 +54,7 @@ def upload_nft_results(request):
         successful_files = []
         uploaded_files = request.FILES.getlist('nft_files')
 
+        # 💥 Supprimer les anciennes données une seule fois ici
         if NftResults.objects.exists():
             NftResults.objects.all().delete()
 
@@ -95,19 +102,73 @@ def upload_nft_results(request):
 @api_view(['GET'])
 def get_nft_results(request):
     queryset = NftResults.objects.all()
-
+    
     if not queryset.exists():
         return Response({"message": "Aucune donnée disponible"}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Données de base
+    results = [{
+        "mesure": result.mesure,
+        "bande": result.bande,
+        "antenne": result.antenne,
+        "power": result.power,
+        "lim_min": result.lim_min,
+        "lim_max": result.lim_max,
+    } for result in queryset]
+    
+    # Calculs statistiques
+    power_values = [r['power'] for r in results if r['power'] is not None]
+    stats = {
+        'count': len(power_values),
+        'mean': np.mean(power_values) if power_values else None,
+        'std': np.std(power_values) if power_values else None,
+        'min': np.min(power_values) if power_values else None,
+        'max': np.max(power_values) if power_values else None,
+    }
+    
+    # Courbe gaussienne
+    gaussian = calculate_gaussian(power_values)
+    
+    return Response({
+        'results': results,
+        'statistics': stats,
+        'gaussian': gaussian
+    }, status=status.HTTP_200_OK)
 
-    results = []
-    for result in queryset:
-        results.append({
-            "mesure": result.mesure,
-            "bande": result.bande,
-            "antenne": result.antenne,
-            "power": result.power,
-            "lim_min": result.lim_min,
-            "lim_max": result.lim_max,
+@api_view(['GET'])
+def get_power_statistics(request):
+    try:
+        power_values = list(NftResults.objects.exclude(power__isnull=True).values_list('power', flat=True))
+        
+        if not power_values:
+            return Response(
+                {"message": "Aucune donnée power disponible"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        gaussian_data = calculate_gaussian(power_values)
+        
+        return Response({
+            'statistics': {
+                'count': len(power_values),
+                'mean': float(np.mean(power_values)),
+                'std': float(np.std(power_values)),
+                'min': float(np.min(power_values)),
+                'max': float(np.max(power_values)),
+            },
+            'gaussian_curve': {
+                'x': [float(x) for x in gaussian_data['curve']['x']],
+                'y': [float(y) for y in gaussian_data['curve']['y']]
+            },
+            'original_data': [float(x) for x in power_values],
+            'histogram': {
+                'bins': [int(x) for x in np.histogram(power_values, bins=10)[0].tolist()],
+                'edges': [float(x) for x in np.histogram(power_values, bins=10)[1].tolist()]
+            }
         })
-
-    return Response(results, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
