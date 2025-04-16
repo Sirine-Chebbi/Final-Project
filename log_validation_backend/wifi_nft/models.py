@@ -8,3 +8,9 @@ class NftResults(models.Model):
     power = models.FloatField(null=True, blank=True) 
     lim_min = models.IntegerField(null=True, blank=True) 
     lim_max = models.IntegerField(null=True, blank=True) 
+    source_file = models.CharField(max_length=100, null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['power']),
+        ]
