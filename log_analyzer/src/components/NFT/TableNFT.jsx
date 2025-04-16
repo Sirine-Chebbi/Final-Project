@@ -1,26 +1,27 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
-const TableNFT = ({ testResults, antenne, mesure, bande, setSelectedMin, setSelectedMax }) => {
+const TableNFT = ({ testResults, antenne, mesure, bande, setSelectedMin, setSelectedMax, setFilteredResults}) => {
   var filteredResults = testResults;
 
   // Step 1: Filter by mesure
   if (mesure) {
-    filteredResults = filteredResults.filter((result) => result.mesure === mesure.trim());
+    filteredResults = filteredResults.filter((result) => result.mesure == mesure);
   }
 
   // Step 2: Filter by antenne
   if (antenne) {
-    filteredResults = filteredResults.filter((result) => result.antenne === antenne);
+    filteredResults = filteredResults.filter((result) => result.antenne == antenne);
   }
 
   // Step 3: Filter by bande
   if (bande) {
-    filteredResults = filteredResults.filter((result) => result.bande === bande + "G");
-  }
+    filteredResults = filteredResults.filter((result) => result.bande == bande + "G");
+  } 
 
   const minLimit = Math.min(...filteredResults.map((result) => parseFloat(result.lim_min)));
   const maxLimit = Math.max(...filteredResults.map((result) => parseFloat(result.lim_max)));
+  
 
   useEffect(() => {
     if (minLimit === Infinity || maxLimit === -Infinity) {
@@ -31,7 +32,12 @@ const TableNFT = ({ testResults, antenne, mesure, bande, setSelectedMin, setSele
     
     setSelectedMin(minLimit);
     setSelectedMax(maxLimit);
-  }, [minLimit, maxLimit, setSelectedMin, setSelectedMax]);
+    setFilteredResults(filteredResults);
+  }, [minLimit, maxLimit, filteredResults, setSelectedMin, setSelectedMax, setFilteredResults]);
+
+  console.log("Filtered Results:", filteredResults);
+  console.log(mesure, antenne, bande);
+  
 
   return (
     <>
@@ -79,6 +85,7 @@ TableNFT.propTypes = {
   bande: PropTypes.string,
   setSelectedMin: PropTypes.func.isRequired, 
   setSelectedMax: PropTypes.func.isRequired, 
+  setFilteredResults: PropTypes.array.isRequired,
 };
 
 export default TableNFT;

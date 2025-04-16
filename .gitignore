@@ -12,4 +12,4 @@ package-lock.json
 
 # Django
 *.sqlite3
-/migrations/
+/uploads/

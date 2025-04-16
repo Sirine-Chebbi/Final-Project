@@ -1,4 +1,3 @@
-# views.py
 import re
 import numpy as np
 
@@ -15,9 +14,9 @@ from .statistics import calculate_gaussian
 
 def process_nft_file(content, filename=None):
     rf_pattern = re.compile(
-        r'Mesure <(?P<mesure>MES_BNFTPWR(\d)(\w+))>\s:.?Status\s(?P<status>\d+).?'
-        r'(?P<lim_min>\d+.\d+)\sdBm\s<\s...\s<\s(?P<lim_max>\d+.\d+)\sdBm.?'
-        r'(?P<power>\d+.\d+)\sdBm',
+        r'Mesure <(?P<mesure>MES_BNFT_PWR(\d)_(\w+))>\s*:.*?Status\s*(?P<status>\d+).*?'
+        r'(?P<lim_min>\d+\.\d+)\s*dBm\s*<\s*\.\.\.\s*<\s*(?P<lim_max>\d+\.\d+)\s*dBm.*?'
+        r'(?P<power>\d+\.\d+)\s*dBm',
         re.DOTALL
     )
 
