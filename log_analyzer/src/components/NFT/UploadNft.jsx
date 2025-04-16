@@ -3,22 +3,22 @@ import axios from "axios";
 
 const UploadNFT = () => {
 
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
 
   const handleFileChange = (event) => {
-    setFile(event.target.files);
+    setFiles(event.target.files);
   };
 
   const handleUpload = async () => {
-    if (!file) {
+    if (!files) {
       setMessage("Veuillez sélectionner un fichier.");
       return;
     }
 
     const formData = new FormData();
-    for (let i = 0; i < file.length; i++) {
-      formData.append("file", file[i]);
+    for (let i = 0; i < files.length; i++) {
+      formData.append("nft_files", files[i]);
     }
 
 
@@ -30,15 +30,12 @@ const UploadNFT = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      
-      setMessage(response.data.message);
 
+      setMessage(`Succès : ${response.data.total_count} fichiers traités.`);
     } catch (error) {
-      console.error("Erreur lors de l'envoi:", error);
-      setMessage(error.response?.data.error);
+      console.error("Erreur lors de l'envoi :", error);
+      setMessage(error.response?.data.message || "Erreur lors de l'envoi.");
     }
-
-    window.location.reload();
   };
 
   return (
