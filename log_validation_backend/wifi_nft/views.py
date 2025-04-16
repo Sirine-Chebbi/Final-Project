@@ -1,4 +1,3 @@
-# views.py
 import re
 import numpy as np
 

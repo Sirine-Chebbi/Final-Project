@@ -7,14 +7,14 @@ function NftFilter({ testResults, setSelectedAntenne, setSelectedMesure, setSele
     const [mesure, setMesure] = useState("");
     const [bande, setBande] = useState("");
 
-    const handleClickAntenne = (antenne) => {
-        setSelectedAntenne(antenne);
+    const handleClickAntenne = (value) => {
+        setSelectedAntenne(value);
     }
-    const handleClickMesure = (mesure) => {
-        setSelectedMesure(mesure);
+    const handleClickMesure = (value) => {
+        setSelectedMesure(value);
     }
-    const handleClickBande = (bande) => {
-        setSelectedBande(bande);
+    const handleClickBande = (value) => {
+        setSelectedBande(value);
     }
 
     const Annuler = () => {

@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class NftResults(models.Model):
     mesure = models.CharField(max_length=50, null=True)
     bande  = models.CharField(max_length=10, null=True)
