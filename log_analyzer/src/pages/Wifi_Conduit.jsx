@@ -30,7 +30,6 @@
 
     const [filteredResults ,setFilteredResults] = useState([]);
 
-
     console.log("selectedAntenne:", Antenne);
     console.log("selectedFrequency:", Bande);
     

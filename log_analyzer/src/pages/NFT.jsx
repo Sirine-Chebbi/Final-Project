@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import NftFilter from '../components/NFT/NftFilter';
-import Nftgraph from '../components/NFT/NFTgraph';
+import Nftgraph from '../components/NFT/Nftgraph';
 import TableNFT from '../components/NFT/TableNFT';
 import UploadNFT from '../components/NFT/UploadNft';
 import axios from 'axios';
 
-
 const NFT = () => {
-
   const [testResults, setTestResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
   const [antenne, setSelectedAntenne] = useState('');
@@ -16,8 +14,6 @@ const NFT = () => {
   const [bande, setSelectedBande] = useState('');
   const [min, setSelectedMin] = useState('');
   const [max, setSelectedMax] = useState('');
-
-
 
   const fetchTestResults = async () => {
     try {
@@ -31,8 +27,6 @@ const NFT = () => {
   useEffect(() => {
     fetchTestResults();
   }, []);
-
-
 
   return (
     <>
@@ -57,9 +51,9 @@ const NFT = () => {
           setFilteredResults={setFilteredResults}
         />
         <Nftgraph
-        filteredResults={filteredResults}
-        min={min}
-        max={max}
+          filteredResults={filteredResults}
+          min={min}
+          max={max}
         />
       </div>
     </>

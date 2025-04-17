@@ -10,11 +10,10 @@ import {
   Tooltip,
   Legend,
   Title,
-} from 'chart.js';
-import { Chart } from 'react-chartjs-2';
-import PropTypes from 'prop-types';
+} from "chart.js";
+import { Chart } from "react-chartjs-2";
+import PropTypes from "prop-types";
 
-// Enregistrement complet des composants ChartJS nécessaires
 ChartJS.register(
   BarElement,
   CategoryScale,
@@ -37,8 +36,8 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
     const stdDev = Math.sqrt(powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) / powerValues.length);
-    const dataMin = min || Math.min(...powerValues);
-    const dataMax = max || Math.max(...powerValues);
+    const dataMin = min;
+    const dataMax = max;
 
     const generateGaussianCurve = () => {
       const curve = [];
@@ -57,8 +56,8 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       max: dataMax,
       powerValues,
       gaussianCurve: generateGaussianCurve(),
-      limMin: parseFloat(data[0]?.lim_min) || 0,
-      limMax: parseFloat(data[0]?.lim_max) || 0
+      limMin: dataMin,
+      limMax: dataMax
     };
   };
 
@@ -79,52 +78,79 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
     return {
       datasets: [
+        
         {
-          type: 'line',
-          label: 'Distribution Gaussienne',
-          data: stats.gaussianCurve.map(point => ({ x: point.x, y: point.y })),
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2,
+          type: "line",
+          label: "Distribution Gaussienne",
+          data: stats.gaussianCurve.map((point) => ({
+            x: point.x,
+            y: point.y,
+          })),
+          borderColor: "#06b6d4", // Using hex color
+          borderWidth: 3,
           pointRadius: 0,
-          yAxisID: 'y'
+          yAxisID: "y",
         },
         {
-          type: 'bar',
-          label: 'Histogramme',
+          type: "bar",
+          label: "Histogramme",
           data: Object.entries(histogram).map(([x, y]) => ({
             x: parseFloat(x),
-            y: y * scaleFactor
+            y: y * scaleFactor,
           })),
-          backgroundColor: 'rgba(255, 99, 132, 0.6)',
-          yAxisID: 'y1'
+          backgroundColor: "rgba(239, 68, 68, 0.7)", // Using rgba color
+          yAxisID: "y1",
         },
         {
-          type: 'line',
-          label: 'Limite Min',
+          type: "line",
+          label: "LSI",
           data: [
             { x: stats.limMin, y: 0 },
-            { x: stats.limMin, y: Math.max(...stats.gaussianCurve.map(p => p.y)) }
+            {
+              x: stats.limMin,
+              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
+            },
           ],
-          borderColor: 'rgba(255, 206, 86, 1)',
+          borderColor: "#f59e0b", // Using hex color
           borderWidth: 2,
           borderDash: [5, 5],
           pointRadius: 0,
-          yAxisID: 'y'
+          yAxisID: "y",
         },
         {
-          type: 'line',
-          label: 'Limite Max',
+          type: "line",
+          label: "LSS",
           data: [
             { x: stats.limMax, y: 0 },
-            { x: stats.limMax, y: Math.max(...stats.gaussianCurve.map(p => p.y)) }
+            {
+              x: stats.limMax,
+              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
+            },
           ],
-          borderColor: 'rgba(255, 206, 86, 1)',
+          borderColor: "#f59e0b", // Using hex color
           borderWidth: 2,
           borderDash: [5, 5],
           pointRadius: 0,
-          yAxisID: 'y'
-        }
-      ]
+          yAxisID: "y",
+        },
+        {
+          type: "line",
+          label: "Cible",
+          data: [
+            { x: stats.mean, y: 0 },
+            {
+              x: stats.mean,
+              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
+            },
+          ],
+          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderWidth: 2,
+          borderDash: [10, 5],
+          pointRadius: 0,
+          yAxisID: "y",
+        },
+        
+      ],
     };
   };
 
@@ -283,4 +309,4 @@ Nftgraph.propTypes = {
   max: PropTypes.number,
 };
 
-export default Nftgraph
+export default Nftgraph;
