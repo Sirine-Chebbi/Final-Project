@@ -1,61 +1,70 @@
-import './wifi.css'
-import { useState, useEffect } from "react";
-import Upload from "../components/Wifi_Conduit/Upload"
-import Table from "../components/Wifi_Conduit/Table"
-import Menu from "../components/Wifi_Conduit/Menu"
-import Delta from "../components/Wifi_Conduit/Delta"
-import Filters from "../components/Wifi_Conduit/Filters"
-import { Graph } from '../components/Wifi_Conduit/Graph';
-import axios from "axios";
-import Navbar from '../components/Navbar';
+  import './wifi.css'
+  import { useState, useEffect } from "react";
+  import Upload from "../components/Wifi_Conduit/Upload"
+  import Table from "../components/Wifi_Conduit/Table"
+  import Menu from "../components/Wifi_Conduit/Menu"
 
-function Wifi_Conduit() {
+  import Rssigraph from "../components/Wifi_Conduit/Graphs/Rssigraph"
+  import Powergraph from "../components/Wifi_Conduit/Graphs/Powergraph"
+  import Evmgraph from "../components/Wifi_Conduit/Graphs/Evmgraph"
+  import Deltagraph from "../components/Wifi_Conduit/Graphs/Deltagraph"
 
-  const [selectedFrequency, setSelectedFrequency] = useState("");
-  const [selectedAntenne, setSelectedAntenne] = useState(""); 
-  const [selectedCaisson, setSelectedCaisson] = useState(""); 
-  const [Lmax, setLmax] = useState(0);
-  const [Lmin, setLmin] = useState(0);     
-  const [selectedVisibility, setVisibility] = useState("hidden");
-  const [testResults, setTestResults] = useState([]);
-  const [Results, setfetchResult] = useState([]);
-  const [Mesure, setMesure] = useState("");
-  const [Antenne, setselectedAntenne] = useState(0);
-  const [Bande, setselectedBande] = useState("");
+  import Delta from "../components/Wifi_Conduit/Delta"
+  import Filters from "../components/Wifi_Conduit/Filters"
 
-  console.log(Antenne);
-  console.log(Bande);
-  
-  
+  import axios from "axios";
+  import Navbar from '../components/Navbar';
 
-  useEffect(() => {
-    const fetchTestResults = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/wifi-conduit/results/without-delta-desc/");
-        setTestResults(response.data.results);
-      } catch (error) {
-        console.error("Error fetching test results", error);
-      }
-    };
-    fetchTestResults();
-  }, []);
+  function Wifi_Conduit() {
+
+    const [selectedFrequency, setSelectedFrequency] = useState("");
+    const [selectedAntenne, setSelectedAntenne] = useState(""); 
+    const [selectedCaisson, setSelectedCaisson] = useState(""); 
+    const [selectedVisibility, setVisibility] = useState("hidden");
+
+    const [testResults, setTestResults] = useState([]);
+    const [Results, setfetchResult] = useState([]);
+
+    const [Antenne, setSelectedAntenneDelta] = useState(0);
+    const [Bande, setselectedBande] = useState("");
+
+    const [filteredResults ,setFilteredResults] = useState([]);
 
 
-  return (
-    <>
-    <Navbar></Navbar>
-      <Menu></Menu>   
-      <div className="pr-35 pl-60 mb-10">
-        <div className="flex justify-between mt-10">
-          <Upload></Upload> 
-          <Delta setselectedAntenne={setselectedAntenne} setselectedBande={setselectedBande} setfetchResult={setfetchResult}></Delta>
-        </div>
-          <Filters setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
-          <Table setMesure={setMesure} setLmax={setLmax} setLmin={setLmin} testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility}></Table>
-          <Graph Results={Results} Bande={Bande} Antenne={Antenne} Mesure={Mesure} Lmin={Lmin} Lmax={Lmax} testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedCaisson={selectedCaisson}/>
-      </div> 
-    </>
-  )
-}
+    console.log("selectedAntenne:", Antenne);
+    console.log("selectedFrequency:", Bande);
+    
+    useEffect(() => {
+      const fetchTestResults = async () => {
+        try {
+          const response = await axios.get("http://127.0.0.1:8000/api/wifi-conduit/results/without-delta-desc/");
+          setTestResults(response.data.results);
+        } catch (error) {
+          console.error("Error fetching test results", error);
+        }
+      };
+      fetchTestResults();
+    }, []);
 
-export default  Wifi_Conduit
+
+    return (
+      <>
+      <Navbar></Navbar>
+        <Menu></Menu>   
+        <div className="pr-35 pl-60 mb-10">
+          <div className="flex justify-between mt-10">
+            <Upload></Upload> 
+            <Delta setSelectedAntenneDelta={setSelectedAntenneDelta} setselectedBande={setselectedBande} setfetchResult={setfetchResult}></Delta>
+          </div>
+            <Filters setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
+            <Table testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility} setFilteredResults={setFilteredResults} setSelectedCaisson={setSelectedCaisson}></Table>
+            <Powergraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Powergraph>
+            <Evmgraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Evmgraph>
+            <Rssigraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Rssigraph>
+            <Deltagraph Results={Results} selectedCaisson={selectedCaisson}></Deltagraph>
+        </div> 
+      </>
+    )
+  }
+
+  export default  Wifi_Conduit

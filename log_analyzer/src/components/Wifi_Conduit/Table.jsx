@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo  } from "react";
 import PropTypes from 'prop-types'
 
-const Table = ({setMesure, selectedFrequency, selectedAntenne, testResults, setLmin, setLmax}) => {
+const Table = ({selectedFrequency, selectedAntenne, testResults, setFilteredResults}) => {
 
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
@@ -9,21 +9,26 @@ const Table = ({setMesure, selectedFrequency, selectedAntenne, testResults, setL
 
   const handleSelectChange = (event) => {
     setSelectedMetric(event.target.value);
-    setMesure(selectedMetric)
   };
 
-  var filteredResults = testResults;
+  const filteredResults = useMemo(() => {
+      let results = [...testResults];
 
-  if (selectedAntenne != "" && selectedFrequency != "") {
-    filteredResults = selectedFrequency || selectedAntenne
-      ? testResults.filter((result) => (result.frequence == selectedFrequency) && (result.ant == selectedAntenne))
-      : testResults;
+      if (selectedAntenne != "" && selectedFrequency != "") {
+        results = selectedFrequency || selectedAntenne
+          ? testResults.filter((result) => (result.frequence == selectedFrequency) && (result.ant == selectedAntenne))
+          : testResults;
+      
+        } else {
+          results = selectedFrequency || selectedAntenne
+            ? testResults.filter((result) => (result.frequence == selectedFrequency) || (result.ant == selectedAntenne))
+            : testResults;
+        }
 
-  } else {
-    filteredResults = selectedFrequency || selectedAntenne
-      ? testResults.filter((result) => (result.frequence == selectedFrequency) || (result.ant == selectedAntenne))
-      : testResults;
-  }
+        return results;
+      }, [testResults, selectedFrequency, selectedAntenne]);
+
+  setFilteredResults(filteredResults);
 
   useEffect(() => {
     if (filteredResults.length > 0) {
@@ -39,46 +44,19 @@ const Table = ({setMesure, selectedFrequency, selectedAntenne, testResults, setL
         if (selectedMetric == "Evm") {
           setMin(filteredResults[0].evm_min);
           setMax(filteredResults[0].evm_max);
-          setLmax(max);
-          setLmin(min);
-          console.log(max);
-          
-          if(max == null){
-            setLmax(0);
-          }
-          if(min == null){
-            setLmin(0)
-          }
         }
         else if (selectedMetric == "Rssi") {
             setMin(filteredResults[0].rssi_min);
             setMax(filteredResults[0].rssi_max);
-            setLmax(max);
-            setLmin(min);
-            if(max == null){
-              setLmax(0);
-            }
-            if(min == null){
-              setLmin(0)
-            }
           }
         else{
           setMin(filteredResults[0].limit_min);
           setMax(filteredResults[0].limit_max);
-          setLmax(max);
-          setLmin(min);
-          if(max == null){
-            setLmax(0);
-          }
-          if(min == null){
-            setLmin(0)
-          }
         }
       }
     }
-  }, [filteredResults, max, min, setLmax, setLmin, selectedMetric]);
+  }, [filteredResults, selectedMetric]);
 
-  
 
   return (
     <>
@@ -167,6 +145,7 @@ Table.propTypes = {
   setLmin: PropTypes.number,
   selectedFrequency: PropTypes.string,
   selectedVisibility: PropTypes.string,
-  selectedAntenne: PropTypes.string
+  selectedAntenne: PropTypes.string,
+  setFilteredResults: PropTypes.array,
 };
 export default Table;

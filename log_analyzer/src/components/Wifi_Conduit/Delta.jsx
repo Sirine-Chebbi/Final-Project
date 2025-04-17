@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "./delta.css"
 import axios from "axios";
 import PropTypes from 'prop-types'
 
-export const Delta = ({setselectedAntenne, setselectedBande, setfetchResult}) => {
+export const Delta = ({setSelectedAntenneDelta, setselectedBande, setfetchResult}) => {
 
     const [value, setValue] = useState(2);
     const [Results, setTestResults] = useState([]);
@@ -27,31 +27,33 @@ export const Delta = ({setselectedAntenne, setselectedBande, setfetchResult}) =>
 
 
     useEffect(() => {
-        setselectedAntenne(Antenne);
-    }, [Antenne, setselectedAntenne]);
+        setSelectedAntenneDelta(Antenne);
+    }, [Antenne, setSelectedAntenneDelta]);
     
     useEffect(() => {
         setselectedBande(Bande);
     }, [Bande, setselectedBande]);
 
-    useEffect(() => {
-        setfetchResult(Results);
-    }, [Results, setfetchResult]);
+    const filteredResults = useMemo(() => {
+          let results = [...Results];
+    
+          if (Antenne != 0 && Bande != "") {
+            results = Antenne || Bande
+                ? Results.filter((result) => (result.ant == Antenne) && (result.type_gega == Bande))
+                : Results;
+    
+        } else {
+            results = Antenne || Bande
+                ? Results.filter((result) => (result.type_gega == Bande) || (result.ant == Antenne))
+                : Results;
+        }
+    
+            return results;
+          }, [Results, Antenne, Bande]);
+    
+      setfetchResult(filteredResults);
 
 
-
-    var filteredResults = Results;
-
-    if (Antenne != 0 && Bande != "") {
-        filteredResults = Antenne || Bande
-            ? Results.filter((result) => (result.ant == Antenne) && (result.type_gega == Bande))
-            : Results;
-
-    } else {
-        filteredResults = Antenne || Bande
-            ? Results.filter((result) => (result.type_gega == Bande) || (result.ant == Antenne))
-            : Results;
-    }
 
     useEffect(() => {
         const fetchTestResults = async () => {
@@ -92,7 +94,7 @@ export const Delta = ({setselectedAntenne, setselectedBande, setfetchResult}) =>
                             <td className="p-3">Bande</td>
                             <td className="p-3">Signal</td>
                             <td className="p-3">Antenne</td>
-                            <td className="p-4">Delta</td>
+                            <td className="p-4">RX-Gainerror</td>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-yellow-400 text-lg">
@@ -112,7 +114,7 @@ export const Delta = ({setselectedAntenne, setselectedBande, setfetchResult}) =>
 }
 
 Delta.propTypes = {
-    setselectedAntenne: PropTypes.func.isRequired,
+    setSelectedAntenneDelta: PropTypes.func.isRequired,
     setselectedBande: PropTypes.func.isRequired,
     setfetchResult: PropTypes.array,
 };
