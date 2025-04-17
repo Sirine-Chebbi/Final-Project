@@ -176,14 +176,14 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     ctx.drawImage(canvas, 0, 0);
   
     const imgData = scaledCanvas.toDataURL("image/png");
-    const imgWidth = 180;
+    const imgWidth = 160;
     const imgHeight = 140;
     const imgX = 15;
     const imgY = 30;
   
     const bande = filteredResults[0]?.bande || 'unknown';
     const antenne = filteredResults[0]?.antenne || 'unknown';
-    const title = `POWER_RMS_AVG_VSA1 ${bande} A${antenne}`;
+    const title = `POWER_RMS_AVG_VSA1 ${filteredResults[0]?.bande} A${filteredResults[0]?.antenne}`;
   
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 255);
@@ -191,7 +191,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     pdf.text(title, titleX, 15);
   
     pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
-    pdf.save(`power_graph_${bande}_A${antenne}.pdf`);
+    pdf.save(`power_graph_${filteredResults[0]?.bande}_A${filteredResults[0]?.antenne}.pdf`);
   };
   
 
@@ -205,7 +205,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-cyan-400">Moyenne</h3>
+              <h3 className="text-cyan-400">Cible</h3>
               <p className="text-white text-xl">
                 {stats?.mean?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
               </p>
@@ -217,13 +217,13 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-cyan-400">Minimum</h3>
+              <h3 className="text-cyan-400">LSI</h3>
               <p className="text-white text-xl">
                 {stats?.min?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-cyan-400">Maximum</h3>
+              <h3 className="text-cyan-400">LSS</h3>
               <p className="text-white text-xl">
                 {stats?.max?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
               </p>

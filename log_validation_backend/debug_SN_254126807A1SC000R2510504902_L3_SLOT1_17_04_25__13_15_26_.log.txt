@@ -1,0 +1,748 @@
+[13:14:19:910] ===================> Attente retrait GTW <================================================
+
+[13:14:19:910] Perte Ping OK
+[13:14:20:020] ===================> DEBUT DE TEST <======================================================
+
+[13:14:20:030] ===================> EZR-BBS27600 <=======================================================
+
+[13:14:20:030] ######## CONFIGURATION BDT #######################
+[13:14:20:040] conf_GTW_BNFT_Config_DFA_FILLE            : [scos-manuf-data -b mcu get {Pass:#}{dfa 2%}]
+               conf_GTW_BNFT_Config_DFA                  : [scos-manuf-data -b file get dfa{Pass:#}{R%}]\r\n
+               conf_GTW_BNFT_Init_Wifi                   : [wl -i wl0 ver{Pass:#}{Fail:not found}][wl -i wl1 ver{Pass:#}{Fail:not found}]
+               conf_GTW_BNFT_Config_Wifi_2G              : [scos-wifi nft_stop all{Pass:#}]
+               conf_GTW_BNFT_Config_Wifi_5G              : [scos-wifi nft_stop wl0{Pass:#}]
+               conf_GTW_BNFT_Config_Wifi_6G              : [scos-wifi nft_stop wl1{Pass:#}]
+               conf_GTW_BNFT_Active_Antenne_x_2G         : [scos-wifi nft_stop wl0{Pass:#}][scos-wifi nft_start wl0 %s %d 12{Pass:#}{Fail:not found}]
+               conf_GTW_BNFT_Active_Antenne_x_5G         : [scos-wifi nft_stop wl1{Pass:#}][scos-wifi nft_start wl1 %s %d 20{Pass:#}{Fail:not found}]
+               conf_GTW_BNFT_Active_Antenne_x_6G         : [scos-wifi nft_stop wl2{Pass:#}][scos-wifi nft_start wl2 %s 6g%d 14{Pass:#}{Fail:not found}]
+               conf_GTW_BNFT_Active_Antenne_x_Dect       : [scos-voice -b dect nft_stop{Pass:#}][scos-voice -b dect nft_start %d{Pass:#}]
+               conf_GTW_BNFT_TEST_USB_1                  : [scos-storage -b usb test -p P1 {TimeOut:12}{Pass:#}{Pass:2:OK R/W tests OK}{Fail:not found}]
+               conf_GTW_BNFT_TEST_USB_2                  : [test_usb.sh -usb2 P8{Pass:ALL TESTS OK}]
+               conf_GTW_BNFT_login                       : [root{Pass:Password:}][root{Pass:#}]
+               conf_GTW_BNFT_Nom_Produit                 : REGLISSE_WIFI7
+               conf_GTW_BNFT_MSJ_NVRAM                   : [scos-wifi mfg 0{Pass:0}]
+               conf_GTW_BNFT_Version                     : NFT_V2.9.6
+               conf_GTW_BNFT_Nombre_Antenne_2G           : 3
+               conf_GTW_BNFT_Nombre_Antenne_5G           : 4
+               conf_GTW_BNFT_Nombre_Antenne_6G           : 4
+               conf_GTW_BNFT_Nombre_Antenne_Dect         : 2
+               conf_GTW_BNFT_Nombre_Antenne_LTE_TX       : 1
+               conf_GTW_BNFT_Nombre_Antenne_LTE_RX       : 1
+               conf_GTW_BNFT_Nombre_Antenne_BLE          : 1
+               conf_GTW_BNFT_Nombre_Antenne_ZIGBEE       : 1
+               conf_GTW_BNFT_Numero_Antennes_2G          : 0|1|2
+               conf_GTW_BNFT_Numero_Antennes_5G          : 0|1|2|3
+               conf_GTW_BNFT_Numero_Antennes_6G          : 0|1|2|3
+               conf_GTW_BNFT_LIMITE_PATHLOSS_2G          : 60|60|60
+               conf_GTW_BNFT_LIMITE_PATHLOSS_5G          : 60|60|60|60
+               conf_GTW_BNFT_LIMITE_PATHLOSS_6G          : 60|60|60|60
+               conf_GTW_BNFT_Numero_Switch_2G            : 01|08|03
+               conf_GTW_BNFT_Numero_Switch_5G            : 02|07|08|01
+               conf_GTW_BNFT_Numero_Switch_6G            : 04|05|06|09
+               conf_GTW_BNFT_CHECK_NVRAM                 : [scos-wifi mfg{Pass:1}{Fail:0}]
+               conf_GTW_BNFT_Nombre_Char_DFA_FILLE       : 9
+               conf_GTW_BNFT_Nombre_Char_DFA_MERE        : 10
+               conf_GTW_BNFT_TAG_DFA_MERE                : R
+               conf_GTW_BNFT_TAG_DFA_FILLE               : 2
+               conf_GTW_BNFT_CMD_TEMPS_DEM_GTW           : cut -d. -f1 /proc/uptime
+               conf_GTW_BNFT_TEMPS_DEM_GTW               : 70
+               conf_GTW_BNFT_CMD_FINALISATION            : [scos-wifi mfg 0{Tags:root@f5698ofr:~#}{Pass:root@f5698ofr:~#}{Fail:failed}]
+               conf_GTW_BNFT_CMD_INITIALISATION          : [scos-version{Pass:root@f5698ofr:~#}{Pass:MCU FIRMWARE: 20}][scos-wifi mfg 1{Pass:1}{Fail:0}]
+               conf_GTW_BNFT_OPERATION                   : ATR_TEST_BNFT_BOUTON
+               conf_GTW_BNFT_Delay_2G                    : 1
+               conf_GTW_BNFT_Delay_5G                    : 1
+               conf_GTW_BNFT_Delay_6G                    : 1
+               conf_GTW_BNFT_FLAG_USB_1                  : 1
+               conf_GTW_BNFT_FLAG_2G                     : 1
+               conf_GTW_BNFT_FLAG_5G                     : 1
+               conf_GTW_BNFT_FLAG_DFA_FILLE              : 1
+               conf_GTW_BNFT_FLAG_DFA_MERE               : 1
+               conf_GTW_BNFT_FLAG_ASSEMBLAGE_FILLE_MERE  : 1
+               conf_GTW_BNFT_FLAG_TRACA                  : 1
+               conf_GTW_BNFT_FLAG_CHECK_NVRAM            : 1
+               conf_GTW_BNFT_FLAG_LOGIN                  : 1
+               conf_GTW_BNFT_FLAG_TEMPS_DEM_GTW          : 1
+               conf_GTW_BNFT_FLAG_TEST_BOUTON            : 1
+               conf_GTW_BNFT_FLAG_SWITCH                 : 1
+               conf_GTW_BNFT_FLAG_INITIALISATION         : 1
+               conf_Resultat_Path                        : C:\Resultat
+               conf_Path_Bouton                          : C:\NFTBT\NFT-BTconsole
+               conf_GTW_BNFT_INT_MFG                     : scos-wifi mfg 1
+               flag_GTW_BNFT_FLAG_TAMPON                 : 0
+               flag_GTW_BNFT_CHECK_CALIBRATION           : 1
+               
+[13:14:20:040] poste_GTW_BNFT_Offset_Antennes_2G_S0_REGLISSE_WIFI78
+               poste_GTW_BNFT_Offset_Antennes_5G_S0_REGLISSE_WIFI71|27
+               poste_GTW_BNFT_Offset_Antennes_6G_S0_REGLISSE_WIFI77|26
+               
+[13:14:20:040] Pathloss 2GHz : 18|20|18|
+[13:14:20:040] Pathloss 5GHz : 27|28|31|27|
+[13:14:20:040] 
+[13:14:20:040] Pathloss DECT : 
+[13:14:20:040] Pathloss LTE TX : 
+[13:14:20:040] Pathloss LTE RX : 
+[13:14:20:040] Pathloss BLE : 
+[13:14:20:040] Pathloss ZIGBEE : 
+[13:14:36:911] Demarrage Carte OK
+[13:14:38:123] =====> Connexion Telnet 
+[13:14:38:352] [root{Pass:Password:}][root{Pass:#}]
+[13:14:38:352] [PC > GTW]  root
+[13:14:38:572] [PC < GTW]  f5698ofr login: root
+                           Password:
+[13:14:38:572] [PC > GTW]  root
+[13:14:38:793] [PC < GTW]  root@f5698ofr:~#
+[13:14:38:803] 
+[13:14:38:803] Connexion Telnet OK
+[13:14:39:803] ===================> Lecture DFA <========================================================
+
+[13:14:39:819] [PC > GTW]  scos-manuf-data -b file get dfa
+[13:14:39:989] [PC < GTW]  scos-manuf-data -b file get dfa
+                           
+                           R2510704291
+                           root@f5698ofr:~#
+[13:14:39:999] 
+[13:14:39:999] Lecture DFA carte mére OK
+[13:14:39:999] ===================> AUTORISATION DE PASSAGE <============================================
+
+[13:14:39:999]  Autorisation de Passage 
+[13:14:39:999] Sn Cie: R2510704291
+
+[13:14:39:999] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[13:14:40:019] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[13:14:40:019] SFC Trouvé pour ce SnCIE : 254126807A1SC000R2510504902
+
+[13:14:40:019] --------> Appel Traça  : Informations SFC : Début <--------
+[13:14:40:049] --------> Appel Traça  : Informations SFC : Fin   <--------
+[13:14:40:059] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[13:14:40:069] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[13:14:40:069] --------> Appel Traça  : SNPFIN - Start : Début <--------
+[13:14:40:160] --------> Appel Traça  : SNPFIN - Start : Fin   <--------
+[13:14:40:179] 
+[13:14:41:191] Autorisation de Passage OK
+[13:14:41:201] Sans vérification SFC avec flashage
+[13:14:41:211] ===================> Attente Demarrage Gateway Apres Certain Temps <======================
+
+[13:14:41:381] 
+[13:14:41:391] Temps de demarrage Gateway OK
+[13:14:41:391] ===================> Check Calibration File <=============================================
+
+[13:14:41:391] --------> Appel Traça  : Récupération Donnée Collectée du SFC : Début <--------
+[13:14:41:421] --------> Appel Traça  : Récupération Donnée Collectée du SFC : Fin   <--------
+[13:14:41:731] CHARGEMENT_CALIBRATION_RF OK
+[13:14:41:731] ===================> Lecture DFA carte fille <============================================
+
+[13:14:41:731] [PC > GTW]  scos-manuf-data -b mcu get
+[13:14:43:960] [PC < GTW]  scos-manuf-data -b mcu get
+                           
+                           model FAST5698OFR
+                           dfa 2510704274
+                           cal XBXB00
+                           md5 29b87b741201fff7439fb6fd29f1dfae
+                           xd5 d603f6d7aa6b812892476efca2d8f897
+                           root@f5698ofr:~#
+[13:14:43:970] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[13:14:43:990] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[13:14:45:002] --------> Appel Traça  : Récupération SFC Depuis Composant : Début <--------
+[13:14:45:021] --------> Appel Traça  : Récupération SFC Depuis Composant : Fin   <--------
+[13:14:45:131] --------> Appel Traça  : Récupération Donnée Collectée du SFC : Début <--------
+[13:14:45:161] --------> Appel Traça  : Récupération Donnée Collectée du SFC : Fin   <--------
+[13:14:45:472] DFA fille  DC
+
+[13:14:45:472] 2510704274
+
+[13:14:45:472] DFA fille carte
+
+[13:14:45:482] 2510704274
+
+[13:14:45:482] VERIFICATION DFA FILLE OK
+
+[13:14:45:502] --------> Appel Traça  : Informations SFC : Début <--------
+[13:14:45:552] --------> Appel Traça  : Informations SFC : Fin   <--------
+[13:14:45:572] 
+[13:14:45:572] Vérification DFA carte fille OK
+[13:14:45:572] ===================> Check Nvram <========================================================
+
+[13:14:45:582] [PC > GTW]  scos-wifi mfg
+[13:14:45:752] [PC < GTW]  scos-wifi mfg
+                           
+                           MFG: 1
+[13:14:45:762] 
+[13:14:45:762] Check Nvram OK
+[13:14:45:762] ===================> Initialisation <=====================================================
+
+[13:14:45:762] [PC > GTW]  scos-version
+[13:14:46:492] [PC < GTW]  scos-version
+                           
+                           TPL 1 (armbl1): U-Boot TPL 2019.07 (Jul 03 2024 - 15:27:31 +0200)
+                           TPL 2 (armbl2): U-Boot TPL 2019.07 (Jul 03 2024 - 15:27:31 +0200)
+                           SMC BL: v.1.0.30.1.29 (df9cd4b51)
+                           SMC OS: v4.0.10.1.7.33 (b685e5dbd)
+                           BOOTFS (bootfs1): sc_f5698ofr_manuf_sblp-5_04L_04-17_10_369_39012-0.5.29 (Fri Mar  7 11:07:18 UTC 2025)
+                           BOOTFS (bootfs2): sc_f5698ofr_manuf_sblp-5_04L_04-17_10_369_39012-0.5.29 (Fri Mar  7 11:07:18 UTC 2025)
+                           6726B0 FIRMWARE: 17.10.369.39012 (r839077) Ucode Ver: 1892.32722 FWID: 01-64007507 WLTEST
+                           MCU FIRMWARE: 20
+                           GSDF (operational): UNKNOWN
+                           GSDF (rescue): UNKNOWN
+                           MILESTONE: 5.04L.04
+                           WLAN DRIVER: 17.10.369.39012
+                           CLMVER (wl0): API: 28.3 - Data: BCM6711_BCM6726.v0 - Compiler: 1.69.0 - ClmImport: 1.69.0 - Customization: F5698OFR_FR_v2.2 + F5698OPL_PL_v2.0 - Creation: 2025-02-25 10:53:38 -  - 
+                           CLMVER (wl1): API: 28.3 - Data: BCM6711_BCM6726.v0 - Compiler: 1.69.0 - ClmImport: 1.69.0 - Customization: F5698OFR_FR_v2.2 + F5698OPL_PL_v2.0 - Creation: 2025-02-25 10:53:38 -  - 
+                           OMCI: v11.10.0
+                           BCMBCA_VOICE_4_19_VERSION: 5.04L.04p3_v0.11.0
+                           H2AL_VOICE_BUNDLE_VERSION: c4c8c4b2af
+                           LINUX: 4.19.294-5.04L.04
+                           SCOS SYSTEM: sc_f5698ofr manuf 5_04L_04-17_10_369_39012-0.5.29 20250307T110611Z
+                           SCOS CORE: 2.1.1 (Hip to be scared)
+                           PON TYPE: GPON
+                           SROM: F5698OFR_v1.1.4 ('default' variant)
+                           root@f5698ofr:~#
+[13:14:46:502] [PC > GTW]  scos-wifi mfg 1
+[13:14:46:632] [PC < GTW]  scos-wifi mfg 1
+[13:14:46:642] 
+[13:14:46:642] Initialisation OK
+[13:14:46:642] ===================> Test USB Port 1 <====================================================
+
+[13:14:46:642] [PC > GTW]  scos-storage -b usb test -p P1
+[13:14:48:952] [PC < GTW]  scos-storage -b usb test -p P1
+                           
+                           USB:P1:START Starting tests for USB port P1
+                           USB:P1:SCAN Fetching device on port P1 as USB 2
+                           USB:P1:2:OK R/W tests OK
+                           USB:P1:SCAN Fetching device on port P1 as USB 3
+                           USB:P1:3:EMPTY Nothing plugged on P1 as USB 3
+                           USB:P1:END Finished tests for USB port P1
+                           root@f5698ofr:~#
+[13:14:48:962] 
+[13:14:48:962] Test USB port 1 OK
+[13:14:48:962] ===================> Initialisation Switch <==============================================
+
+[13:14:48:962] [PC > GTW]  enable
+[13:14:49:272] [PC < GTW]  enable
+                           (enable)#
+[13:14:49:272] [PC > GTW]  connect line 2
+[13:14:49:532] [PC < GTW]  connect line 2
+                           Connected to line 2.
+                           Escape sequence is <control>L
+[13:14:49:532] 
+[13:14:49:532] Initialisation Switch OK
+[13:14:49:532] ===================> Initialisation Wifi <================================================
+
+[13:14:49:532] [PC > GTW]  wl -i wl0 ver
+[13:14:49:702] [PC < GTW]  wl -i wl0 ver
+                           
+                           Broadcom BCA: 17.10 RC369.39012
+                           wl0: Mar  7 2025 10:55:09 version 17.10.369.39012 (r839077 WLTEST) BSPv1W13
+                           root@f5698ofr:~#
+[13:14:49:712] [PC > GTW]  wl -i wl1 ver
+[13:14:49:882] [PC < GTW]  wl -i wl1 ver
+                           
+                           Broadcom BCA: 17.10 RC369.39012
+                           wl1: Mar  6 2025 11:17:08 version 17.10.369.39012 (r839077 WLTEST) [5.04L.04p3-151-g29f780d34c] BSPv1W13 FWID 01-64007507
+                           root@f5698ofr:~#
+[13:14:49:892] 
+[13:14:49:892] Initialisation Wifi OK
+[13:14:49:892] ===================> Configuration Wifi  2.4 Ghz <========================================
+
+[13:14:49:902] [PC > GTW]  scos-wifi nft_stop all
+[13:14:50:181] [PC < GTW]  scos-wifi nft_stop all
+                           
+                           [1;35mINFO: stopping NFT for wl0[0m
+                           [1;35mINFO: wl0 is down[0m
+                           [1;35mINFO: stopping NFT for wl1[0m
+                           [1;35mINFO: wl1 is down[0m
+                           root@f5698ofr:~#
+[13:14:50:181] 
+[13:14:50:181] Configuration Wifi  2.4 Ghz OK
+[13:14:50:181] ===================> Récuparation Mesures Wifi 2.4 Ghz <==================================
+
+[13:14:50:181] [PC > GTW]  c01
+[13:14:50:301] ======>
+[13:14:50:522] switch port OK
+[13:14:50:531] [PC > GTW]  scos-wifi nft_stop wl0
+[13:14:51:357] [PC < GTW]  scos-wifi nft_stop wl0
+                           
+                           [1;35mINFO: stopping NFT for wl0[0m
+                           [1;35mINFO: wl0 is down[0m
+                           root@f5698ofr:~#
+[13:14:51:357] [PC > GTW]  scos-wifi nft_start wl0 0 1 12
+[13:14:52:495] [PC < GTW]  scos-wifi nft_start wl0 0 1 12
+                           
+                           [1;35mINFO: starting NFT for wl0[0m
+                           Chanspec set to 0x1001
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl0 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       1
+                           BSS Channel:           not associated
+                           BSS Local Max:         20.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           12.0 dBm
+                           SROM Antgain 2G:       3.25 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     16.00  
+                           
+                           Core Index:            1
+                           Board Limits:
+                           OFDM6                  1     19.00  
+                           
+                           Power Targets:
+                           OFDM6                  1     12.00  
+                           
+                           PHY Maximum Power Target among all rates  :      12.00   19.00   19.00  
+                           PHY Power Target for the current rate     :      12.00     -       -    
+                           Last est. power                           :      15.50     -       -    
+                           Last adjusted est. power                  :      15.50     -       -    
+                           root@f5698ofr:~#
+[13:14:53:506] ============> Debut Analyse powermetter
+[13:14:53:537] ====================== Détail Mesures ==================================
+[13:14:53:537] ------------> Mesure 2G Antenne 0 = 10.227230
+[13:14:53:537] ------------> Mesure 2G Sans offset = -7.772770
+[13:14:53:537] ------------> Offset appliqué = 18
+[13:14:53:537] ========================================================================
+
+[13:14:53:537] [PC > GTW]  c08
+[13:14:53:597] ======>
+[13:14:53:817] switch port OK
+[13:14:53:827] [PC > GTW]  scos-wifi nft_stop wl0
+[13:14:54:057] [PC < GTW]  scos-wifi nft_stop wl0
+                           
+                           [1;35mINFO: stopping NFT for wl0[0m
+                           [1;35mINFO: wl0 is down[0m
+                           root@f5698ofr:~#
+[13:14:54:057] [PC > GTW]  scos-wifi nft_start wl0 1 1 12
+[13:14:55:066] [PC < GTW]  scos-wifi nft_start wl0 1 1 12
+                           
+                           [1;35mINFO: starting NFT for wl0[0m
+                           Chanspec set to 0x1001
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl0 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       1
+                           BSS Channel:           not associated
+                           BSS Local Max:         20.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           12.0 dBm
+                           SROM Antgain 2G:       3.25 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     16.00  
+                           
+                           Core Index:            2
+                           Board Limits:
+                           OFDM6                  1     19.00  
+                           
+                           Power Targets:
+                           OFDM6                  1     12.00  
+                           
+                           PHY Maximum Power Target among all rates  :      12.00   12.00   19.00  
+                           PHY Power Target for the current rate     :        -     12.00     -    
+                           Last est. power                           :        -     13.50     -    
+                           Last adjusted est. power                  :        -     13.50     -    
+                           root@f5698ofr:~#
+[13:14:56:066] ============> Debut Analyse powermetter
+[13:14:56:099] ====================== Détail Mesures ==================================
+[13:14:56:099] ------------> Mesure 2G Antenne 1 = 12.891106
+[13:14:56:099] ------------> Mesure 2G Sans offset = -7.108894
+[13:14:56:099] ------------> Offset appliqué = 20
+[13:14:56:099] ========================================================================
+
+[13:14:56:099] [PC > GTW]  c03
+[13:14:56:159] ======>
+[13:14:56:380] switch port OK
+[13:14:56:380] [PC > GTW]  scos-wifi nft_stop wl0
+[13:14:56:600] [PC < GTW]  scos-wifi nft_stop wl0
+                           
+                           [1;35mINFO: stopping NFT for wl0[0m
+                           [1;35mINFO: wl0 is down[0m
+                           root@f5698ofr:~#
+[13:14:56:610] [PC > GTW]  scos-wifi nft_start wl0 2 1 12
+[13:14:57:629] [PC < GTW]  scos-wifi nft_start wl0 2 1 12
+                           
+                           [1;35mINFO: starting NFT for wl0[0m
+                           Chanspec set to 0x1001
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl0 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       1
+                           BSS Channel:           not associated
+                           BSS Local Max:         20.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           12.0 dBm
+                           SROM Antgain 2G:       3.25 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     16.00  
+                           
+                           Core Index:            4
+                           Board Limits:
+                           OFDM6                  1     19.00  
+                           
+                           Power Targets:
+                           OFDM6                  1     12.00  
+                           
+                           PHY Maximum Power Target among all rates  :      12.00   12.00   12.00  
+                           PHY Power Target for the current rate     :        -       -     12.00  
+                           Last est. power                           :        -       -     16.25  
+                           Last adjusted est. power                  :        -       -     16.25  
+                           root@f5698ofr:~#
+[13:14:58:639] ============> Debut Analyse powermetter
+[13:14:58:661] ====================== Détail Mesures ==================================
+[13:14:58:661] ------------> Mesure 2G Antenne 2 = 13.428758
+[13:14:58:671] ------------> Mesure 2G Sans offset = -4.571242
+[13:14:58:671] ------------> Offset appliqué = 18
+[13:14:58:671] ========================================================================
+
+[13:14:58:671] 
+[13:14:58:671] Récupération Mesures Wifi 2.4 Ghz OK
+[13:14:58:671] ===================> Configuration Wifi  5 Ghz <==========================================
+
+[13:14:58:671] =====> Configuration Wifi  5 Ghz
+[13:14:58:671] [PC > GTW]  scos-wifi nft_stop wl0
+[13:14:58:900] [PC < GTW]  scos-wifi nft_stop wl0
+                           
+                           [1;35mINFO: stopping NFT for wl0[0m
+                           [1;35mINFO: wl0 is down[0m
+                           root@f5698ofr:~#
+[13:14:58:900] 
+[13:14:58:900] Configuration Wifi  5 Ghz OK
+[13:14:58:900] ===================> Récuparation Mesures Wifi 5 Ghz <====================================
+
+[13:14:58:900] [PC > GTW]  c02
+[13:14:58:950] ======>
+[13:14:59:160] switch port OK
+[13:14:59:160] [PC > GTW]  scos-wifi nft_stop wl1
+[13:14:59:630] [PC < GTW]  scos-wifi nft_stop wl1
+                           
+                           [1;35mINFO: stopping NFT for wl1[0m
+                           [1;35mINFO: wl1 is down[0m
+                           root@f5698ofr:~#
+[13:14:59:630] [PC > GTW]  scos-wifi nft_start wl1 0 100 20
+[13:15:00:020] [PC < GTW]  scos-wifi nft_start wl1 0 100 20
+                           
+                           [1;35mINFO: starting NFT for wl1[0m
+                           Chanspec set to 0xd064
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl1 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       100
+                           BSS Channel:           not associated
+                           BSS Local Max:         30.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           20.0 dBm
+                           SROM Antgain 2G:       0.0 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     24.50  
+                           
+                           Core Index:            1
+                           Board Limits:
+                           OFDM6                  1     22.50  
+                           
+                           Power Targets:
+                           OFDM6                  1     20.00  
+                           
+                           PHY Maximum Power Target among all rates  :      20.00   22.00   22.00   22.00  
+                           PHY Power Target for the current rate     :      20.00     -       -       -    
+                           Last est. power                           :      10.50     -       -       -    
+                           Last adjusted est. power                  :      10.50     -       -       -    
+                           root@f5698ofr:~#
+[13:15:01:021] ============> Debut Analyse powermetter
+[13:15:01:043] ====================== Détail Mesures ==================================
+[13:15:01:043] ------------> Mesure 5G Antenne 0 = 20.257303
+[13:15:01:053] ------------> Mesure 5G Sans offset = -6.742697
+[13:15:01:053] ------------> Offset appliqué = 27
+[13:15:01:053] ========================================================================
+
+[13:15:01:053] [PC > GTW]  c07
+[13:15:01:113] ======>
+[13:15:01:334] switch port OK
+[13:15:01:343] [PC > GTW]  scos-wifi nft_stop wl1
+[13:15:01:523] [PC < GTW]  scos-wifi nft_stop wl1
+                           
+                           [1;35mINFO: stopping NFT for wl1[0m
+                           [1;35mINFO: wl1 is down[0m
+                           root@f5698ofr:~#
+[13:15:01:533] [PC > GTW]  scos-wifi nft_start wl1 1 100 20
+[13:15:01:883] [PC < GTW]  scos-wifi nft_start wl1 1 100 20
+                           
+                           [1;35mINFO: starting NFT for wl1[0m
+                           Chanspec set to 0xd064
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl1 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       100
+                           BSS Channel:           not associated
+                           BSS Local Max:         30.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           20.0 dBm
+                           SROM Antgain 2G:       0.0 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     24.50  
+                           
+                           Core Index:            2
+                           Board Limits:
+                           OFDM6                  1     22.50  
+                           
+                           Power Targets:
+                           OFDM6                  1     20.00  
+                           
+                           PHY Maximum Power Target among all rates  :      20.00   20.00   22.00   22.00  
+                           PHY Power Target for the current rate     :        -     20.00     -       -    
+                           Last est. power                           :        -     10.50     -       -    
+                           Last adjusted est. power                  :        -     10.50     -       -    
+                           root@f5698ofr:~#
+[13:15:02:883] ============> Debut Analyse powermetter
+[13:15:02:906] ====================== Détail Mesures ==================================
+[13:15:02:906] ------------> Mesure 5G Antenne 1 = 20.073497
+[13:15:02:916] ------------> Mesure 5G Sans offset = -7.926503
+[13:15:02:916] ------------> Offset appliqué = 28
+[13:15:02:916] ========================================================================
+
+[13:15:02:916] [PC > GTW]  c08
+[13:15:02:966] ======>
+[13:15:03:176] switch port OK
+[13:15:03:176] [PC > GTW]  scos-wifi nft_stop wl1
+[13:15:03:346] [PC < GTW]  scos-wifi nft_stop wl1
+                           
+                           [1;35mINFO: stopping NFT for wl1[0m
+                           [1;35mINFO: wl1 is down[0m
+                           root@f5698ofr:~#
+[13:15:03:356] [PC > GTW]  scos-wifi nft_start wl1 2 100 20
+[13:15:03:706] [PC < GTW]  scos-wifi nft_start wl1 2 100 20
+                           
+                           [1;35mINFO: starting NFT for wl1[0m
+                           Chanspec set to 0xd064
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl1 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       100
+                           BSS Channel:           not associated
+                           BSS Local Max:         30.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           20.0 dBm
+                           SROM Antgain 2G:       0.0 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     24.50  
+                           
+                           Core Index:            4
+                           Board Limits:
+                           OFDM6                  1     22.50  
+                           
+                           Power Targets:
+                           OFDM6                  1     20.00  
+                           
+                           PHY Maximum Power Target among all rates  :      20.00   20.00   20.00   22.00  
+                           PHY Power Target for the current rate     :        -       -     20.00     -    
+                           Last est. power                           :        -       -     10.00     -    
+                           Last adjusted est. power                  :        -       -     10.00     -    
+                           root@f5698ofr:~#
+[13:15:04:715] ============> Debut Analyse powermetter
+[13:15:04:745] ====================== Détail Mesures ==================================
+[13:15:04:745] ------------> Mesure 5G Antenne 2 = 15.971501
+[13:15:04:745] ------------> Mesure 5G Sans offset = -15.028499
+[13:15:04:745] ------------> Offset appliqué = 31
+[13:15:04:745] ========================================================================
+
+[13:15:04:745] [PC > GTW]  c01
+[13:15:04:815] ======>
+[13:15:05:035] switch port OK
+[13:15:05:045] [PC > GTW]  scos-wifi nft_stop wl1
+[13:15:05:225] [PC < GTW]  scos-wifi nft_stop wl1
+                           
+                           [1;35mINFO: stopping NFT for wl1[0m
+                           [1;35mINFO: wl1 is down[0m
+                           root@f5698ofr:~#
+[13:15:05:235] [PC > GTW]  scos-wifi nft_start wl1 3 100 20
+[13:15:05:585] [PC < GTW]  scos-wifi nft_start wl1 3 100 20
+                           
+                           [1;35mINFO: starting NFT for wl1[0m
+                           Chanspec set to 0xd064
+                           Setting SSID: ""
+                           [1;35mINFO: started: wl1 is up[0m
+                           Output Format Version: 11
+                           Power Control:         On, HW
+                           Current Channel:       100
+                           BSS Channel:           not associated
+                           BSS Local Max:         30.0 dBm
+                           BSS Local Constraint:  0.0 dB
+                           Channel Width:         20MHz
+                           User Target:           20.0 dBm
+                           SROM Antgain 2G:       0.0 dB
+                           SROM Antgain 5G:       0.0 dB
+                           SROM Antgain 6G:       0.0 dB
+                           SAR:                   -32.0 dB
+                           Country code:          FR/1
+                           Open loop:             Off
+                           PAMODE:                0
+                           Current rate:          [OFDM6] rate 6 Mbps Tx Exp 0
+                           
+                           Rate                  Chains 20MHz
+                           Regulatory Limits:
+                           OFDM6                  1     24.50  
+                           
+                           Core Index:            8
+                           Board Limits:
+                           OFDM6                  1     22.50  
+                           
+                           Power Targets:
+                           OFDM6                  1     20.00  
+                           
+                           PHY Maximum Power Target among all rates  :      20.00   20.00   20.00   20.00  
+                           PHY Power Target for the current rate     :        -       -       -     20.00  
+                           Last est. power                           :        -       -       -     11.25  
+                           Last adjusted est. power                  :        -       -       -     11.25  
+                           root@f5698ofr:~#
+[13:15:06:585] ============> Debut Analyse powermetter
+[13:15:06:609] ====================== Détail Mesures ==================================
+[13:15:06:609] ------------> Mesure 5G Antenne 3 = 18.209709
+[13:15:06:609] ------------> Mesure 5G Sans offset = -8.790291
+[13:15:06:619] ------------> Offset appliqué = 27
+[13:15:06:619] ========================================================================
+
+[13:15:06:619] 
+[13:15:06:619] Récupération Mesures Wifi 5 Ghz OK
+[13:15:06:619] ===================> Assemblage carte fille-mere <========================================
+
+[13:15:06:619] --------> Appel Traça  : Assemblage Composant : Début <--------
+[13:15:06:729] --------> Appel Traça  : Assemblage Composant : Fin   <--------
+[13:15:06:729] 
+[13:15:06:729] Assembalge carte fille mére OK
+[13:15:07:229] ===================> TRACA BDD <==========================================================
+
+[13:15:07:229] 
+[13:15:07:229] ATT FIN BT
+[13:15:24:383] ==============> Assemblage des données GTW en Traçabilité
+
+[13:15:24:392] ==============> Enregistrement des Mesures en Traçabilité
+
+[13:15:24:392] --------> Appel Traça  : Log Parametric Data Tableau: Début <--------
+[13:15:24:452] --------> Appel Traça  : Log Parametric Data Tableau: Fin   <--------
+[13:15:24:462] --------> Appel Traça  : Complete : Début <--------
+[13:15:24:642] --------> Appel Traça  : Complete : Fin   <--------
+[13:15:24:652] Traçabilite OK
+[13:15:24:652] ===================> TEST BNFT OK  <======================================================
+
+[13:15:24:662] ===================> Attente retrait GTW <================================================
+
+[13:15:26:694] ===================> FIN DE TEST <========================================================
+
+[13:15:26:694] ############ PASSAGE OK ###########
+
+[13:15:26:694] DUREE DU TEST : 47 secondes
+
+[13:15:26:694] SOFT VERSION : EZR-BBS27600 NFT_V2.9.6_0
+
+[13:15:26:694] <CIE>  Nom                                : CIE Prog LB772 MAIN PROD V2.4 (quadcore)
+               <CIE>  Référence                          : 254126807
+               <CIE>  Indice                             : A02
+               <SFIN> Nom                                : CIE Prog LB772 MAIN PROD V2.4 (quadcore)
+               <SFIN> Référence                          : 254126807
+               <SFIN> Indice                             : A02
+               
+[13:15:26:694] Sn SFIN                                   : 254126807A1SC000R2510504902
+               Sn CIE                                    : R2510704291
+               
+[13:15:26:694] 
+[13:15:26:694] Mesure <MES_BNFT_PWR0_2G>                 : Mesures puissance antenne 0 2G - Status 0
+                                                           7.000000 dBm < ... < 17.000000 dBm
+                                                           10.227229 dBm
+               Mesure <MES_BNFT_PWR1_2G>                 : Mesures puissance antenne 1 2G - Status 0
+                                                           7.000000 dBm < ... < 17.000000 dBm
+                                                           12.891107 dBm
+               Mesure <MES_BNFT_PWR2_2G>                 : Mesures puissance antenne 2 2G - Status 0
+                                                           7.000000 dBm < ... < 17.000000 dBm
+                                                           13.428758 dBm
+               Mesure <MES_BNFT_PWR0_5G>                 : Mesures puissance antenne 0 5G - Status 0
+                                                           15.000000 dBm < ... < 25.000000 dBm
+                                                           20.257303 dBm
+               Mesure <MES_BNFT_PWR1_5G>                 : Mesures puissance antenne 1 5G - Status 0
+                                                           15.000000 dBm < ... < 25.000000 dBm
+                                                           20.073498 dBm
+               Mesure <MES_BNFT_PWR2_5G>                 : Mesures puissance antenne 2 5G - Status 0
+                                                           13.000000 dBm < ... < 27.000000 dBm
+                                                           15.971501 dBm
+               Mesure <MES_BNFT_PWR3_5G>                 : Mesures puissance antenne 3 5G - Status 0
+                                                           15.000000 dBm < ... < 25.000000 dBm
+                                                           18.209709 dBm
+               Mesure <MES_BNFT_PWR0_6G>                 : Mesure BNFT Puissance 0 - Status 2
+                                                           9.000000 dBm < ... < 19.000000 dBm
+               Mesure <MES_BNFT_PWR1_6G>                 : Mesure BNFT 6G Puissance 1 - Status 2
+                                                           9.000000 dBm < ... < 19.000000 dBm
+               Mesure <MES_BNFT_PWR2_6G>                 : Mesure BNFT 6G Puissance 2 - Status 2
+                                                           9.000000 dBm < ... < 19.000000 dBm
+               Mesure <MES_BNFT_PWR3_6G>                 : Mesure BNFT 6G Puissance 3 - Status 2
+                                                           9.000000 dBm < ... < 19.000000 dBm
+               Mesure <MES_BNFT_Temps_Test>              : Temps de test NFT - Status 0
+                                                           -100.000000 s < ... < 200.000000 s
+                                                           47.000000 s
+               Mesure <MES_LED1_ON>                      : Mes_Led1_ON - Status 2
+                                                           50.000000  < ... < 65.000000 
+               Mesure <MES_LED1_R>                       : mesure de LED1 rouge - Status 2
+                                                           235.000000  < ... < 255.000000 
+               
+[13:15:26:704] 
+[13:15:26:704] --------> Appel Traça  : Enregistrement Log : Début <--------
+[13:15:26:714] --------> Appel Traça  : Enregistrement Log : Fin   <--------

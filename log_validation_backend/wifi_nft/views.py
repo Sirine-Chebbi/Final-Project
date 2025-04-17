@@ -1,135 +1,156 @@
 import re
-import numpy as np
-
-from django.shortcuts import render
 from django.http import JsonResponse
-from .models import NftResults
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.core.files.storage import default_storage
+from .models import NftResults
 
-from .statistics import calculate_gaussian
-
-
-def process_nft_file(content, filename=None):
-    rf_pattern = re.compile(
-        r'Mesure <(?P<mesure>MES_BNFT_PWR(\d)_(\w+))>\s*:.*?Status\s*(?P<status>\d+).*?'
-        r'(?P<lim_min>\d+\.\d+)\s*dBm\s*<\s*\.\.\.\s*<\s*(?P<lim_max>\d+\.\d+)\s*dBm.*?'
-        r'(?P<power>\d+\.\d+)\s*dBm',
+def extract_measure_data(content, filename=None):
+    # Pattern principal pour détecter les mesures
+    measure_pattern = re.compile(
+        r'Mesure <(?P<mesure>[^>]+)>\s*:(?P<description>[^\n]*)\s*Status\s*(?P<status>\d+).*?'
+        r'(?P<lim_min>-?\d+\.\d+)\s*(?P<unite_min>[^\s<]+)\s*<\s*\.\.\.\s*<\s*(?P<lim_max>-?\d+\.\d+)\s*(?P<unite_max>[^\s>]+).*?'
+        r'(?P<valeur>-?\d+\.\d+)\s*(?P<unite_valeur>\S+)?',
         re.DOTALL
     )
 
-    matches = list(rf_pattern.finditer(content))
-    
-    for match in matches:
-        try:
-            NftResults.objects.create(
-                mesure=match.group('mesure'),
-                bande=match.group(3),
-                antenne=int(match.group(2)),
-                power=float(match.group('power')),
-                lim_min=float(match.group('lim_min')),
-                lim_max=float(match.group('lim_max')),
-                source_file=filename
-            )
-        except Exception as e:
-            print(f"Erreur création objet pour {match.group()}: {str(e)}")
-            continue
+    # Pattern spécifique pour la durée
+    duree_pattern = re.compile(r'Duree\s*(\d+)\s*ms')
 
-    return len(matches)
+    measures = []
+    
+    # On sépare d'abord chaque mesure individuelle
+    raw_measures = re.split(r'(?=\n\s*Mesure <)', content)
+    
+    for raw_measure in raw_measures:
+        if not raw_measure.strip():
+            continue
+            
+        match = measure_pattern.search(raw_measure)
+        if not match:
+            continue
+            
+        status_val = int(match.group('status'))
+        if status_val == 2:  # On ignore les mesures avec status 2
+            continue
+            
+        # Extraction bande et antenne si présents dans le nom de la mesure
+        bande, antenne = None, None
+        mesure_name = match.group('mesure')
+        if '_PWR' in mesure_name:
+            parts = mesure_name.split('_')
+            for part in parts:
+                if part.startswith('PWR'):
+                    antenne = int(part[3:]) if part[3:].isdigit() else None
+                elif part in ['2G', '5G', '6G']:
+                    bande = part
+        
+        # Vérification cohérence des unités
+        unite = match.group('unite_valeur') or match.group('unite_max') or match.group('unite_min')
+        
+        # Extraction durée - recherche dans tout le bloc de la mesure
+        duree_match = duree_pattern.search(raw_measure)
+        duree = int(duree_match.group(1)) if duree_match else None
+        
+        measures.append({
+            'mesure': mesure_name,
+            'status': status_val,
+            'valeur': float(match.group('valeur')),
+            'lim_min': float(match.group('lim_min')),
+            'lim_max': float(match.group('lim_max')),
+            'bande': bande,
+            'antenne': antenne,
+            'duree': duree,
+            'unite': unite,
+            'source_file': filename
+        })
+    
+    return measures
 
 @api_view(['POST'])
 def upload_nft_results(request):
-    if request.method == 'POST':
-        if not request.FILES:
-            return Response(
-                {'status': 'error', 'message': 'Aucun fichier fourni'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+    if request.method != 'POST':
+        return Response({'status': 'error', 'message': 'Méthode non autorisée'}, 
+                       status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    if not request.FILES:
+        return Response({'status': 'error', 'message': 'Aucun fichier fourni'},
+                       status=status.HTTP_400_BAD_REQUEST)
 
-        total_count = 0
-        errors = []
-        successful_files = []
-        uploaded_files = request.FILES.getlist('nft_files')
+    total_count = 0
+    errors = []
+    successful_files = []
+    
+    # Optionnel: vider les anciennes données
+    NftResults.objects.all().delete()
 
-        # 💥 Supprimer les anciennes données une seule fois ici
-        if NftResults.objects.exists():
-            NftResults.objects.all().delete()
+    for uploaded_file in request.FILES.getlist('nft_files'):
+        try:
+            content = uploaded_file.read().decode('latin-1')
+            measures = extract_measure_data(content, uploaded_file.name)
+            print("Mesures extraites:", measures)  # Debug
 
-        for uploaded_file in uploaded_files:
-            try:
-                raw_content = uploaded_file.read()
-                try:
-                    content = raw_content.decode('utf-8')
-                except UnicodeDecodeError:
-                    errors.append(f"Fichier {uploaded_file.name}: encodage non-UTF8")
-                    continue
+            if not measures:
+                errors.append(f"Fichier {uploaded_file.name}: aucune mesure valide trouvée")
+                continue
+                
+            # Création des objets en bulk pour meilleure performance
+            objs = [
+                NftResults(**measure_data)
+                for measure_data in measures
+            ]
+            created = NftResults.objects.bulk_create(objs)
+            total_count += len(created)
+            successful_files.append(uploaded_file.name)
+            
+        except Exception as e:
+            errors.append(f"Erreur avec {uploaded_file.name}: {str(e)}")
 
-                # Pour debug : on peut enlever plus tard
-                with open(f'debug_{uploaded_file.name}.txt', 'w') as f:
-                    f.write(content)
-
-                count = process_nft_file(content, uploaded_file.name)
-
-                if count == 0:
-                    errors.append(f"Fichier {uploaded_file.name}: aucun pattern valide trouvé")
-                else:
-                    total_count += count
-                    successful_files.append(uploaded_file.name)
-
-            except Exception as e:
-                errors.append(f"Erreur avec {uploaded_file.name}: {str(e)}")
-
-        if not successful_files:
-            return Response({
-                'status': 'error',
-                'message': 'Aucun fichier valide traité',
-                'errors': errors,
-                'received_files': [f.name for f in uploaded_files]
-            }, status=status.HTTP_400_BAD_REQUEST)
-
+    if not successful_files:
         return Response({
-            'status': 'success',
-            'count': total_count,
-            'processed_files': successful_files,
-            'errors': errors if errors else None,
-            'message': f"{total_count} mesures traitées dans {len(successful_files)} fichier(s)"
-        })
+            'status': 'error',
+            'message': 'Aucun fichier valide traité',
+            'errors': errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
+    return Response({
+        'status': 'success',
+        'count': total_count,
+        'processed_files': successful_files,
+        'errors': errors if errors else None,
+        'message': f"{total_count} mesures importées depuis {len(successful_files)} fichier(s)"
+    })
 
 @api_view(['GET'])
 def get_nft_results(request):
-    queryset = NftResults.objects.all()
+    # Filtrer seulement les mesures avec status 0 ou 1
+    queryset = NftResults.objects.exclude(status=2)
     
     if not queryset.exists():
-        return Response({"message": "Aucune donnée disponible"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "Aucune donnée disponible"}, 
+                       status=status.HTTP_404_NOT_FOUND)
     
-    # Données de base
-    results = [{
-        "mesure": result.mesure,
-        "bande": result.bande,
-        "antenne": result.antenne,
-        "power": result.power,
-        "lim_min": result.lim_min,
-        "lim_max": result.lim_max,
-    } for result in queryset]
-    
-    # Calculs statistiques
-    power_values = [r['power'] for r in results if r['power'] is not None]
-    stats = {
-        'count': len(power_values),
-        'mean': np.mean(power_values) if power_values else None,
-        'std': np.std(power_values) if power_values else None,
-        'min': np.min(power_values) if power_values else None,
-        'max': np.max(power_values) if power_values else None,
-    }
-    
-    # Courbe gaussienne
-    gaussian = calculate_gaussian(power_values)
+    # Sérialisation des données
+    results = []
+    for result in queryset:
+        res = {
+            "mesure": result.mesure,
+            "status": result.status,
+            "valeur": result.valeur,
+            "lim_min": result.lim_min,
+            "lim_max": result.lim_max,
+            "unite": result.unite,
+            "source_file": result.source_file,
+        }
+        if result.bande:
+            res["bande"] = result.bande
+        if result.antenne is not None:
+            res["antenne"] = result.antenne
+        if result.duree:
+            res["duree"] = result.duree
+        results.append(res)
     
     return Response({
-        'results': results,
-        'statistics': stats,
-        'gaussian': gaussian
+        'count': len(results),
+        'results': results
     }, status=status.HTTP_200_OK)

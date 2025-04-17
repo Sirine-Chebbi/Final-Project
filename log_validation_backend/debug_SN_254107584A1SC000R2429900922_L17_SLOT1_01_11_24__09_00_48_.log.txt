@@ -1,0 +1,1673 @@
+[08:56:46:736] ===================> Attente retrait GTW <================================================
+
+[08:56:46:863] Perte Ping OK
+[08:56:47:135] ===================> DEBUT DE TEST <======================================================
+
+[08:56:47:484] ######## CONFIGURATION BDT #######################
+[08:56:47:530] conf_GTW_BTF_Liste_Test_T                 : Auto;OPEN_TELNET;OPEN_TELNETACC;RINGACC;V_BP3;T_VERSION_SOFT;GEN_DFA;G_DFA;READ_DFA;T_USB1;En_fxs;D_ETH1;D_ETH2;D_WAN;RESVOLTAGE1;LINECURRENT1;RESVOLTAGE2;LINECURRENT2;INITAL1;WAIT;2;RING1;ALARMVOLTAGE1;FXS_Stop_Ring;INITAL2;WAIT;2;RING2;WAIT;3;ALARMVOLTAGE2;FXS_Stop_Ring;En_P2P;FXS1_Trans300;FXS1_Trans1000;FXS1_Trans3400;FXS2_Trans300;FXS2_Trans1000;FXS2_Trans3400;T_DDR3;CONSO;LOAD_SCRIPT;V_Script;GPIO;SAVE_QOSA;XGS_REG;CALIBRATION;FIN;
+               conf_GTW_BTF_sCdesTT.Init_ACC             : [root{Tags:Password}{Pass:Password}][root{Tags:#}{Pass:#}][telnet 192.168.6.2{Tags:login}{Pass:login}][root{Tags:Password}{Pass:Password}][root{Tags:#}{Pass:#}][iperf3 -s >test &{Tags:#}{Pass:#}]
+               code_GTW_BTF_sCdesTT.Enable_P2P_T         : Step: Enable P2P[scos-voice -b fxs p2p start{Tags:#}{Pass:#}]
+               conf_GTW_BTF_sCdesTT.VersionTest_T        : Step: Test Version SOft [ifconfig eth2 192.168.9.1{Pass:#}][scos-versions{Pass:#}{Pass:sc_f5696b manuf 5_04L_04-17_10_369_39012-0.9.1 20241016T065436Z}]
+               conf_GTW_BTF_Version_APP_T                : TF_V1.1.10
+               conf_GTW_BTF_sCdesTT.login_T              : [root{Tags:Password}{Pass:Password}][root{Tags:#}{Pass:#}][memtester 1 1 >TestDDR&{Tags:#}{Pass:#}]
+               conf_GTW_BTF_sCdesTT.DUT_Test_DDRAM_T     : Step: Test DDRAM[cat TestDDR{Pass:#}{Pass:Done}{Fail:nok}]
+               conf_GTW_BTF_sCdesTT.TestDebit_ETH1_T     : [iperf3 -c 192.168.5.2 -t1 -R |grep -e 'er$'{Pass:#}{Fail:iperf3: error - unable to connect to server}]
+               conf_GTW_BTF_sCdesTT.TestDebit_ETH2_T     : [iperf3 -c 192.168.6.2 -t1 -R |grep -e 'er$'{Pass:#}{Fail:iperf3: error - unable to connect to server}]
+               conf_GTW_BTF_sCdesTT.TestDebit_ETH3_T     : [iperf3 -c 192.168.7.2 -t1 -R |grep -e 'er$'{Pass:#}{Fail:iperf3: error - unable to connect to server}]
+               conf_GTW_BTF_sCdesTT.TestDebit_ETH4_T     : [iperf3 -c 192.168.8.2 -t1 -R |grep -e 'er$'{Pass:#}{Fail:iperf3: error - unable to connect to server}]
+               conf_GTW_BTF_sCdesTT.TestDebit_WAN_T      : [iperf3 -c 192.168.9.2 -t1 -R |grep -e 'er$'{Pass:#}{Pass:Gbits/sec}{Fail:iperf3: error - unable to connect to server}]
+               conf_GTW_GEN_sCdesTT.DUT_DisplaySnCie_T   : [scos-manuf-data -b file get dfa {Pass:#}{Fail:Not yet}{R%\r\n}]
+               conf_GTW_BTF_sCdesTT.TestUSB_Port1_T      : Step: Test USB 1[scos-storage -b usb test -p P1{Pass:#}{Pass:2:OK R/W tests OK}]
+               conf_GTW_BTF_sCdesTT.Enable_Conf_FXS_T    : Step: Enable_FXS [scos-voice -b fxs init FR & sleep 1{Tags:#}{Pass:#}]
+               conf_GTW_BTF_sCdesTT.StopRingAcc_T        : Step: stop RingACC[scos-voice -b fxs ring stop &{Pass:#}][sleep 1 {Pass:#}]
+               conf_GTW_BTF_sCdesTT.MakeRINGAcc_T        : Step: Make Ring ACC [iperf3 -s >test & {Tags:#}{Pass:#}]
+               conf_GTW_BTF_LoginACC_T                   : Step: TelnetACC [telnet 192.168.6.2{Pass:login}][root{Pass:Password}][root{Tags:#}{Pass:#}]
+               conf_GTW_BTF_sCdesTT_LOGIN_T              : root
+               conf_GTW_BTF_sCdesTT.PREFIX_LOGIN         : login
+               conf_GTW_BTF_PWD                          : root
+               conf_GTW_BTF_PREFIX_PWD                   : Password:
+               conf_GTW_BTF_SUFF_PWD                     : #
+               conf_GTW_BTF_sCdesTT.FXS1_Restvoltage     : [b{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_LineCurrent     : [c{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Restvoltage     : [n{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_LineCurrent     : [o{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_ConfigAlarmeVoltagef{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_ConfigAlarmeVoltagep{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_makeRing_T      : Step: Make Ring FXS1 [scos-voice -b fxs ring start {Tags:#}{Pass:#}]
+               conf_GTW_BTF_sCdesTT.FXS2_makeRing_T      : Step: Make Ring FXS2 [scos-voice -b fxs ring start {Tags:#}{Pass:#}]
+               conf_GTW_BTF_Mesure_TFG4                  : [${Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_Trans300.Ve     : [k{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_Trans300.Vs     : [h{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_Trans1000.Ve    : [l{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_Trans1000.Vs    : [i{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_Trans3400.Ve    : [m{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS1_Trans3400.Vs    : [j{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Trans300.Ve     : [t{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Trans300.Vs     : [q{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Trans1000.Ve    : [u{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Trans1000.Vs    : [r{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Trans3400.Ve    : [v{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.FXS2_Trans3400.Vs    : [s{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.Conso.courant        : [a{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.Conso.tension        : [g{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.SLOT.DUT1            : [2{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.SLOT.DUT2            : [2{Tags:}{Fail:error}]
+               conf_GTW_BTF_sCdesTT.InsertCIE_T          : [scos-manuf-data -b file set dfa {Tags:#}{Pass:#}][sync{Tags:#}{Pass:#}][sync{Tags:#}{Pass:#}]
+               conf_GTW_BTF_TAG_DFA_T                    : R
+               conf_ATR_BTF_bFlagAssemblage_T            : 1
+               conf_GTW_BTF_FLAG_FLASHAGE_QOSA_T         : 1
+               conf_GTW_BTF_IP_DUT_T                     : 192.168.5.1
+               conf_GTW_BCTT_MASQUES_SNBOSA              : [M1{Pass:XNGCXXXXXXXXXXX_XX.XX}{Pass:2}{Pass:YSB332D4C-4-P-S537-C1249}]\n[M2{Pass:YFLQ2XXXXXXXXXX_XX.XX}{Pass:1}{Pass:B1495}{Pass:_}{Pass:0}{Pass:1400}{Pass:1100}]\n[M3{Pass:XNGCXXCXXXXXXXX_XX.XX}{Pass:2}{Pass:YSB332D4C-4-P-S537-C1249}]\n[M4{Pass:LXXXXXXXXXXX_XX.XX_XX.XX}{Pass:3}{Pass:PLDM588-901}]\n[M5{Pass:MEXXXXXXXXXXXX_XX.XX_XX.XX_X.XX_X.XX_XXX.XX_X.XX_XX.XX_X.XX_XXX.XX_X.XX}{Pass:3}{Pass:PLDM588-901}]
+               conf_GTW_BCTT_FLAG_FLASHAGE               : false
+               conf_GTW_BCTT_sPrompt                     : root@f5386:~#
+               conf_GTW_BCTT_TimeOut                     : 120
+               conf_GTW_BCTT_Version                     : BCTT_V2.0.0.9
+               conf_GTW_BCTT_iVitessePortComDUT          : 115200
+               conf_GTW_BCTT_VERIF_I2C                   : [sh{Tags:#}{Pass:#}][uname -a{Tags:2022}{Pass:Sep 28}][export PYTHONHOME=/usr/{Tags:#}{Pass:#}][cd /data/{Tags:#}{Pass:#}][tftp -g 192.168.5.10 -r _download.sh{Tags:#}{Pass:#}{Fail:tftp: server error:}][chmod +x _download.sh{Tags:#}{Pass:#}{Fail:No such file or directory}][sh /data/_download.sh{Tags:#}{Pass:#}{Fail:No such file or directory}][ls{Tags:#}{Pass:#}][python passthrough.py pwd{Tags:#}{Pass:#}][python passthrough.py xgs{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_VERIF_PinBen                : [scos-pon get txp{Tags:#}{Pass:-inf dBm (no power)}{Fail:open /dev/bosa_drv error}]
+               conf_GTW_BCTT_Bosa_Registers              : [hexdump -C /mnt/nvram/m02101c_firmware.bin{Pass:#}]
+               conf_GTW_BCTT_Bosa_Init_Safran            : [scos-pon load /etc/gpon/m02101c_init.bin {Tags:scos-pon load /etc/gpon/m02101c_init.bin} {Pass:INFO: Loading from}{Fail:No such file or directory}]
+               conf_GTW_BCTT_Set_SnBosa                  : [echo % > /sys/class/laser/m02101c/sn]
+               conf_GTW_BCTT_Set_BosaVapd                : [echo % > /sys/class/laser/m02101c/vapd]
+               conf_GTW_BCTT_Set_BosaApd_a               : [echo 90 > /sys/class/laser/m02101c/apd_a{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_Set_BosaApd_b               : [echo 90 > /sys/class/laser/m02101c/apd_b{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_Set_BosaApd_r1              : [echo 110000 > /sys/class/laser/m02101c/apd_r1{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_Set_BosaApd_r2              : [echo 4320 > /sys/class/laser/m02101c/apd_r2{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_Set_Bosa_Commit             : [python load_cal.py xgs_otp{Pass:#}][python load_init_regs.py init{Pass:#}{Fail:error}{Fail:FAIL}][python load_init_regs.py 0 0x4e 0 init_4e_add_extended.txt{Pass:#}{Fail:error}{Fail:FAIL}][python load_init_regs.py 0 0x4e 0 sn{Pass:#}{Fail:error}{Fail:FAIL}][i2cset -y -f 0 0x4f 0xf0 0x01{Pass:#}{Fail:error}{Fail:FAIL}][python save_cal.py xgs{Pass:backup registers of tables 80h and 81h into EEPROM}{Fail:error}{Fail:FAIL}][python load_cal.py xgs_eeprom{Pass:#}{Fail:error}{Fail:FAIL}]
+               conf_GTW_BCTT_Show_Bosa                   : [i2c_util env show{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_Verif_BosaRegisters1        : [i2c_util env show > /opt/conf/Fichier_0.txt{Tags:#}{Pass:#}]
+               conf_GTW_BCTT_Verif_BosaRegisters2        : [cat /opt/conf/Fichier_0.txt{Pass:#}{gpon_regs =%}]
+               conf_GTW_BCTT_Verif_BosaRegisters3        : [cp m02101c_init.bin /sys/class/laser/m02101c/config{Tag:#}{Pass:#}]
+               conf_GTW_BCTT_VCC_Calibration             : [python calib_xgs.py 0 0x4f vcc 3.3{Pass:#}][python calib_xgs.py 1 0x4f vcc 3.3{Pass:#}]
+               conf_GTW_BCTT_ACC_MesureTension           : V
+               conf_GTW_BCTT_VCC_Set_OffMsb              : [i2cset -y -f 0 0x4f 0x5A 0x{Pass:#}]
+               conf_GTW_BCTT_VCC_Get_OffMsb              : [i2cget -y -f 0 0x4f 0x5A{Pass:#}{\n0x%}]
+               conf_GTW_BCTT_VCC_Set_OffLsb              : [i2cset -y -f 0 0x4f 0x5B 0x{Pass:#}]
+               conf_GTW_BCTT_VCC_Get_OffLsb              : [i2cget -y -f 0 0x4f 0x5B{Pass:#}{\n0x%}]
+               conf_GTW_BCTT_Get_VCC                     : [python xgsddmi.py vcc{Pass:#}{vcc: %}][python gponddmi.py vcc{Pass:#}{vcc: %}]
+               conf_GTW_BCTT_FIN_Calibration_VCC         : [i2cset -y -f 0 0x4f 0x81 0x12{Pass:#}]
+               conf_GTW_BCTT_Calibration_Temperature1    : [i2cset -y -f 0 0x4f 0x56 0x00{Pass:#}] [i2cset -y -f 0 0x4f 0x57 0x00{Pass:#}]
+               conf_GTW_BCTT_Calibration_Temperature2    : [i2cget -y -f 0 0x4f 0x60 w{Pass:#}{\n0x%}]
+               conf_GTW_BCTT_ACC_MesureTemperature       : T
+               conf_GTW_BCTT_TEMP_Set_OffMsb             : [i2cset -y -f 0 0x4f 0x56 0x{Pass:#}]
+               conf_GTW_BCTT_TEMP_Get_OffMsb             : [i2cget -y -f 0 0x4f 0x56{Pass:#}{\n0x%}]
+               conf_GTW_BCTT_TEMP_Set_OffLsb             : [i2cset -y -f 0 0x4f 0x57 0x{Pass:#}]
+               conf_GTW_BCTT_TEMP_Get_OffLsb             : [i2cget -y -f 0 0x4f 0x57{Pass:#}{\n0x%}]
+               conf_GTW_BCTT_Get_Temperature             : [python xgsddmi.py temp{Pass:#}{temp: %}][python gponddmi.py temp{Pass:#}{temp: %}]
+               conf_GTW_BCTT_FIN_Calibration_Temperature : [i2cset -y -f 0 0x4f 0x81 0x12{Pass:#}]
+               conf_GTW_BCTT_Verif_BosaRegisters4        : [python xgsddmi.py vcc{Pass:#}][python gponddmi.py vcc{Pass:#}][python xgsddmi.py temp{Pass:#}][python gponddmi.py temp{Pass:#}]
+               conf_GTW_BCTT_Show_Fichier0               : [i2c_util env show > opt/conf/Fichier_0.txt{Pass:#}]
+               conf_GTW_BCTT_Init_Fichier0               : [sed -i \"7a\"\passage_KO ../../opt/conf/Fichier_0.txt{Pass:#}]
+               conf_GTW_BCTT_TempsDemarrage              : 140
+               conf_GTW_BCTT_bFlagModelProduit           : 1
+               conf_GTW_BCTT_Backup                      : [python save_cal.py xgs{Pass:backup registers of tables 80h and 81h into EEPROM}{Fail:error}{Fail:FAIL}][python lut_vapd_single.py start{Pass:#}{Fail:big badaboom macom}{Fail:error}{Fail:Error}][python calib_xgs.py 0 0x4f lut_offset{Pass:#}{Fail:error}][i2cset -y -f 0 0x4f 0xc8 0x00{Pass:#}{Fail:error}][python save_cal.py all{Pass:calibration gpon saved into /mnt/nvram/m02101c_firmware.bin}{Fail:error}{Fail:FAIL}][sync{Pass:#}{Fail:error}]
+               conf_GTW_BCTT_Flag_Reinitialisation       : 1
+               conf_GTW_BCTT_Bosa_Reinitialisation1      : [ls /mnt/nvram/{Pass:#}{Fail:m02101c_firmware.bin}]
+               conf_GTW_BCTT_Bosa_Reinitialisation2      : [scos-pon load /etc/gpon/m02101c_init.bin{Pass:#}][scos-pon save{Pass:#}][scos-pon freeze{Pass:#}][hexdump -C /mnt/nvram/m02101c_firmware.bin{Pass:#}]
+               conf_GTW_BCTT_Bosa_Reinit_Safran          : [tftp -r safran_m02101c_init_v2.4.bin -l /etc/gpon/m02101c_init.bin -g 192.168.5.10 {Tags:root@f5670eofr:~#}{Pass:root@f5670eofr:~#}{Fail:tftp: timeout}][sleep 2 {Tags:root@f5670eofr:~#}{Pass:root@f5670eofr:~#}{Fail:error}][scos-pon load /etc/gpon/m02101c_init.bin {Tags:root@f5670eofr:~#}{Pass:INFO: Loading from}{Fail:No such file or directory}][i2cset -y -f 0 0x4f 0xAF 0x8C {Tags:i2cset -y -f 0 0x4f 0xAF 0x8C}{Pass:root@f5670eofr:~#}{Fail:error}][i2cset -y -f 0 0x4f 0xB0 0x20 {Tags:i2cset -y -f 0 0x4f 0xB0 0x20}{Pass:root@f5670eofr:~#}{Fail:error}][scos-pon save {Tags:root@f5670eofr:~#}{Pass:root@f5670eofr:~#}{Fail:not Found}][scos-pon freeze {Tags:root@f5670eofr:~#}{Pass:root@f5670eofr:~#}{Fail:not Found}][i2cget -y -f 0 0x4f 0x8a {Tags:root@f5670eofr:~#}{Pass:0xad}{Fail:0xa9}]\n
+               conf_GTW_BCTT_Init_P1_P0                  : [python passthrough.py scratch{Tags:#}{Pass:#}{Fail:XGS}]
+               flag_GTW_BCTT_TRACA                       : 1
+               cmd_GTW_BCTT_SWAP_TO_GPON                 : [python passthrough.py swap {Tag:#}{Pass:GPON}]
+               conf_load_scripts_and_configure_DUT       : [cd /data/{Tags:#}{Pass:#}][tftp -g 192.168.5.100 -r _download.sh{Tags:#}{Pass:#}{Fail:tftp: server error:}][chmod +x _download.sh{Tags:#}{Pass:#}{Fail:No such file or directory}][sh /data/_download.sh 192.168.5.100{Tags:#}{Pass:#}{Fail:No such file or directory}{Fail:error}][serdesctrl prbs 1 0 3 1{Pass:#}][./load_cal.py gpon_init{Pass:#}{Fail:error}][python pwd_protect.py pwd 00 00 00 00 && python pwd_protect.py nopwd ff ff{Pass:#}{Fail:FAIL}{Fail:error}]
+               conf_GTW_BCTT_GPIO                        : [python check.py gpio 55 90 91{Pass:root@f5696b:/opt/conf#}{Fail:FAIL}]
+               conf_check_board_is_fresh_prod_or_retest  : [python passthrough.py scratch{Tags:#}{Pass:#}]
+               conf_identify_QOSA_and_save_SN_QOSA       : [echo % > /sys/class/laser/m02101c/sn]
+               conf_load_VAPD_parameters                 : [echo % > /sys/class/laser/m02101c/vapd]\n
+               conf_load_XGS_init_registers              : [./load_cal.py gpon_init{Pass:#}{Fail:error}][python load_cal.py xgs_otp{Pass:#}][python load_init_regs.py init{Pass:#}][python load_init_regs.py 0 0x4e 0 init_4e_add_extended.txt{Pass:#}][python load_init_regs.py 0 0x4e 0 sn{Pass:#}][i2cset -y -f 0 0x4f 0xf0 0x01{Pass:#}][python save_cal.py xgs{Pass:backup registers of tables 80h and 81h into EEPROM}][python load_cal.py xgs_eeprom{Pass:#}{Fail:error}]
+               conf_Version_Script                       : [python passthrough.py{Tags:root@f5696b:/opt/conf#}{Pass:xPON tools for F5694_2.21.0}][python check.py flex all{Tags:#}{Pass:#}]
+               conf_GTW_BTF_Nombre_Ping                  : 60
+               conf_GTW_BTF_Nombre_Char_DFA_T            : 10
+               conf_GTW_BTF_BP3_T                        : Step: Verification BP3[bp3 status{Pass:# }{Pass:Provisioned: true}{Fail:Chip SN: n/a}{Fail:Product ID: 0x00000000}{Fail:Provisioned: false}]
+               conf_Save_Cal                             : [python save_cal.py all{Tags:#}{Pass:calibration gpon saved into /mnt/nvram/m02101c_firmware.bin}{Fail:error}{Fail:FAIL}]
+               conf_load_Cal                             : [python load_cal.py xgs_eeprom{Tags:#}{Pass:#}{Fail:error}]
+               conf_BTFTT_TAG_RETOUR_TELNET              : #
+               
+[08:56:47:558] 
+[08:56:47:587]  
+
+[08:56:47:608] Flachage 
+[08:56:50:203] --------> Appel Traça  : Informations SFC : Début <--------
+[08:56:50:453] --------> Appel Traça  : Informations SFC : Fin   <--------
+[08:56:50:496]  SFC           :       254107584A1SC000R2429900922
+[08:56:50:530] [INFORMATION]   SFC           :       254107584A1SC000R2429900922
+[08:56:50:551] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:56:50:588]  Code Produit  :       254107584
+[08:56:50:609] [INFORMATION]   Code Produit  :       254107584
+[08:56:50:646] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:56:50:666]  IndiceProduit :       C01
+[08:56:50:703] [INFORMATION]   IndiceProduit :       C01
+[08:56:50:723] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:56:50:768]  OF            :       C254107584_C01_BBS_PROTO_251024
+[08:56:50:789] [INFORMATION]   OF            :       C254107584_C01_BBS_PROTO_251024
+[08:56:50:834] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:56:50:866] 254107584A1SC000R2429900922
+[08:56:50:890] Flachage SFC OK
+[08:58:15:227] AL914ME000018086_36.00_XX.XX_7.50_4.18_181.30_0.13_20.00_2.15_122.20_0.08_240927
+[08:58:16:321] Flashage SN QOSA OK
+[08:58:16:391] Demarrage Carte OK
+[08:58:17:434] ===================> AUTORISATION DE PASSAGE <============================================
+
+[08:58:17:457] WAIT : 3 seconde (s)
+
+[08:58:17:472] Sn Cie: 254107584A1SC000R2429900922
+
+[08:58:17:498]  Recuperation Information PFIN :  
+
+[08:58:17:521] --------> Appel Traça  : Informations SFC : Début <--------
+[08:58:17:591] --------> Appel Traça  : Informations SFC : Fin   <--------
+[08:58:17:875]  SFC           :       254107584A1SC000R2429900922
+[08:58:17:951] [INFORMATION]   SFC           :       254107584A1SC000R2429900922
+[08:58:17:999] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:58:18:045]  Code Produit  :       254107584
+[08:58:18:094] [INFORMATION]   Code Produit  :       254107584
+[08:58:18:118] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:58:18:143]  IndiceProduit :       C01
+[08:58:18:167] [INFORMATION]   IndiceProduit :       C01
+[08:58:18:200] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:58:18:234]  OF            :       C254107584_C01_BBS_PROTO_251024
+[08:58:18:273] [INFORMATION]   OF            :       C254107584_C01_BBS_PROTO_251024
+[08:58:18:316] Informations sur SFC 254107584A1SC000R2429900922 - Code Produit : 254107584/C01 - OF : C254107584_C01_BBS_PROTO_251024 . Retour DLL: Récuperation information SFC Avec succée 
+[08:58:18:348]  OF            :       C254107584_C01_BBS_PROTO_251024
+
+[08:58:18:380] --------> Appel Traça  : SNPFIN - Start : Début <--------
+[08:58:18:919] --------> Appel Traça  : SNPFIN - Start : Fin   <--------
+[08:58:18:945] traitement effectué avec successe
+[08:58:18:977] [INFORMATION]  traitement effectué avec successe
+[08:58:19:024] Autorisation de Passage OK
+[08:58:19:086] =====> Connexion Telnet 
+[08:58:19:117] ===================> Open Telnet <========================================================
+
+[08:58:19:150] [PC > GTW]  root
+[08:58:19:340] [PC < GTW]  root
+                           Password
+[08:58:19:394] [PC > GTW]  root
+[08:58:19:610] [PC < GTW]  root@f5696b:~#
+[08:58:19:647] [PC > GTW]  memtester 1 1 >TestDDR&
+[08:58:19:816] [PC < GTW]  memtester 1 1 >TestDDR&
+                           root@f5696b:~#
+[08:58:19:837] WAIT : 3 seconde (s)
+
+[08:58:19:868] Connexion Telnet OK
+[08:58:19:894] ===================> Open Telnetacc <=====================================================
+
+[08:58:20:688] [PC > GTW]  telnet 192.168.6.2
+[08:58:20:956] [PC < GTW]  telnet 192.168.6.2
+                           Connected to 192.168.6.2
+                           
+                           Entering character mode
+                           Escape character is '^]'.
+                           
+                           
+                           f5694ofr login
+[08:58:20:981] [PC > GTW]  root
+[08:58:21:160] [PC < GTW]  : root
+                           Password
+[08:58:21:185] [PC > GTW]  root
+[08:58:21:368] [PC < GTW]  : 
+                           root@f5694ofr:~#
+[08:58:21:390] WAIT : 3 seconde (s)
+
+[08:58:21:406] Connexion Telnet OK
+[08:58:21:430] ===================>  Make Ring ACC  <====================================================
+
+[08:58:21:454] [PC > GTW]  iperf3 -s >test &
+[08:58:21:655] [PC < GTW]  iperf3 -s >test &
+                           root@f5694ofr:~#
+[08:58:21:688] 
+[08:58:21:725] ===================>  Verification BP3 <==================================================
+
+[08:58:21:755] [PC > GTW]  bp3 status
+[08:58:21:877] [PC < GTW]  bp3 status
+                           ------------------------
+                           Chip SN: 75FB000000008243
+                           Product ID: 0x00068572
+                           Provisioned: true
+                           ------------------------
+                           [0]:[BP3_FEATURE_SPEED_SERVICE]:[ENABLED]
+                           [1]:[BP3_FEATURE_SW_TCP_SPEED_SERVICE]:[ENABLED]
+                           [12]:[BP3_FEATURE_VOICE_2_CHANNELS]:[ENABLED]
+                           [13]:[BP3_FEATURE_VOICE_4_CHANNELS]:[ENABLED]
+                           [33]:[BP3_FEATURE_SHA256]:[ENABLED]
+                           [48]:[BP3_FEATURE_PCIE0]:[ENABLED]
+                           [49]:[BP3_FEATURE_PCIE1]:[ENABLED]
+                           [50]:[BP3_FEATURE_PCIE2]:[ENABLED]
+                           [52]:[BP3_FEATURE_EGPHY0]:[ENABLED]
+                           [53]:[BP3_FEATURE_EGPHY1]:[ENABLED]
+                           [54]:[BP3_FEATURE_EGPHY2]:[ENABLED]
+                           [55]:[BP3_FEATURE_EGPHY3]:[ENABLED]
+                           [64]:[BP3_FEATURE_DDR3]:[ENABLED]
+                           [65]:[BP3_FEATURE_DDR4]:[ENABLED]
+                           [66]:[BP3_FEATURE_LPDDR4]:[ENABLED]
+                           [67]:[BP3_FEATURE_LPDDR4X]:[ENABLED]
+                           [71]:[BP3_FEATURE_USB0]:[ENABLED]
+                           [72]:[BP3_FEATURE_USB1]:[ENABLED]
+                           [73]:[BP3_FEATURE_GPON]:[ENABLED]
+                           [74]:[BP3_FEATURE_10G_GPON]:[ENABLED]
+                           [75]:[BP3_FEATURE_EPON]:[ENABLED]
+                           [76]:[BP3_FEATURE_10G_EPON]:[ENABLED]
+                           [88]:[BP3_FEATURE_SLAN_2_5]:[ENABLED]
+                           [89]:[BP3_FEATURE_SLAN_5]:[ENABLED]
+                           [90]:[BP3_FEATURE_SLAN_10]:[ENABLED]
+                           [91]:[BP3_FEATURE_SLAN_4_2_5]:[ENABLED]
+                           [96]:[BP3_FEATURE_QLAN0_2_5]:[ENABLED]
+                           [104]:[BP3_FEATURE_QLAN1_2_5]:[ENABLED]
+                           [112]:[BP3_FEATURE_QLAN2_2_5]:[ENABLED]
+                           [120]:[BP3_FEATURE_QLAN3_2_5]:[ENABLED]
+                           [160]:[BP3_FEATURE_ACTIVE_ETH_2_5]:[ENABLED]
+                           [162]:[BP3_FEATURE_ACTIVE_ETH_5]:[ENABLED]
+                           [164]:[BP3_FEATURE_ACTIVE_ETH_10]:[ENABLED]
+                           [177]:[BP3_FEATURE_RESERVED]:[ENABLED]
+                           [185]:[BP3_FEATURE_RESERVED]:[ENABLED]
+                           [1]+  Done                       memtester 1 1 1>TestDDR
+                           root@f5696b:~#
+[08:58:21:911]  Verification BP3 OK 
+
+[08:58:21:949] ===================>  Test Version SOft  <================================================
+
+[08:58:21:987] [PC > GTW]  ifconfig eth2 192.168.9.1
+[08:58:22:180] [PC < GTW]  ifconfig eth2 192.168.9.1
+                           root@f5696b:~#
+[08:58:22:217] [PC > GTW]  scos-versions
+[08:58:23:669] [PC < GTW]  scos-versions
+                           TPL FLD (loader): 
+                           UBOOT FLD COPY1 (uboot1): 4.4.9
+                           UBOOT FLD COPY2 (uboot2): 4.4.9
+                           TPL 1 (armbl1): U-Boot TPL 2019.07 (Apr 12 2024 - 12:07:10 +0200)
+                           TPL 2 (armbl2): U-Boot TPL 2019.07 (Apr 12 2024 - 12:07:10 +0200)
+                           SMC BL: v.1.0.30.1.28 (046451475)
+                           SMC OS: v4.0.10.1.7.30 (dfbb8ccb0)
+                           BOOTFS (bootfs1): sc_f5696b_manuf_dev-5_04L_04-17_10_369_39012-0.9.1 (Wed Oct 16 06:54:49 UTC 2024)
+                           BOOTFS (bootfs2): sc_f5696b_manuf_dev-5_04L_04-17_10_369_39012-0.9.1 (Wed Oct 16 06:54:49 UTC 2024)
+                           imgburn Bytel TPL 1: B17001-TPL-4.4.8.bin 2024-07-22T11:18:51Z
+                           imgburn Bytel TPL 2: B17001-TPL-4.4.8.bin 2024-07-22T11:18:51Z
+                           imgburn U-Boot 1: B17001-UBOOT1-4.4.9.bin 2024-07-30T11:42:21Z
+                           imgburn U-Boot 2: B17001-UBOOT2-4.4.9.bin 2024-07-30T11:42:21Z
+                           imgburn Current firmware: B17001-MAIN-24.2.26.bin 2024-09-16T13:20:50Z
+                           imgburn Previous firmware: B17001-RECO-24.2.26.bin 2024-09-16T13:44:38Z
+                           imgburn Secondary main firmware:  
+                           imgburn tertiary firmware:  
+                           6726B0 FIRMWARE: 17.10.369.39012 (r839077) Ucode Ver: 1892.32722 FWID: 01-24e69e7e WLTEST
+                           MCU FIRMWARE: {{App:2.15.2}{RAIL:2.15.2}{Multiprotocol:False}{Built:Jul  5 2024 16:16:12}}
+                           MILESTONE: 5.04L.04
+                           WLAN DRIVER: 17.10.369.39012
+                           OMCI: v11.12.0
+                           BCMBCA_VOICE_4_19_VERSION: 5.04L.04p3_v0.11.0
+                           H2AL_VOICE_BUNDLE_VERSION: c4c8c4b2af
+                           LINUX: 4.19.294-5.04L.04
+                           SCOS SYSTEM: sc_f5696b manuf 5_04L_04-17_10_369_39012-0.9.1 20241016T065436Z
+                           SCOS CORE: 2.1.1 (Hip to be scared)
+                           PON TYPE: GPON
+                           PERMANENT PARAMETERS: 6
+                           SROM: F5696b_v2.6.2 ('default' variant)
+                           root@f5696b:~#
+[08:58:23:706]  Test Version SOft  OK 
+
+[08:58:23:752] WAIT : 3 seconde (s)
+
+[08:58:23:781] ===================> Generation DFA <=====================================================
+
+[08:58:23:922] ---------> DFA_Generer R2430602957
+[08:58:23:956] [INFORMATION]  ---------> DFA_Generer R2430602957
+[08:58:23:994] Géneration DFA OK
+[08:58:24:032] ===================> Ecriture DFA <=======================================================
+
+[08:58:24:060] WAIT : 3 seconde (s)
+
+[08:58:24:098] [PC > GTW]  scos-manuf-data -b file set dfa  R2430602957
+[08:58:24:403] [PC < GTW]  scos-manuf-data -b file set dfa  R2430602957
+                           WARN: Storage already mounted
+                           root@f5696b:~#
+[08:58:24:443] [PC > GTW]  sync
+[08:58:24:657] [PC < GTW]  sync
+                           root@f5696b:~#
+[08:58:24:690] [PC > GTW]  sync
+[08:58:24:880] [PC < GTW]  sync
+                           root@f5696b:~#
+[08:58:24:920] Ecriture DFA OK
+[08:58:24:958] ===================> Lecture DFA <========================================================
+
+[08:58:24:996] [PC > GTW]  scos-manuf-data -b file get dfa
+[08:58:25:199] [PC < GTW]  scos-manuf-data -b file get dfa
+                           R2430602957
+                           root@f5696b:~#
+[08:58:25:234] LECTURE DFA OK
+[08:58:25:264] ===================>  Test USB 1 <========================================================
+
+[08:58:25:301] [PC > GTW]  scos-storage -b usb test -p P1
+[08:58:27:775] [PC < GTW]  scos-storage -b usb test -p P1
+                           USB:P1:START Starting tests for USB port P1
+                           USB:P1:SCAN Fetching device on port P1 as USB 2
+                           USB:P1:2:OK R/W tests OK
+                           USB:P1:END Finished tests for USB port P1
+                           root@f5696b:~#
+[08:58:28:709]  Test USB 1 OK 
+
+[08:58:28:755] ===================>  Enable_FXS  <=======================================================
+
+[08:58:28:793] [PC > GTW]  scos-voice -b fxs init FR & sleep 1
+[08:58:29:964] [PC < GTW]  scos-voice -b fxs init FR & sleep 1
+                           Using country: FR
+                           root@f5696b:~#
+[08:58:30:871]  Enable_FXS  OK 
+
+[08:58:30:900] ===================> Test iperf3 Eth1 <===================================================
+
+[08:58:30:930] [PC > GTW]  iperf3 -c 192.168.5.2 -t1 -R |grep -e 'er$'
+[08:58:32:112] [PC < GTW]  iperf3 -c 192.168.5.2 -t1 -R |grep -e 'er$'
+                           [  5]   0.00-1.00   sec   114 MBytes   954 Mbits/sec   24             sender
+                           [  5]   0.00-1.00   sec   110 MBytes   924 Mbits/sec                  receiver
+                           root@f5696b:~#
+[08:58:32:956] WAIT : 3 seconde (s)
+
+[08:58:33:035] Test Iperf eth1 OK
+[08:58:33:072] ===================> Test iperf3 Eth2 <===================================================
+
+[08:58:33:110] [PC > GTW]  iperf3 -c 192.168.6.2 -t1 -R |grep -e 'er$'
+[08:58:34:343] [PC < GTW]  iperf3 -c 192.168.6.2 -t1 -R |grep -e 'er$'
+                           [  5]   0.00-1.00   sec   114 MBytes   960 Mbits/sec   49             sender
+                           [  5]   0.00-1.00   sec   111 MBytes   931 Mbits/sec                  receiver
+                           [1]+  Done                       scos-voice -b fxs init FR
+                           root@f5696b:~#
+[08:58:34:475] WAIT : 3 seconde (s)
+
+[08:58:34:506] Test Iperf eth2 OK
+[08:58:34:535] ===================> Test iperf3 WAN <====================================================
+
+[08:58:34:573] [PC > GTW]  iperf3 -c 192.168.9.2 -t1 -R |grep -e 'er$'
+[08:58:35:792] [PC < GTW]  iperf3 -c 192.168.9.2 -t1 -R |grep -e 'er$'
+                           [  5]   0.00-1.00   sec   387 MBytes  3.24 Gbits/sec   62             sender
+                           [  5]   0.00-1.00   sec   383 MBytes  3.21 Gbits/sec                  receiver
+                           root@f5696b:~#
+[08:58:36:431] WAIT : 3 seconde (s)
+
+[08:58:36:468] Test Iperf WAN OK
+[08:58:36:498] ===================> Test RESVOLTAGE FXS1 <===============================================
+
+[08:58:36:535] [PC > TF]  B
+[08:58:37:772] [PC > TF]  $
+[08:58:38:568] [PC < TF]  0486
+[08:58:38:865] FXS1 Mesure tension de repos : 48.599998
+
+[08:58:38:915] [INFORMATION]  FXS1 Mesure tension de repos : 48.599998
+                           
+[08:58:38:944] Test RESVOLTAGE FXS1 OK 
+
+[08:58:38:981] ===================> Test Line current FXS1 <=============================================
+
+[08:58:39:019] [PC > TF]  C
+[08:58:40:057] [PC > TF]  $
+[08:58:40:984] [PC < TF]  0172
+[08:58:41:250] FXS1 Mesure courant de ligne : 36.595745
+
+[08:58:41:287] [INFORMATION]  FXS1 Mesure courant de ligne : 36.595745
+                           
+[08:58:41:326] Test Line current FXS1 OK 
+
+[08:58:41:355] ===================> Test RESVOLTAGE FXS2 <===============================================
+
+[08:58:41:401] [PC > TF]  N
+[08:58:42:444] [PC > TF]  $
+[08:58:43:195] [PC < TF]  0463
+[08:58:43:230] Mesure tension de repos FXS2 : 46.299999
+[08:58:44:397] [INFORMATION]  Mesure tension de repos FXS2 : 46.299999
+[08:58:44:711] Test RESVOLTAGE FXS2 OK 
+
+[08:58:44:758] ===================> Test Line current FXS2 <=============================================
+
+[08:58:44:796] [PC > TF]  O
+[08:58:45:844] [PC > TF]  $
+[08:58:46:517] [PC < TF]  0172
+[08:58:46:658] Mesure courant de ligne FXS2 : 36.595745
+[08:58:46:688] [INFORMATION]  Mesure courant de ligne FXS2 : 36.595745
+[08:58:46:726] Test Line current FXS2 OK 
+
+[08:58:46:763] ===================> FXS1 INIT ALARMVOLTAGE <=============================================
+
+[08:58:46:800] [PC > TF]  F
+[08:58:47:642] FXS1 INIT ALARMVOLTAGE OK 
+
+[08:58:48:641] [INFORMATION]  WAIT : 2 seconde (s)
+                           
+[08:58:50:691] ===================>  Make Ring FXS1  <===================================================
+
+[08:58:50:828] [PC > GTW]  scos-voice -b fxs ring start
+[08:58:51:026] [PC < GTW]  scos-voice -b fxs ring start
+                           root@f5696b:~#
+[08:58:51:062]  Make Ring FXS1  OK 
+
+[08:58:51:099] ===================> Test Tension de sonnerie <===========================================
+
+[08:58:51:137] [PC > TF]  F
+[08:58:52:172] [PC > TF]  $
+[08:58:53:530] [PC < TF]  0003
+[08:58:54:079] Mesure tension de sonnerie : 0.300000
+
+[08:58:54:117] [INFORMATION]  Mesure tension de sonnerie : 0.300000
+                           
+[08:58:54:154] Test 1 ==> Erreur: Test Tension de sonnerie 
+ 
+
+[08:58:55:199] [PC > TF]  $
+[08:58:56:650] [PC < TF]  0002
+[08:58:57:236] Mesure tension de sonnerie : 0.200000
+
+[08:58:57:266] [INFORMATION]  Mesure tension de sonnerie : 0.200000
+                           
+[08:58:57:303] Test 2 ==> Erreur: Test Tension de sonnerie 
+ 
+
+[08:58:58:347] [PC > TF]  $
+[08:58:59:004] [PC < TF]  0371
+[08:58:59:108] Mesure tension de sonnerie : 37.099998
+
+[08:58:59:138] [INFORMATION]  Mesure tension de sonnerie : 37.099998
+                           
+[08:58:59:167] Test Tension de sonnerie OK 
+
+[08:58:59:197] ===================>  stop RingACC <======================================================
+
+[08:58:59:235] [PC > GTW]  scos-voice -b fxs ring stop &
+[08:58:59:399] [PC < GTW]  scos-voice -b fxs ring stop &
+                           root@f5696b:~#
+[08:58:59:440] [PC > GTW]  sleep 1
+[08:59:00:589] [PC < GTW]  sleep 1
+                           [1]+  Done                       scos-voice -b fxs ring stop
+                           root@f5696b:~#
+[08:59:01:356]  stop RingACC OK 
+
+[08:59:01:661] ===================> FXS2 INIT ALARMVOLTAGE <=============================================
+
+[08:59:01:718] [PC > TF]  P
+[08:59:02:557] FXS2 INIT ALARMVOLTAGE OK 
+
+[08:59:02:724] [INFORMATION]  WAIT : 2 seconde (s)
+                           
+[08:59:04:767] ===================>  Make Ring FXS2  <===================================================
+
+[08:59:05:094] [PC > GTW]  scos-voice -b fxs ring start
+[08:59:05:291] [PC < GTW]  scos-voice -b fxs ring start
+                           root@f5696b:~#
+[08:59:05:325]  Make Ring FXS2  OK 
+
+[08:59:05:354] [INFORMATION]  WAIT : 3 seconde (s)
+                           
+[08:59:08:407] ===================> Test Tension de sonnerie FXS2 <======================================
+
+[08:59:08:938] [PC > TF]  P
+[08:59:09:998] [PC > TF]  $
+[08:59:10:669] [PC < TF]  0000
+[08:59:10:706] Mesure tension de sonnerie FXS2 : 0.000000
+[08:59:10:744] [INFORMATION]  Mesure tension de sonnerie FXS2 : 0.000000
+[08:59:10:782] Test 1 ==> Erreur: Test Tension de sonnerie FXS2 
+ 
+
+[08:59:11:827] [PC > TF]  $
+[08:59:12:482] [PC < TF]  0359
+[08:59:12:898] Mesure tension de sonnerie FXS2 : 35.900002
+[08:59:12:927] [INFORMATION]  Mesure tension de sonnerie FXS2 : 35.900002
+[08:59:12:956] Test Tension de sonnerie FXS2 OK 
+
+[08:59:13:264] ===================>  stop RingACC <======================================================
+
+[08:59:13:309] [PC > GTW]  scos-voice -b fxs ring stop &
+[08:59:13:512] [PC < GTW]  scos-voice -b fxs ring stop &
+                           root@f5696b:~#
+[08:59:13:549] [PC > GTW]  sleep 1
+[08:59:14:699] [PC < GTW]  sleep 1
+                           [1]+  Done                       scos-voice -b fxs ring stop
+                           root@f5696b:~#
+[08:59:14:736]  stop RingACC OK 
+
+[08:59:14:765] ===================>  Enable P2P <========================================================
+
+[08:59:14:802] [PC > GTW]  scos-voice -b fxs p2p start
+[08:59:15:055] [PC < GTW]  scos-voice -b fxs p2p start
+                           root@f5696b:~#
+[08:59:15:132]  Enable P2P OK 
+
+[08:59:15:160] ===================> Test FXS1 transmission 300Hz <=======================================
+
+[08:59:15:190] [PC > TF]  K
+[08:59:16:248] [PC > TF]  $
+[08:59:16:968] [PC < TF]  0863
+[08:59:16:996] [PC > TF]  H
+[08:59:18:028] [PC > TF]  $
+[08:59:18:669] [PC < TF]  0266
+[08:59:20:033] Mesure transmission FXS1 300Hz : 9.222583
+
+[08:59:20:085] [INFORMATION]  Mesure transmission FXS1 300Hz : 9.222583
+                           
+[08:59:20:123] Test FXS1 transmission 300Hz OK 
+
+[08:59:20:153] ===================> Test FXS1 transmission 1000Hz <======================================
+
+[08:59:20:190] [PC > TF]  L
+[08:59:21:226] [PC > TF]  $
+[08:59:22:040] [PC < TF]  0767
+[08:59:22:143] [PC > TF]  I
+[08:59:23:179] [PC > TF]  $
+[08:59:24:867] [PC < TF]  0238
+[08:59:25:402] Mesure transmission FXS1 1000Hz : 9.164368
+[08:59:25:448] [INFORMATION]  Mesure transmission FXS1 1000Hz : 9.164368
+[08:59:25:477] Test FXS1 transmission 1000Hz OK 
+
+[08:59:25:515] ===================> Test FXS1 transmission 3400Hz <======================================
+
+[08:59:25:553] [PC > TF]  M
+[08:59:26:598] [PC > TF]  $
+[08:59:28:080] [PC < TF]  0449
+[08:59:28:675] [PC > TF]  J
+[08:59:29:728] [PC > TF]  $
+[08:59:30:939] [PC < TF]  0107
+[08:59:31:617] Mesure transmission FXS1 3400Hz : 11.457252
+
+[08:59:31:654] [INFORMATION]  Mesure transmission FXS1 3400Hz : 11.457252
+                           
+[08:59:31:684] Test 1 ==> Erreur: Test FXS1 transmission 3400Hz 
+ 
+
+[08:59:31:721] [PC > TF]  M
+[08:59:32:764] [PC > TF]  $
+[08:59:33:486] [PC < TF]  0390
+[08:59:34:303] [PC > TF]  J
+[08:59:35:340] [PC > TF]  $
+[08:59:36:775] [PC < TF]  0108
+[08:59:37:243] Mesure transmission FXS1 3400Hz : 10.152817
+
+[08:59:37:281] [INFORMATION]  Mesure transmission FXS1 3400Hz : 10.152817
+                           
+[08:59:37:319] Test FXS1 transmission 3400Hz OK 
+
+[08:59:37:348] ===================> Test FXS2 transmission 300Hz <=======================================
+
+[08:59:37:378] [PC > TF]  T
+[08:59:38:412] [PC > TF]  $
+[08:59:39:499] [PC < TF]  0822
+[08:59:40:435] [PC > TF]  Q
+[08:59:41:499] [PC > TF]  $
+[08:59:42:743] [PC < TF]  0265
+[08:59:43:205] Mesure transmission FXS2 300Hz : 8.832519
+[08:59:43:235] [INFORMATION]  Mesure transmission FXS2 300Hz : 8.832519
+[08:59:43:264] Test FXS2 transmission 300Hz OK 
+
+[08:59:43:293] ===================> Test FXS2 transmission 1000Hz <======================================
+
+[08:59:43:332] [PC > TF]  U
+[08:59:44:382] [PC > TF]  $
+[08:59:45:355] [PC < TF]  0730
+[08:59:45:823] [PC > TF]  R
+[08:59:46:879] [PC > TF]  $
+[08:59:48:125] [PC < TF]  0238
+[08:59:48:226] Mesure transmission FXS2 1000Hz : 8.734918
+
+[08:59:48:255] [INFORMATION]  Mesure transmission FXS2 1000Hz : 8.734918
+                           
+[08:59:48:293] Test FXS2 transmission 1000Hz OK 
+
+[08:59:48:322] ===================> Test FXS2 transmission 3400Hz <======================================
+
+[08:59:48:360] [PC > TF]  V
+[08:59:49:411] [PC > TF]  $
+[08:59:50:800] [PC < TF]  0371
+[08:59:51:857] [PC > TF]  S
+[08:59:52:923] [PC > TF]  $
+[08:59:53:579] [PC < TF]  0112
+[08:59:53:704] Mesure transmission FXS2 3400Hz : 9.403118
+[08:59:53:734] [INFORMATION]  Mesure transmission FXS2 3400Hz : 9.403118
+[08:59:53:763] Test FXS2 transmission 3400Hz OK 
+
+[08:59:53:793] ===================>  Test DDRAM <========================================================
+
+[08:59:53:831] [PC > GTW]  cat TestDDR
+[08:59:54:041] [PC < GTW]  cat TestDDR
+                           memtester version 4.6.0 (64-bit)
+                           Copyright (C) 2001-2020 Charles Cazabon.
+                           Licensed under the GNU General Public License version 2 (only).
+                           
+                           pagesize is 4096
+                           pagesizemask is 0xfffffffffffff000
+                           want 1MB (1048576 bytes)
+                           got  1MB (1048576 bytes), trying mlock ...locked.
+                           Loop 1/1:
+                             Stuck Address       :            setting   0testing   0setting   1testing   1setting   2testing   2setting   3testing   3setting   4testing   4setting   5testing   5setting   6testing   6setting   7testing   7setting   8testing   8setting   9testing   9setting  10testing  10setting  11testing  11setting  12testing  12setting  13testing  13setting  14testing  14setting  15testing  15           ok
+                             Random Value        :  \|/-\|/-\|/-\|/-\|/-\|/-\|/ ok
+                             Compare XOR         : ok
+                             Compare SUB         : ok
+                             Compare MUL         : ok
+                             Compare DIV         : ok
+                             Compare OR          : ok
+                             Compare AND         : ok
+                             Sequential Increment: ok
+                             Solid Bits          :            setting   0testing   0setting   1testing   1setting   2testing   2setting   3testing   3setting   4testing   4setting   5testing   5setting   6testing   6setting   7testing   7setting   8testing   8setting   9testing   9setting  10testing  10setting  11testing  11setting  12testing  12setting  13testing  13setting  14testing  14setting  15testing  15setting  16testing  16setting  17testing  17setting  18testing  18setting  19testing  19setting  20testing  20setting  21testing  21setting  22testing  22setting  23testing  23setting  24testing  24setting  25testing  25setting  26testing  26setting  27testing  27setting  28testing  28setting  29testing  29setting  30testing  30setting  31testing  31setting  32testing  32setting  33testing  33setting  34testing  34setting  35testing  35setting  36testing  36setting  37testing  37setting  38testing  38setting  39testing  39setting  40testing  40setting  41testing  41setting  42testing  42setting  43testing  43setting  44testing  44setting  45testing  45setting  46testing  46setting  47testing  47setting  48testing  48setting  49testing  49setting  50testing  50setting  51testing  51setting  52testing  52setting  53testing  53setting  54testing  54setting  55testing  55setting  56testing  56setting  57testing  57setting  58testing  58setting  59testing  59setting  60testing  60setting  61testing  61setting  62testing  62setting  63testing  63           ok
+                             Block Sequential    :            setting   0testing   0setting   1testing   1setting   2testing   2setting   3testing   3setting   4testing   4setting   5testing   5setting   6testing   6setting   7testing   7setting   8testing   8setting   9testing   9setting  10testing  10setting  11testing  11setting  12testing  12setting  13testing  13setting  14testing  14setting  15testing  15setting  16testing  16setting  17testing  17setting  18testing  18setting  19testing  19setting  20testing  20setting  21testing  21setting  22testing  22setting  23testing  23setting  24testing  24setting  25testing  25setting  26testing  26setting  27testing  27setting  28testing  28setting  29testing  29setting  30testing  30setting  31testing  31setting  32testing  32setting  33testing  33setting  34testing  34setting  35testing  35setting  36testing  36setting  37testing  37setting  38testing  38setting  39testing  39setting  40testing  40setting  41testing  41setting  42testing  42setting  43testing  43setting  44testing  44setting  45testing  45setting  46testing  46setting  47testing  47setting  48testing  48setting  49testing  49setting  50testing  50setting  51testing  51setting  52testing  52setting  53testing  53setting  54testing  54setting  55testing  55setting  56testing  56setting  57testing  57setting  58testing  58setting  59testing  59setting  60testing  60setting  61testing  61setting  62testing  62setting  63testing  63setting  64testing  64setting  65testing  65setting  66testing  66setting  67testing  67setting  68testing  68setting  69testing  69setting  70testing  70setting  71testing  71setting  72testing  72setting  73testing  73setting  74testing  74setting  75testing  75setting  76testing  76setting  77testing  77setting  78testing  78setting  79testing  79setting  80testing  80setting  81testing  81setting  82testing  82setting  83testing  83setting  84testing  84setting  85testing  85setting  86testing  86setting  87testing  87setting  88testing  88setting  89testing  89setting  90testing  90setting  91testing  91setting  92testing  92setting  93testing  93setting  94testing  94setting  95testing  95setting  96testing  96setti
+[08:59:54:069]  Test DDRAM OK 
+
+[08:59:54:106] ===================> Test  Consommation <=================================================
+
+[08:59:54:136] [PC > TF]  G
+[08:59:55:179] [PC > TF]  $
+[08:59:56:451] [PC < TF]  0127
+[08:59:57:000] [PC > TF]  A
+[08:59:57:050] [PC > TF]  $
+[08:59:57:687] [PC < TF]  0141
+[08:59:57:951] Mesure consommation : 9.679460
+[08:59:57:981] [INFORMATION]  Mesure consommation : 9.679460
+[08:59:58:009] Test  Consommation OK 
+
+[08:59:58:047] ===================> LOAD_SCRIPT <========================================================
+
+[08:59:58:077] [PC > GTW]  cd /data/
+[08:59:58:241] cd /data/
+root@f5696b:/opt/conf#
+[08:59:58:275] [PC > GTW]  tftp -g 192.168.5.100 -r _download.sh
+[08:59:58:463] tftp -g 192.168.5.100 -r _download.sh
+
+root@f5696b:/opt/conf#
+[08:59:58:497] [PC > GTW]  chmod +x _download.sh
+[08:59:58:716] chmod +x _download.sh
+
+root@f5696b:/opt/conf#
+[08:59:58:751] [PC > GTW]  sh /data/_download.sh 192.168.5.100
+[08:59:59:639] sh /data/_download.sh 192.168.5.100
+
+tftp server used: 192.168.5.100
+root@f5696b:/opt/conf#
+[08:59:59:677] [PC > GTW]  serdesctrl prbs 1 0 3 1
+[08:59:59:904] serdesctrl prbs 1 0 3 1
+
+root@f5696b:/opt/conf#
+[09:00:00:415] [PC > GTW]  ./load_cal.py gpon_init
+[09:00:00:810] ./load_cal.py gpon_init
+
+calibration gpon /data/m02101c_init_f5696b.bin loaded (testsw)
+root@f5696b:/opt/conf#
+[09:00:01:619] [PC > GTW]  python pwd_protect.py pwd 00 00 00 00 && python pwd_protect.py nopwd ff ff
+[09:00:02:955] python pwd_protect.py pwd 00 00 00 00 && python pwd_prote
+ct.py nopwd ff ff
+
+
+access for NOPWD (t0x81 r=0x84 w=0x85):
+
+read            0xff -> 0xff
+write           0xff -> 0xff
+                        cur     new
+0x840x85              0xff|0xff 0xff|0xff
+bit     memory          r|w     r|w     add     table   start   end
+7       device reg 80h  1|1     1|1     0x4f    0x80    0x80    0xF0
+6       device reg 81h  1|1     1|1     0x4f    0x81    0x80    0x90
+5       sfp reserved    1|1     1|1     0x4e    n_a     0x80    0xFF
+4       vendor specific 1|1     1|1     0x4f    0x00    0xF8    0xFF
+3       user writable   1|1     1|1     0x4f    0x00    0x80    0xF7
+2       sfp lower       1|1     1|1     0x4e    n_a     0x00    0x7F
+1       diagnostic 2    1|1     1|1     0x4f    n_a     0x60    0x76
+0       diagnostic 1    1|1     1|1     0x4f    n_a     0x00    0x5F
+root@f5696b:/opt/conf#
+[09:00:04:219] [PC > GTW]  python passthrough.py
+                           xPON tools for F5694_2.21.0
+                           RdpaWanType = GPON
+                           root@f5696b:/opt/conf#
+[09:00:04:600] Generation DFA OK 
+
+[09:00:04:637] LOAD SCRIPT OK
+[09:00:04:667] ===================> Test Version Script <================================================
+
+[09:00:04:705] [PC > GTW]  python passthrough.py
+[09:00:05:308] python passthrough.py
+
+xPON tools for F5694_2.21.0
+RdpaWanType = GPON
+root@f5696b:/opt/conf#
+[09:00:05:891] [PC > GTW]  python check.py flex all
+[09:00:17:153] python check.py flex all
+
+boardid                 ['(none)', 'f5694ofr', 'f5694opl', 'f5694', 'f5698ofr', 'f5698opl', 'f5696b', 'f5387', 'f5685', 'f5670ofr']
+software                ['bcmrefsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw']
+LST_TXDIS_OUT           ['06', '06', '06', '06', '06', '06', '55', '38', '57', '24']
+LST_SW_EN_N_OUT         ['56', '56', '56', '56', '56', '56', '90', '0', 'NA', 'NA']
+LST_SEL_XGS_N_OUT       ['58', '58', '58', '58', '58', '58', '91', '0', 'NA', 'NA']
+LST_TXSD_IN             ['55', '55', '55', '55', '55', '55', '89', '14', '56', '13']
+LST_TXFAULT_IN          ['56', '56', '56', '56', '56', '56', '57', '40', '55', '10']
+LST_LOS_IN              ['49', '49', '49', '49', '49', '49', '85', '10', '49', '08']
+LST_LOS_GPON_IN         ['50', '50', '50', '50', '50', '50', '86', '10', '49', '08']
+LST_LOS_XGS_IN          ['05', '05', '05', '05', '05', '05', '87', '10', '49', '08']
+LST_GPON_BUS            ['1', '1', '1', '1', '1', '1', '1', '0', 'NA', '0']
+LST_GPON_ADD            ['0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', 'NA', '0x4F']
+LST_XGS_BUS             ['0', '0', '0', '0', '0', '0', '0', 'NA', '0', 'NA']
+LST_XGS_ADD             ['0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', 'NA', '0x4F', 'NA']
+LST_INIT_GPON           ['m02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init_f5696b.bin', 'm02101c_init_f5387.bin', 'NA', 'm02101c_init.bin']
+LST_INIT_XGS            ['init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add_f5696b.txt', 'NA', 'init_4f_80h_add.txt', 'NA']
+start checking flex TX TX_GPON:
+
+init regs (bus 1, add 0x4f)
+regs    0x7f    0x81    0xaf    0xb0    0xb1    0x50    0x51    0x52    0x53
+read    0x80    0x12    0x0     0x0     0x32    0x1     0x0     0x0     0x0
+set     0x80    0x32                            0x01    0x00    0x00    0x00    (init values)
+
+rewrite 0x80    0x12    0x0     0x0     0x32    0x1     0x0     0x0     0x0
+
+ddmi    value   unit    min     max     status
+txp     0.198   mW      0.1     0.3     pass
+
+flex TX TX_GPON:        pass
+
+
+start checking flex RX RX_GPON: init RX reg + min VAPD. Search for unexpected values on ddmi
+
+init regs (bus 1, add 0x4f)
+regs    0x7f    0x81    0x46    0x47    0x48    0x49    0x4a    0x4b    0xBB
+read    0x80    0x12    0x0     0x0     0x1     0x0     0x0     0x0     0x28
+set     0x80    0x32    0x00    0x00    0x01    0x00    0x00    0x00    0x2C    (init values)
+
+disable VAPD routine and set VAPD to 38V
+re-enable VAPD routine
+rewrite 0x80    0x12    0x0     0x0     0x1     0x0     0x0     0x0     0x28
+
+ddmi    value   unit    min     max     status
+rxpraw  0       LSBs    0       5       pass
+rssipp  308     LSBs    225     350     pass
+rxp     0       LSBs    0       65535   pass
+
+flex RX RX_GPON:        pass
+
+
+start checking flex TX TX_XGS:
+
+init regs (bus 0, add 0x4f)
+regs    0x7f    0x81    0xf0    0xa8    0xb4    0xb6    0x50    0x51    0x52    0x53
+read    0x80    0x32    0x1     0x5     0x0     0x0     0x1     0x0     0x0     0x7b
+set     0x80    0x32    0x01                            0x01    0x00    0x00    0x00    (init values)
+
+rewrite 0x80    0x32    0x1     0x5     0x0     0x0     0x1     0x0     0x0     0x7b
+
+ddmi    value   unit    min     max     status
+txp     0.263   mW      0.1     0.3     pass
+
+flex TX TX_XGS: pass
+
+
+start checking flex RX RX_XGS:  init RX reg + min VAPD. Search for unexpected values on ddmi
+
+init regs (bus 0, add 0x4f)
+regs    0x7f    0x81    0xf0    0x46    0x47    0x48    0x49    0x4a    0x4b    0x4c    0x4d    0x58    0x59    0x5d    0x5e
+read    0x80    0x32    0x1     0x1     0xe4    0x0     0x68    0xff    0xeb    0x0     0xc8    0x0     0x93    0x0     0x40
+set     0x80    0x32    0x01    0x01    0x00    0x01    0x00    0x00    0x00    0x01    0x00    0x0F    0xFF    0x0F    0xFF    (init values)
+
+rewrite 0x80    0x32    0x1     0x1     0xe4    0x0     0x68    0xff    0xeb    0x0     0xc8    0x0     0x93    0x0     0x40
+
+ddmi    value   unit    min     max     status
+rxpraw  1       LSBs    0       5       pass
+rssipp  46      LSBs    22      30      fail
+rxp     1       LSBs    0       65535   pass
+
+flex RX RX_XGS: fail
+
+
+root@f5696b:/opt/conf#
+[09:00:17:219] Generation DFA OK 
+
+[09:00:17:257] Test Version Script OK
+[09:00:17:295] ===================> Test GPIO <==========================================================
+
+[09:00:17:325] [PC > GTW]  python check.py gpio 55 90 91
+[09:00:20:454] python check.py gpio 55 90 91
+
+boardid                 ['(none)', 'f5694ofr', 'f5694opl', 'f5694', 'f5698ofr', 'f5698opl', 'f5696b', 'f5387', 'f5685', 'f5670ofr']
+software                ['bcmrefsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw', 'testsw']
+LST_TXDIS_OUT           ['06', '06', '06', '06', '06', '06', '55', '38', '57', '24']
+LST_SW_EN_N_OUT         ['56', '56', '56', '56', '56', '56', '90', '0', 'NA', 'NA']
+LST_SEL_XGS_N_OUT       ['58', '58', '58', '58', '58', '58', '91', '0', 'NA', 'NA']
+LST_TXSD_IN             ['55', '55', '55', '55', '55', '55', '89', '14', '56', '13']
+LST_TXFAULT_IN          ['56', '56', '56', '56', '56', '56', '57', '40', '55', '10']
+LST_LOS_IN              ['49', '49', '49', '49', '49', '49', '85', '10', '49', '08']
+LST_LOS_GPON_IN         ['50', '50', '50', '50', '50', '50', '86', '10', '49', '08']
+LST_LOS_XGS_IN          ['05', '05', '05', '05', '05', '05', '87', '10', '49', '08']
+LST_GPON_BUS            ['1', '1', '1', '1', '1', '1', '1', '0', 'NA', '0']
+LST_GPON_ADD            ['0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', 'NA', '0x4F']
+LST_XGS_BUS             ['0', '0', '0', '0', '0', '0', '0', 'NA', '0', 'NA']
+LST_XGS_ADD             ['0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', '0x4F', 'NA', '0x4F', 'NA']
+LST_INIT_GPON           ['m02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init.bin', 'm02101c_init_f5696b.bin', 'm02101c_init_f5387.bin', 'NA', 'm02101c_init.bin']
+LST_INIT_XGS            ['init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add.txt', 'init_4f_80h_add_f5696b.txt', 'NA', 'init_4f_80h_add.txt', 'NA']
+gpios   55      90      91      status
+read    0       0       0
+w_0 rd  0       0       0       PASS
+w_1 rd  1       1       1       PASS
+gpio tested and set back to state read
+root@f5696b:/opt/conf#
+[09:00:20:498] Generation DFA OK 
+
+[09:00:20:523] Test GPIO OK
+[09:00:20:539] ===================> Identify QOSA and save SN QOSA <=====================================
+
+[09:00:20:723] echo AL914ME000018086_36.00_XX.XX_7.50_4.18_181.30_0.13_20.00_2.15_122.20_0.08_240927 > /data/AL914ME000018086_36.00_prov.txt
+[09:00:20:744] echo AL914ME000018086_36.00_XX.XX_7.50_4.18_181.30_0.13_2
+0.00_2.15_122.20_0.08_240927 > /data/AL914ME000018086_36.00_prov.txt
+root@f5696b:/opt/conf#
+[09:00:20:930] echo  AL914ME000018086_36.00  > /sys/class/laser/m02101c/sn
+[09:00:20:957] echo  AL914ME000018086_36.00  > /sys/class/laser/m02101c/
+sn
+root@f5696b:/opt/conf#
+[09:00:20:973] SAVE QOSA   OK
+[09:00:20:989] ===================> Load XGS init registers <============================================
+
+[09:00:21:031] [PC > GTW]  python load_cal.py xgs_otp
+[09:00:22:395] python load_cal.py xgs_otp
+
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+Initiate soft reset and download from EEPROM --> t82h.@x9D=0x07
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+reg     value
+@x55    0xff
+@x81    0x32
+@xa6    0xb
+@xbd    0xb0
+@xc1    0x84
+@xdc    0x0
+root@f5696b:/opt/conf#
+[09:00:22:446] [PC > GTW]  python load_init_regs.py init
+[09:00:23:463] python load_init_regs.py init
+
+load initialization files: ['init_4f_80h_add_f5696b.txt', 'init_4f_low_add.txt']
+write file: init_4f_80h_add_f5696b.txt into i2c address: 0x4f
+i2cset -y -f 0 0x4f 0x7f 0x80   0
+i2cset -y -f 0 0x4f 0x81 0x32   0
+i2cset -y -f 0 0x4f 0x82 0x0    0
+i2cset -y -f 0 0x4f 0x83 0x0    0
+i2cset -y -f 0 0x4f 0x84 0x20   0
+i2cset -y -f 0 0x4f 0x86 0x1a   0
+i2cset -y -f 0 0x4f 0x88 0x30   0
+i2cset -y -f 0 0x4f 0x8b 0x5    0
+i2cset -y -f 0 0x4f 0x8c 0xa0   0
+i2cset -y -f 0 0x4f 0x8e 0x3e   0
+i2cset -y -f 0 0x4f 0x95 0x59   0
+i2cset -y -f 0 0x4f 0x96 0x96   0
+i2cset -y -f 0 0x4f 0x97 0x16   0
+i2cset -y -f 0 0x4f 0x99 0x92   0
+i2cset -y -f 0 0x4f 0x9a 0xa    0
+i2cset -y -f 0 0x4f 0x9b 0x38   0
+i2cset -y -f 0 0x4f 0x9c 0x10   0
+i2cset -y -f 0 0x4f 0x9d 0x60   0
+i2cset -y -f 0 0x4f 0x9f 0x14   0
+i2cset -y -f 0 0x4f 0xa5 0x1e   0
+i2cset -y -f 0 0x4f 0xa6 0x28   0
+i2cset -y -f 0 0x4f 0xaa 0x19   0
+i2cset -y -f 0 0x4f 0xab 0x33   0
+i2cset -y -f 0 0x4f 0xb7 0x62   0
+i2cset -y -f 0 0x4f 0xb8 0x68   0
+i2cset -y -f 0 0x4f 0xc0 0xe7   0
+i2cset -y -f 0 0x4f 0xd0 0xfe   0
+i2cset -y -f 0 0x4f 0xd1 0xfe   0
+i2cset -y -f 0 0x4f 0xd2 0x94   0
+i2cset -y -f 0 0x4f 0xd3 0x76   0
+i2cset -y -f 0 0x4f 0xd4 0xd6   0
+i2cset -y -f 0 0x4f 0xd5 0x7e   0
+i2cset -y -f 0 0x4f 0xd8 0x4    0
+dump 0 0x4f
+0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 5a 00 00 00 55 00 0a 00 8e 30 74 68 84 08 7d c8    Z...U.?.?0th??}?
+10: ff dc 00 00 ff dc 00 00 8a ac 27 10 57 80 37 14    .?...?..??'?W?7?
+20: 07 d0 00 0a 07 d0 00 0a ff ff ff ff ff ff ff ff    ??.???.?........
+30: ff ff ff ff ff ff ff ff 50 70 90 b0 d0 ff 40 60    ........Pp???.@`
+40: 80 a0 c0 e0 20 ff 01 e4 00 68 ff eb 00 c8 02 00    ???? .??.h.?.??.
+50: 01 00 00 7b ff ff bf 33 00 93 00 a8 ff 00 40 ff    ?..{..?3.?.?..@.
+60: 00 00 00 00 00 00 00 00 00 00 00 a0 6a 1c 03 00    ...........?j??.
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 80    ...............?
+80: 55 32 00 00 20 00 1a 00 30 1f 00 05 a0 80 3e 00    U2.. .?.0?.???>.
+90: 00 00 00 00 1a 59 96 16 ff 92 0a 38 10 60 02 14    ....?Y??.??8?`??
+a0: 00 01 01 00 00 1e 28 6d 05 20 19 33 70 11 00 00    .??..?(m? ?3p?..
+b0: 00 80 00 00 00 00 00 62 68 7f 7f 55 aa b0 40 40    .?.....bh??U??@@
+c0: e7 84 00 00 00 00 ff ff 00 00 10 00 50 40 40 00    ??........?.P@@.
+d0: fe fe 94 76 d6 7e 00 50 04 00 64 01 00 00 00 00    ???v?~.P?.d?....
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+write file: init_4f_low_add.txt into i2c address: 0x4f
+i2cset -y -f 0 0x4f 0x0 0x5a    0
+i2cset -y -f 0 0x4f 0x1 0x0     0
+i2cset -y -f 0 0x4f 0x2 0x0     0
+i2cset -y -f 0 0x4f 0x3 0x0     0
+i2cset -y -f 0 0x4f 0x4 0x55    0
+i2cset -y -f 0 0x4f 0x5 0x0     0
+i2cset -y -f 0 0x4f 0x6 0xa     0
+i2cset -y -f 0 0x4f 0x7 0x0     0
+i2cset -y -f 0 0x4f 0x8 0x8e    0
+i2cset -y -f 0 0x4f 0x9 0x30    0
+i2cset -y -f 0 0x4f 0xa 0x74    0
+i2cset -y -f 0 0x4f 0xb 0x68    0
+i2cset -y -f 0 0x4f 0xc 0x84    0
+i2cset -y -f 0 0x4f 0xd 0x8     0
+i2cset -y -f 0 0x4f 0xe 0x7d    0
+i2cset -y -f 0 0x4f 0xf 0xc8    0
+i2cset -y -f 0 0x4f 0x10 0xff   0
+i2cset -y -f 0 0x4f 0x11 0xdc   0
+i2cset -y -f 0 0x4f 0x12 0x0    0
+i2cset -y -f 0 0x4f 0x13 0x0    0
+i2cset -y -f 0 0x4f 0x14 0xff   0
+i2cset -y -f 0 0x4f 0x15 0xdc   0
+i2cset -y -f 0 0x4f 0x16 0x0    0
+i2cset -y -f 0 0x4f 0x17 0x0    0
+i2cset -y -f 0 0x4f 0x18 0x8a   0
+i2cset -y -f 0 0x4f 0x19 0xac   0
+i2cset -y -f 0 0x4f 0x1a 0x27   0
+i2cset -y -f 0 0x4f 0x1b 0x10   0
+i2cset -y -f 0 0x4f 0x1c 0x57   0
+i2cset -y -f 0 0x4f 0x1d 0x80   0
+i2cset -y -f 0 0x4f 0x1e 0x37   0
+i2cset -y -f 0 0x4f 0x1f 0x14   0
+i2cset -y -f 0 0x4f 0x20 0x7    0
+i2cset -y -f 0 0x4f 0x21 0xd0   0
+i2cset -y -f 0 0x4f 0x22 0x0    0
+i2cset -y -f 0 0x4f 0x23 0xa    0
+i2cset -y -f 0 0x4f 0x24 0x7    0
+i2cset -y -f 0 0x4f 0x25 0xd0   0
+i2cset -y -f 0 0x4f 0x26 0x0    0
+i2cset -y -f 0 0x4f 0x27 0xa    0
+i2cset -y -f 0 0x4f 0x38 0x50   0
+i2cset -y -f 0 0x4f 0x39 0x70   0
+i2cset -y -f 0 0x4f 0x3a 0x90   0
+i2cset -y -f 0 0x4f 0x3b 0xb0   0
+i2cset -y -f 0 0x4f 0x3c 0xd0   0
+i2cset -y -f 0 0x4f 0x3d 0xff   0
+i2cset -y -f 0 0x4f 0x3e 0x40   0
+i2cset -y -f 0 0x4f 0x3f 0x60   0
+i2cset -y -f 0 0x4f 0x40 0x80   0
+i2cset -y -f 0 0x4f 0x41 0xa0   0
+i2cset -y -f 0 0x4f 0x42 0xc0   0
+i2cset -y -f 0 0x4f 0x43 0xe0   0
+i2cset -y -f 0 0x4f 0x44 0x20   0
+i2cset -y -f 0 0x4f 0x46 0x1    0
+i2cset -y -f 0 0x4f 0x47 0x0    0
+i2cset -y -f 0 0x4f 0x48 0x1    0
+i2cset -y -f 0 0x4f 0x49 0x0    0
+i2cset -y -f 0 0x4f 0x4a 0x0    0
+i2cset -y -f 0 0x4f 0x4b 0x0    0
+i2cset -y -f 0 0x4f 0x4e 0x2    0
+i2cset -y -f 0 0x4f 0x4f 0x0    0
+i2cset -y -f 0 0x4f 0x50 0x1    0
+i2cset -y -f 0 0x4f 0x51 0x0    0
+i2cset -y -f 0 0x4f 0x52 0x0    0
+i2cset -y -f 0 0x4f 0x53 0x0    0
+i2cset -y -f 0 0x4f 0x56 0x0    0
+i2cset -y -f 0 0x4f 0x57 0x0    0
+i2cset -y -f 0 0x4f 0x5a 0x0    0
+i2cset -y -f 0 0x4f 0x5b 0x0    0
+dump 0 0x4f
+0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 5a 00 00 00 55 00 0a 00 8e 30 74 68 84 08 7d c8    Z...U.?.?0th??}?
+10: ff dc 00 00 ff dc 00 00 8a ac 27 10 57 80 37 14    .?...?..??'?W?7?
+20: 07 d0 00 0a 07 d0 00 0a ff ff ff ff ff ff ff ff    ??.???.?........
+30: ff ff ff ff ff ff ff ff 50 70 90 b0 d0 ff 40 60    ........Pp???.@`
+40: 80 a0 c0 e0 20 ff 01 00 01 00 00 00 00 c8 02 00    ???? .?.?....??.
+50: 01 00 00 00 ff ff 00 00 00 93 00 00 ff 00 40 ff    ?........?....@.
+60: 00 00 00 00 00 00 00 00 00 00 00 a0 6a 1c 03 00    ...........?j??.
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 80    ...............?
+80: 55 32 00 00 20 00 1a 00 30 1f 00 05 a0 80 3e 00    U2.. .?.0?.???>.
+90: 00 00 00 00 1a 59 96 16 ff 92 0a 38 10 60 02 14    ....?Y??.??8?`??
+a0: 00 01 01 00 00 1e 28 6d 05 20 19 33 70 11 00 00    .??..?(m? ?3p?..
+b0: 00 80 00 00 00 00 00 62 68 7f 7f 55 aa b0 40 40    .?.....bh??U??@@
+c0: e7 84 00 00 00 00 ff ff 00 00 10 00 50 40 40 00    ??........?.P@@.
+d0: fe fe 94 76 d6 7e 00 50 04 00 64 01 00 00 00 00    ???v?~.P?.d?....
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+write complete files: ['init_4f_80h_add_f5696b.txt', 'init_4f_low_add.txt']
+root@f5696b:/opt/conf#
+[09:00:24:252] [PC > GTW]  python load_init_regs.py 0 0x4e 0 init_4e_add_extended.txt
+[09:00:25:868] python load_init_regs.py 0 0x4e 0 init_4e_add_extended.tx
+t
+
+bus:    0
+add:    0x4e
+tempo:  0
+load file1:     init_4e_add_extended.txt
+write file: init_4e_add_extended.txt into i2c address: 0x4e
+i2cset -y -f 0 0x4e 0x0 0x2     0
+i2cset -y -f 0 0x4e 0x1 0x4     0
+i2cset -y -f 0 0x4e 0x2 0x2     0
+i2cset -y -f 0 0x4e 0x3 0x0     0
+i2cset -y -f 0 0x4e 0x4 0x3     0
+i2cset -y -f 0 0x4e 0x5 0x3     0
+i2cset -y -f 0 0x4e 0x6 0x6     0
+i2cset -y -f 0 0x4e 0x7 0x2     0
+i2cset -y -f 0 0x4e 0x8 0x2     0
+i2cset -y -f 0 0x4e 0x9 0x0     0
+i2cset -y -f 0 0x4e 0xa 0x4     0
+i2cset -y -f 0 0x4e 0xb 0x0     0
+i2cset -y -f 0 0x4e 0xc 0x0     0
+i2cset -y -f 0 0x4e 0xd 0x0     0
+i2cset -y -f 0 0x4e 0xe 0x0     0
+i2cset -y -f 0 0x4e 0xf 0x0     0
+i2cset -y -f 0 0x4e 0x10 0x0    0
+i2cset -y -f 0 0x4e 0x11 0x0    0
+i2cset -y -f 0 0x4e 0x12 0x0    0
+i2cset -y -f 0 0x4e 0x13 0x0    0
+i2cset -y -f 0 0x4e 0x14 0x4d   0
+i2cset -y -f 0 0x4e 0x15 0x61   0
+i2cset -y -f 0 0x4e 0x16 0x63   0
+i2cset -y -f 0 0x4e 0x17 0x6f   0
+i2cset -y -f 0 0x4e 0x18 0x6d   0
+i2cset -y -f 0 0x4e 0x19 0x0    0
+i2cset -y -f 0 0x4e 0x1a 0x0    0
+i2cset -y -f 0 0x4e 0x1b 0x0    0
+i2cset -y -f 0 0x4e 0x1c 0x0    0
+i2cset -y -f 0 0x4e 0x1d 0x0    0
+i2cset -y -f 0 0x4e 0x1e 0x0    0
+i2cset -y -f 0 0x4e 0x1f 0x0    0
+i2cset -y -f 0 0x4e 0x20 0x0    0
+i2cset -y -f 0 0x4e 0x21 0x0    0
+i2cset -y -f 0 0x4e 0x22 0x0    0
+i2cset -y -f 0 0x4e 0x23 0x0    0
+i2cset -y -f 0 0x4e 0x24 0x2    0
+i2cset -y -f 0 0x4e 0x25 0x0    0
+i2cset -y -f 0 0x4e 0x26 0x0    0
+i2cset -y -f 0 0x4e 0x27 0x0    0
+i2cset -y -f 0 0x4e 0x28 0x4d   0
+i2cset -y -f 0 0x4e 0x29 0x30   0
+i2cset -y -f 0 0x4e 0x2a 0x32   0
+i2cset -y -f 0 0x4e 0x2b 0x31   0
+i2cset -y -f 0 0x4e 0x2c 0x38   0
+i2cset -y -f 0 0x4e 0x2d 0x31   0
+i2cset -y -f 0 0x4e 0x2e 0x43   0
+i2cset -y -f 0 0x4e 0x2f 0x5f   0
+i2cset -y -f 0 0x4e 0x30 0x46   0
+i2cset -y -f 0 0x4e 0x31 0x35   0
+i2cset -y -f 0 0x4e 0x32 0x36   0
+i2cset -y -f 0 0x4e 0x33 0x39   0
+i2cset -y -f 0 0x4e 0x34 0x34   0
+i2cset -y -f 0 0x4e 0x35 0x0    0
+i2cset -y -f 0 0x4e 0x36 0x0    0
+i2cset -y -f 0 0x4e 0x37 0x0    0
+i2cset -y -f 0 0x4e 0x38 0x33   0
+i2cset -y -f 0 0x4e 0x39 0x0    0
+i2cset -y -f 0 0x4e 0x3a 0x0    0
+i2cset -y -f 0 0x4e 0x3b 0x0    0
+i2cset -y -f 0 0x4e 0x3c 0x0    0
+i2cset -y -f 0 0x4e 0x3d 0x0    0
+i2cset -y -f 0 0x4e 0x3e 0x0    0
+i2cset -y -f 0 0x4e 0x3f 0x0    0
+i2cset -y -f 0 0x4e 0x40 0x0    0
+i2cset -y -f 0 0x4e 0x41 0x0    0
+i2cset -y -f 0 0x4e 0x42 0x0    0
+i2cset -y -f 0 0x4e 0x43 0x0    0
+i2cset -y -f 0 0x4e 0x44 0x45   0
+i2cset -y -f 0 0x4e 0x45 0x45   0
+i2cset -y -f 0 0x4e 0x46 0x55   0
+i2cset -y -f 0 0x4e 0x47 0x30   0
+i2cset -y -f 0 0x4e 0x48 0x30   0
+i2cset -y -f 0 0x4e 0x49 0x30   0
+i2cset -y -f 0 0x4e 0x4a 0x30   0
+i2cset -y -f 0 0x4e 0x4b 0x30   0
+i2cset -y -f 0 0x4e 0x4c 0x30   0
+i2cset -y -f 0 0x4e 0x4d 0x30   0
+i2cset -y -f 0 0x4e 0x4e 0x30   0
+i2cset -y -f 0 0x4e 0x4f 0x30   0
+i2cset -y -f 0 0x4e 0x50 0x30   0
+i2cset -y -f 0 0x4e 0x51 0x5f   0
+i2cset -y -f 0 0x4e 0x52 0x30   0
+i2cset -y -f 0 0x4e 0x53 0x30   0
+i2cset -y -f 0 0x4e 0x54 0x0    0
+i2cset -y -f 0 0x4e 0x55 0x0    0
+i2cset -y -f 0 0x4e 0x56 0x0    0
+i2cset -y -f 0 0x4e 0x57 0x1    0
+i2cset -y -f 0 0x4e 0x58 0x0    0
+i2cset -y -f 0 0x4e 0x59 0x1    0
+i2cset -y -f 0 0x4e 0x5a 0x0    0
+i2cset -y -f 0 0x4e 0x5b 0x0    0
+i2cset -y -f 0 0x4e 0x5c 0x58   0
+i2cset -y -f 0 0x4e 0x5d 0xfe   0
+i2cset -y -f 0 0x4e 0x5e 0x8    0
+i2cset -y -f 0 0x4e 0x5f 0x0    0
+i2cset -y -f 0 0x4e 0x60 0x0    0
+i2cset -y -f 0 0x4e 0x61 0x0    0
+i2cset -y -f 0 0x4e 0x62 0x0    0
+i2cset -y -f 0 0x4e 0x63 0x0    0
+i2cset -y -f 0 0x4e 0x64 0x0    0
+i2cset -y -f 0 0x4e 0x65 0x0    0
+i2cset -y -f 0 0x4e 0x66 0x0    0
+i2cset -y -f 0 0x4e 0x67 0x0    0
+i2cset -y -f 0 0x4e 0x68 0x0    0
+i2cset -y -f 0 0x4e 0x69 0x0    0
+i2cset -y -f 0 0x4e 0x6a 0x0    0
+i2cset -y -f 0 0x4e 0x6b 0x0    0
+i2cset -y -f 0 0x4e 0x6c 0x0    0
+i2cset -y -f 0 0x4e 0x6d 0x0    0
+i2cset -y -f 0 0x4e 0x6e 0x0    0
+i2cset -y -f 0 0x4e 0x6f 0x0    0
+i2cset -y -f 0 0x4e 0x70 0x0    0
+i2cset -y -f 0 0x4e 0x71 0x0    0
+i2cset -y -f 0 0x4e 0x72 0x0    0
+i2cset -y -f 0 0x4e 0x73 0x0    0
+i2cset -y -f 0 0x4e 0x74 0x0    0
+i2cset -y -f 0 0x4e 0x75 0x0    0
+i2cset -y -f 0 0x4e 0x76 0x0    0
+i2cset -y -f 0 0x4e 0x77 0x0    0
+i2cset -y -f 0 0x4e 0x78 0x0    0
+i2cset -y -f 0 0x4e 0x79 0x0    0
+i2cset -y -f 0 0x4e 0x7a 0x0    0
+i2cset -y -f 0 0x4e 0x7b 0x0    0
+i2cset -y -f 0 0x4e 0x7c 0x0    0
+i2cset -y -f 0 0x4e 0x7d 0x0    0
+i2cset -y -f 0 0x4e 0x7e 0x0    0
+i2cset -y -f 0 0x4e 0x7f 0x0    0
+i2cset -y -f 0 0x4e 0x80 0x0    0
+i2cset -y -f 0 0x4e 0x81 0x0    0
+i2cset -y -f 0 0x4e 0x82 0x0    0
+i2cset -y -f 0 0x4e 0x83 0x0    0
+i2cset -y -f 0 0x4e 0x84 0x0    0
+i2cset -y -f 0 0x4e 0x85 0x0    0
+i2cset -y -f 0 0x4e 0x86 0x0    0
+i2cset -y -f 0 0x4e 0x87 0x0    0
+i2cset -y -f 0 0x4e 0x88 0x0    0
+i2cset -y -f 0 0x4e 0x89 0x0    0
+i2cset -y -f 0 0x4e 0x8a 0x0    0
+i2cset -y -f 0 0x4e 0x8b 0x0    0
+i2cset -y -f 0 0x4e 0x8c 0x0    0
+i2cset -y -f 0 0x4e 0x8d 0x0    0
+i2cset -y -f 0 0x4e 0x8e 0x0    0
+i2cset -y -f 0 0x4e 0x8f 0x0    0
+i2cset -y -f 0 0x4e 0x90 0x0    0
+i2cset -y -f 0 0x4e 0x91 0x0    0
+i2cset -y -f 0 0x4e 0x92 0x0    0
+i2cset -y -f 0 0x4e 0x93 0x0    0
+i2cset -y -f 0 0x4e 0x94 0x0    0
+i2cset -y -f 0 0x4e 0x95 0x0    0
+i2cset -y -f 0 0x4e 0x96 0x0    0
+i2cset -y -f 0 0x4e 0x97 0x0    0
+i2cset -y -f 0 0x4e 0x98 0x0    0
+i2cset -y -f 0 0x4e 0x99 0x0    0
+i2cset -y -f 0 0x4e 0x9a 0x0    0
+i2cset -y -f 0 0x4e 0x9b 0x0    0
+i2cset -y -f 0 0x4e 0x9c 0x0    0
+i2cset -y -f 0 0x4e 0x9d 0x0    0
+i2cset -y -f 0 0x4e 0x9e 0x0    0
+i2cset -y -f 0 0x4e 0x9f 0x0    0
+i2cset -y -f 0 0x4e 0xa0 0x0    0
+i2cset -y -f 0 0x4e 0xa1 0x0    0
+i2cset -y -f 0 0x4e 0xa2 0x0    0
+i2cset -y -f 0 0x4e 0xa3 0x0    0
+i2cset -y -f 0 0x4e 0xa4 0x0    0
+i2cset -y -f 0 0x4e 0xa5 0x0    0
+i2cset -y -f 0 0x4e 0xa6 0x0    0
+i2cset -y -f 0 0x4e 0xa7 0x0    0
+i2cset -y -f 0 0x4e 0xa8 0x0    0
+i2cset -y -f 0 0x4e 0xa9 0x0    0
+i2cset -y -f 0 0x4e 0xaa 0x0    0
+i2cset -y -f 0 0x4e 0xab 0x0    0
+i2cset -y -f 0 0x4e 0xac 0x0    0
+i2cset -y -f 0 0x4e 0xad 0x0    0
+i2cset -y -f 0 0x4e 0xae 0x0    0
+i2cset -y -f 0 0x4e 0xaf 0x0    0
+i2cset -y -f 0 0x4e 0xb0 0x0    0
+i2cset -y -f 0 0x4e 0xb1 0x0    0
+i2cset -y -f 0 0x4e 0xb2 0x0    0
+i2cset -y -f 0 0x4e 0xb3 0x0    0
+i2cset -y -f 0 0x4e 0xb4 0x0    0
+i2cset -y -f 0 0x4e 0xb5 0x0    0
+i2cset -y -f 0 0x4e 0xb6 0x0    0
+i2cset -y -f 0 0x4e 0xb7 0x0    0
+i2cset -y -f 0 0x4e 0xb8 0x0    0
+i2cset -y -f 0 0x4e 0xb9 0x0    0
+i2cset -y -f 0 0x4e 0xba 0x0    0
+i2cset -y -f 0 0x4e 0xbb 0x0    0
+i2cset -y -f 0 0x4e 0xbc 0x0    0
+i2cset -y -f 0 0x4e 0xbd 0x0    0
+i2cset -y -f 0 0x4e 0xbe 0x0    0
+i2cset -y -f 0 0x4e 0xbf 0x0    0
+i2cset -y -f 0 0x4e 0xc0 0x0    0
+i2cset -y -f 0 0x4e 0xc1 0x0    0
+i2cset -y -f 0 0x4e 0xc2 0x0    0
+i2cset -y -f 0 0x4e 0xc3 0x0    0
+i2cset -y -f 0 0x4e 0xc4 0x0    0
+i2cset -y -f 0 0x4e 0xc5 0x0    0
+i2cset -y -f 0 0x4e 0xc6 0x0    0
+i2cset -y -f 0 0x4e 0xc7 0x0    0
+i2cset -y -f 0 0x4e 0xc8 0x0    0
+i2cset -y -f 0 0x4e 0xc9 0x0    0
+i2cset -y -f 0 0x4e 0xca 0x0    0
+i2cset -y -f 0 0x4e 0xcb 0x0    0
+i2cset -y -f 0 0x4e 0xcc 0x0    0
+i2cset -y -f 0 0x4e 0xcd 0x0    0
+i2cset -y -f 0 0x4e 0xce 0x0    0
+i2cset -y -f 0 0x4e 0xcf 0x0    0
+i2cset -y -f 0 0x4e 0xd0 0x0    0
+i2cset -y -f 0 0x4e 0xd1 0x0    0
+i2cset -y -f 0 0x4e 0xd2 0x0    0
+i2cset -y -f 0 0x4e 0xd3 0x0    0
+i2cset -y -f 0 0x4e 0xd4 0x0    0
+i2cset -y -f 0 0x4e 0xd5 0x0    0
+i2cset -y -f 0 0x4e 0xd6 0x0    0
+i2cset -y -f 0 0x4e 0xd7 0x0    0
+i2cset -y -f 0 0x4e 0xd8 0x0    0
+i2cset -y -f 0 0x4e 0xd9 0x0    0
+i2cset -y -f 0 0x4e 0xda 0x0    0
+i2cset -y -f 0 0x4e 0xdb 0x0    0
+i2cset -y -f 0 0x4e 0xdc 0x0    0
+i2cset -y -f 0 0x4e 0xdd 0x0    0
+i2cset -y -f 0 0x4e 0xde 0x0    0
+i2cset -y -f 0 0x4e 0xdf 0x0    0
+i2cset -y -f 0 0x4e 0xe0 0x0    0
+i2cset -y -f 0 0x4e 0xe1 0x0    0
+i2cset -y -f 0 0x4e 0xe2 0x0    0
+i2cset -y -f 0 0x4e 0xe3 0x0    0
+i2cset -y -f 0 0x4e 0xe4 0x0    0
+i2cset -y -f 0 0x4e 0xe5 0x0    0
+i2cset -y -f 0 0x4e 0xe6 0x0    0
+i2cset -y -f 0 0x4e 0xe7 0x0    0
+i2cset -y -f 0 0x4e 0xe8 0x0    0
+i2cset -y -f 0 0x4e 0xe9 0x0    0
+i2cset -y -f 0 0x4e 0xea 0x0    0
+i2cset -y -f 0 0x4e 0xeb 0x0    0
+i2cset -y -f 0 0x4e 0xec 0x0    0
+i2cset -y -f 0 0x4e 0xed 0x0    0
+i2cset -y -f 0 0x4e 0xee 0x0    0
+i2cset -y -f 0 0x4e 0xef 0x0    0
+i2cset -y -f 0 0x4e 0xf0 0x0    0
+i2cset -y -f 0 0x4e 0xf1 0x0    0
+i2cset -y -f 0 0x4e 0xf2 0x0    0
+i2cset -y -f 0 0x4e 0xf3 0x0    0
+i2cset -y -f 0 0x4e 0xf4 0x0    0
+i2cset -y -f 0 0x4e 0xf5 0x0    0
+i2cset -y -f 0 0x4e 0xf6 0x0    0
+i2cset -y -f 0 0x4e 0xf7 0x0    0
+i2cset -y -f 0 0x4e 0xf8 0x0    0
+i2cset -y -f 0 0x4e 0xf9 0x0    0
+i2cset -y -f 0 0x4e 0xfa 0x0    0
+i2cset -y -f 0 0x4e 0xfb 0x0    0
+i2cset -y -f 0 0x4e 0xfc 0x0    0
+i2cset -y -f 0 0x4e 0xfd 0x0    0
+i2cset -y -f 0 0x4e 0xfe 0x0    0
+i2cset -y -f 0 0x4e 0xff 0x0    0
+dump 0 0x4e
+0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 02 04 02 00 03 03 06 02 02 00 04 00 00 00 00 00    ???.?????.?.....
+10: 00 00 00 00 4d 61 63 6f 6d 00 00 00 00 00 00 00    ....Macom.......
+20: 00 00 00 00 02 00 00 00 4d 30 32 31 38 31 43 5f    ....?...M02181C_
+30: 46 35 36 39 34 00 00 00 33 00 00 00 00 00 00 00    F5694...3.......
+40: 00 00 00 00 45 45 55 30 30 30 30 30 30 30 30 30    ....EEU000000000
+50: 30 5f 30 30 00 00 00 01 00 01 00 00 58 fe 08 00    0_00...?.?..X??.
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+write complete files: ['init_4e_add_extended.txt']
+root@f5696b:/opt/conf#
+[09:00:26:070] [PC > GTW]  python load_init_regs.py 0 0x4e 0 sn
+[09:00:26:554] python load_init_regs.py 0 0x4e 0 sn
+
+sn: AL914ME000018086_36.00
+i2cset -y -f 0 0x4e 0x44 0x41   0
+i2cset -y -f 0 0x4e 0x45 0x4c   0
+i2cset -y -f 0 0x4e 0x46 0x39   0
+i2cset -y -f 0 0x4e 0x47 0x31   0
+i2cset -y -f 0 0x4e 0x48 0x34   0
+i2cset -y -f 0 0x4e 0x49 0x4d   0
+i2cset -y -f 0 0x4e 0x4a 0x45   0
+i2cset -y -f 0 0x4e 0x4b 0x30   0
+i2cset -y -f 0 0x4e 0x4c 0x30   0
+i2cset -y -f 0 0x4e 0x4d 0x30   0
+i2cset -y -f 0 0x4e 0x4e 0x30   0
+i2cset -y -f 0 0x4e 0x4f 0x31   0
+i2cset -y -f 0 0x4e 0x50 0x38   0
+i2cset -y -f 0 0x4e 0x51 0x30   0
+i2cset -y -f 0 0x4e 0x52 0x38   0
+i2cset -y -f 0 0x4e 0x53 0x36   0
+i2cset -y -f 0 0x4e 0x54 0x5f   0
+i2cset -y -f 0 0x4e 0x55 0x33   0
+i2cset -y -f 0 0x4e 0x56 0x36   0
+i2cset -y -f 0 0x4e 0x57 0x2e   0
+i2cset -y -f 0 0x4e 0x58 0x30   0
+i2cset -y -f 0 0x4e 0x59 0x30   0
+AL914ME000018086_36.00 writen in ascii on bus=0 add=0x4e from reg=0x44
+i2cset -y -f 0 0x4e 0x28 0x4d   0
+i2cset -y -f 0 0x4e 0x29 0x30   0
+i2cset -y -f 0 0x4e 0x2a 0x32   0
+i2cset -y -f 0 0x4e 0x2b 0x31   0
+i2cset -y -f 0 0x4e 0x2c 0x38   0
+i2cset -y -f 0 0x4e 0x2d 0x31   0
+i2cset -y -f 0 0x4e 0x2e 0x43   0
+i2cset -y -f 0 0x4e 0x2f 0x5f   0
+i2cset -y -f 0 0x4e 0x30 0x46   0
+i2cset -y -f 0 0x4e 0x31 0x35   0
+i2cset -y -f 0 0x4e 0x32 0x36   0
+i2cset -y -f 0 0x4e 0x33 0x39   0
+i2cset -y -f 0 0x4e 0x34 0x36   0
+i2cset -y -f 0 0x4e 0x35 0x42   0
+M02181C_F5696B writen in ascii on bus=0 add=0x4e from reg=0x28
+root@f5696b:/opt/conf#
+[09:00:26:603] [PC > GTW]  i2cset -y -f 0 0x4f 0xf0 0x01
+[09:00:26:787] i2cset -y -f 0 0x4f 0xf0 0x01
+
+root@f5696b:/opt/conf#
+[09:00:26:807] [PC > GTW]  python save_cal.py xgs
+[09:00:27:515] python save_cal.py xgs
+
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+i=1     t82h@96 = 0xa0 (expected bit 3 == 0)
+backup registers of tables 80h and 81h into EEPROM
+root@f5696b:/opt/conf#
+[09:00:27:687] [PC > GTW]  python load_cal.py xgs_eeprom
+[09:00:28:564] python load_cal.py xgs_eeprom
+
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+Initiate soft reset and download from EEPROM \ OTP register --> t82h.@x9D=0x02
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+root@f5696b:/opt/conf#
+[09:00:29:485] LOAD XGS REGISTRE OK
+[09:00:29:805] ===================> Test de CALIBRATION <================================================
+
+[09:00:29:841] [PC > GTW]  python xgsddmi.py vcc
+[09:00:30:153] python xgsddmi.py vcc
+
+@x6263  0x7fe0  vcc     3.2736 V
+root@f5696b:/opt/conf#
+[09:00:30:172] [PC > GTW]  python gponddmi.py vcc
+[09:00:30:455] python gponddmi.py vcc
+
+@x6263  0x7ed0  vcc     3.2464 V
+root@f5696b:/opt/conf#
+[09:00:30:474] [PC > GTW]  python xgsddmi.py temp
+[09:00:30:759] python xgsddmi.py temp
+
+@x6061  0x6180  temp    97.5 degC
+root@f5696b:/opt/conf#
+[09:00:30:777] [PC > GTW]  python gponddmi.py temp
+[09:00:31:077] python gponddmi.py temp
+
+@x6061  0x35c0  temp    53.75 degC
+root@f5696b:/opt/conf#
+[09:00:31:096] ===================> Test calibration VCC <===============================================
+
+[09:00:31:108] [PC > GTW]  python calib_xgs.py 0 0x4f vcc 3.3
+[09:00:31:535] [PC < GTW]  python calib_xgs.py 0 0x4f vcc 3.3
+                           init vcc cal regs: @x5a & @x5b
+                           targvcc = 3.3 V,        raw_vcc_mon = 3.2768 V = 0x8000
+                           vcc_offset=232 = 0xe8 =0xe8
+                           reg_5b5a 0xe800
+                           root@f5696b:/opt/conf#
+[09:00:32:037] [PC > GTW]  python calib_xgs.py 1 0x4f vcc 3.3
+[09:00:32:518] [PC < GTW]  python calib_xgs.py 1 0x4f vcc 3.3
+                           init vcc cal regs: @x5a & @x5b
+                           targvcc = 3.3 V,        raw_vcc_mon = 3.2448 V = 0x7ec0
+                           vcc_offset=552 = 0x228 =0x228
+                           reg_5b5a 0x2802
+                           root@f5696b:/opt/conf#
+[09:00:32:803] python gponddmi.py vcc
+[09:00:33:318] python gponddmi.py vcc
+@x6263  0x8108  vcc     3.3032 V
+root@f5696b:/opt/conf#
+[09:00:33:337] vcc GPON OK
+[09:00:33:616] python xgsddmi.py vcc
+[09:00:33:635] python xgsddmi.py vcc
+@x6263  0x80d8  vcc     3.2984 V
+root@f5696b:/opt/conf#
+[09:00:34:425] vcc XGS OK
+[09:00:34:475] ===================> Test calibration Temperature <=======================================
+
+[09:00:35:874] ÿP	
+[09:00:36:314] Mesured_value(before calib)=28.500000   °C   
+ 
+[09:00:36:778] python calib_xgs.py 1 0x4f temp 28.500000
+[09:00:37:082] python calib_xgs.py 1 0x4f temp 28.500000
+init temperature cal regs: @x56 & @x57
+targtemp = 28.500000 = 7296.0,  raw_temp_mon = 0x34c0 = 13504
+temp_offset=-6208= -0x1840=0xffffffffffffe7c0
+reg_5756 0xc0e7
+root@f5696b:/opt/conf#
+[09:00:37:399] python gponddmi.py temp
+[09:00:37:435] python gponddmi.py temp
+@x6061  0x1d00  temp    29.0 degC
+root@f5696b:/opt/conf#
+[09:00:37:465] Température GPON OK
+[09:00:37:906] python calib_xgs.py 0 0x4f temp 28.500000
+[09:00:37:940] python calib_xgs.py 0 0x4f temp 28.500000
+init temperature cal regs: @x56 & @x57
+targtemp = 28.500000 = 7296.0,  raw_temp_mon = 0x6200 = 25088
+temp_offset=-17792= -0x4580=0xffffffffffffba80
+reg_5756 0x80ba
+root@f5696b:/opt/conf#
+[09:00:38:240] python xgsddmi.py temp
+[09:00:38:743] python xgsddmi.py temp
+@x6061  0x1c40  temp    28.25 degC
+root@f5696b:/opt/conf#
+[09:00:38:772] Température XGS OK
+[09:00:38:810] ===================> Backup <=============================================================
+
+[09:00:38:848] Backup ...
+[09:00:38:877] [PC > GTW]  python save_cal.py xgs
+[09:00:39:588] python save_cal.py xgs
+
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+i=1     t82h@96 = 0xa0 (expected bit 3 == 0)
+backup registers of tables 80h and 81h into EEPROM
+root@f5696b:/opt/conf#
+[09:00:40:417] [PC > GTW]  python lut_vapd_single.py start
+[09:00:43:432] python lut_vapd_single.py start
+
+AL914ME000018086_36.00
+qosa PLDM588-914        gamma 0.025
+vbr_25 =36.0    vapd_25 =33.84V
+check= OK
+passthrough is possible
+i2c address of VAPD LUT = @x50
+T_degC  VAPD(V)         DACs(hex(round())       @i2c_50 [val+2] [val]
+-40     32.22|32.27     122.35 | 122.78         0x80    0x7a | 0x7a
+-36     32.32|32.37     123.21 | 123.64         0x82    0x7b | 0x7b
+-32     32.42|32.47     124.07 | 124.50         0x84    0x7c | 0x7c
+-28     32.52|32.57     124.93 | 125.36         0x86    0x7c | 0x7d
+-24     32.62|32.67     125.79 | 126.22         0x88    0x7d | 0x7e
+-20     32.72|32.77     126.66 | 127.09         0x8a    0x7e | 0x7f
+-16     32.82|32.87     127.52 | 127.95         0x8c    0x7f | 0x7f
+-12     32.92|32.97     128.38 | 128.81         0x8e    0x80 | 0x80
+-8      33.02|33.07     129.24 | 129.67         0x90    0x81 | 0x81
+-4      33.12|33.17     130.10 | 130.53         0x92    0x82 | 0x82
+0       33.22|33.27     130.96 | 131.39         0x94    0x82 | 0x83
+4       33.32|33.37     131.83 | 132.26         0x96    0x83 | 0x84
+8       33.42|33.47     132.69 | 133.12         0x98    0x84 | 0x85
+12      33.52|33.57     133.55 | 133.98         0x9a    0x85 | 0x85
+16      33.62|33.67     134.41 | 134.84         0x9c    0x86 | 0x86
+20      33.72|33.77     135.27 | 135.70         0x9e    0x87 | 0x87
+24      33.82|33.87     136.13 | 136.56         0xa0    0x88 | 0x88
+28      33.92|33.97     137.00 | 137.43         0xa2    0x88 | 0x89
+32      34.02|34.07     137.86 | 138.29         0xa4    0x89 | 0x8a
+36      34.12|34.17     138.72 | 139.15         0xa6    0x8a | 0x8b
+40      34.22|34.27     139.58 | 140.01         0xa8    0x8b | 0x8c
+44      34.32|34.37     140.44 | 140.87         0xaa    0x8c | 0x8c
+48      34.42|34.47     141.30 | 141.73         0xac    0x8d | 0x8d
+52      34.52|34.57     142.17 | 142.60         0xae    0x8e | 0x8e
+56      34.62|34.67     143.03 | 143.46         0xb0    0x8f | 0x8f
+60      34.72|34.77     143.89 | 144.32         0xb2    0x8f | 0x90
+64      34.82|34.87     144.75 | 145.18         0xb4    0x90 | 0x91
+68      34.92|34.97     145.61 | 146.04         0xb6    0x91 | 0x92
+72      35.02|35.07     146.47 | 146.91         0xb8    0x92 | 0x92
+76      35.12|35.17     147.34 | 147.77         0xba    0x93 | 0x93
+80      35.22|35.27     148.20 | 148.63         0xbc    0x94 | 0x94
+84      35.32|35.37     149.06 | 149.49         0xbe    0x95 | 0x95
+88      35.42|35.47     149.92 | 150.35         0xc0    0x95 | 0x96
+92      35.52|35.57     150.78 | 151.21         0xc2    0x96 | 0x97
+96      35.62|35.67     151.64 | 152.08         0xc4    0x97 | 0x98
+100     35.72|35.77     152.51 | 152.94         0xc6    0x98 | 0x98
+104     35.82|35.87     153.37 | 153.80         0xc8    0x99 | 0x99
+108     35.92|35.97     154.23 | 154.66         0xca    0x9a | 0x9a
+112     36.02|36.07     155.09 | 155.52         0xcc    0x9b | 0x9b
+116     36.12|36.17     155.95 | 156.38         0xce    0x9b | 0x9c
+120     36.22|36.27     156.81 | 157.25         0xd0    0x9c | 0x9d
+124     36.32|36.37     157.68 | 158.11         0xd2    0x9d | 0x9e
+dump t50h apd lut = 0x80-0xD3:
+ 0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 02 32 00 00 20 00 1a 00 30 1f 00 05 a0 80 3e 00    ?2.. .?.0?.???>.
+10: 00 00 00 00 1a 59 96 16 ff 92 0a 38 10 60 02 14    ....?Y??.??8?`??
+20: 00 01 01 00 00 1e 28 6d 05 20 19 33 70 11 00 00    .??..?(m? ?3p?..
+30: 00 80 00 00 00 00 00 62 68 7f 7f 54 aa b0 40 40    .?.....bh??T??@@
+40: ff ff ff ff ff ff ff ff 00 0e 10 00 50 40 40 00    .........??.P@@.
+50: fe fe 94 76 d6 7e 95 50 04 7f 64 01 00 00 ff ff    ???v?~?P??d?....
+60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+70: 01 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ?...............
+80: 7a 7a 7b 7b 7c 7c 7c 7d 7d 7e 7e 7f 7f 7f 80 80    zz{{|||}}~~?????
+90: 81 81 82 82 82 83 83 84 84 85 85 85 86 86 87 87    ????????????????
+a0: 88 88 88 89 89 8a 8a 8b 8b 8c 8c 8c 8d 8d 8e 8e    ????????????????
+b0: 8f 8f 8f 90 90 91 91 92 92 92 93 93 94 94 95 95    ????????????????
+c0: 95 96 96 97 97 98 98 98 99 99 9a 9a 9b 9b 9b 9c    ????????????????
+d0: 9c 9d 9d 9e ff ff ff ff ff ff ff ff ff ff ff ff    ????............
+e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+        >>>     end of loop     <<<
+root@f5696b:/opt/conf#
+[09:00:43:549] [PC > GTW]  python calib_xgs.py 0 0x4f lut_offset
+[09:00:44:097] python calib_xgs.py 0 0x4f lut_offset
+
+temp_val - index = 174 - 34.375
+lut_offset (t80h-0xA7)= 0x8b
+root@f5696b:/opt/conf#
+[09:00:44:580] [PC > GTW]  i2cset -y -f 0 0x4f 0xc8 0x00
+[09:00:44:778] i2cset -y -f 0 0x4f 0xc8 0x00
+
+root@f5696b:/opt/conf#
+[09:00:44:819] [PC > GTW]  python save_cal.py all
+[09:00:46:003] python save_cal.py all
+
+set t82h R/W pwd at i2c bus 0 and address 0x4F
+i=1     t82h@96 = 0xa0 (expected bit 3 == 0)
+backup registers of tables 80h and 81h into EEPROM
+gpon_b0 SGCtestsw
+calibration gpon saved into /mnt/nvram/m02101c_firmware.bin
+root@f5696b:/opt/conf#
+[09:00:46:379] [PC > GTW]  sync
+[09:00:46:592] sync
+
+root@f5696b:/opt/conf#
+[09:00:46:626] TEST CALIBRATION OK
+[09:00:46:664] ===================> TRACA BDD <==========================================================
+
+[09:00:46:694] ==============> Assemblage des données GTW en Traçabilité
+
+[09:00:46:723] ==============> Enregistrement des Mesures en Traçabilité
+
+[09:00:46:752] Enregistrement du tableau de mesure en cours
+[09:00:46:790] --------> Appel Traça  : Log Parametric Data Tableau: Début <--------
+[09:00:46:952] --------> Appel Traça  : Log Parametric Data Tableau: Fin   <--------
+[09:00:46:979] --------> Appel Traça  : Assemblage Composant : Début <--------
+[09:00:47:165] --------> Appel Traça  : Assemblage Composant : Fin   <--------
+[09:00:47:193] --------> Appel Traça  : Assemblage Composant : Début <--------
+[09:00:47:361] --------> Appel Traça  : Assemblage Composant : Fin   <--------
+[09:00:47:400] --------> Appel Traça  : Collect SFC Data : Début <--------
+[09:00:47:528] --------> Appel Traça  : Collect SFC Data : Fin   <--------
+[09:00:47:565] --------> Appel Traça  : Complete : Début <--------
+[09:00:47:722] --------> Appel Traça  : Complete : Fin   <--------
+[09:00:47:772] WAIT : 3 seconde (s)
+
+[09:00:47:809] Traçabilite OK
+[09:00:47:839] ===================> TEST TF OK  <========================================================
+
+[09:00:47:877] ===================> Attente retrait GTW <================================================
+
+[09:00:47:906] ===================> FIN DE TEST <========================================================
+
+[09:00:47:942] ############ PASSAGE OK ###########
+
+[09:00:47:972] DUREE DU TEST : 146 secondes
+
+[09:00:48:002] SOFT VERSION : EZR-BBS27208 TF_V1.1.10_0
+
+[09:00:48:031] <CIE>  Nom                                : CIE 5696b EDERSON Main V2.7 DEV
+               <CIE>  Référence                          : 254107584
+               <CIE>  Indice                             : C01
+               <SFIN> Nom                                : CIE 5696b EDERSON Main V2.7 DEV
+               <SFIN> Référence                          : 254107584
+               <SFIN> Indice                             : C01
+               
+[09:00:48:061] Sn SFIN                                   : 254107584A1SC000R2429900922
+               Sn CIE                                    : R2430602957
+               
+[09:00:48:115] Mesure <M_DUREE_TEST_FCT>                 : Temps de test - Status 0
+                                                           0.000000 s < ... < 360.000000 s
+                                                           146.000000 s
+               Mesure <M_FXS_LIGNECURENT_FXS1>           : FXS1 Mesure Courant de Ligne - Status 0
+                                                           33.000000 mA < ... < 39.000000 mA
+                                                           36.595745 mA
+               Mesure <M_FXS_LIGNECURENT_FXS2>           : FXS2 Mesure Courant de Ligne - Status 0
+                                                           33.000000 mA < ... < 39.000000 mA
+                                                           36.595745 mA
+               Mesure <M_FXS_RESTVOLTAGE_FXS1>           : FXS1 Mesure Tension Repos - Status 0
+                                                           44.000000 V < ... < 50.000000 V
+                                                           48.599998 V
+               Mesure <M_FXS_RESTVOLTAGE_FXS2>           : FXS2 Mesure Tension Repos - Status 0
+                                                           44.000000 V < ... < 50.000000 V
+                                                           46.299999 V
+               Mesure <M_FXS_ALARMVOLTAGE_FXS1>          : FXS1 Mesure Tension Sonnerie - Status 0
+                                                           35.000000 VRms < ... < 41.000000 VRms
+                                                           37.099998 VRms
+               Mesure <M_FXS_ALARMVOLTAGE_FXS1>          : FXS1 Mesure Tension Sonnerie - Status 0
+                                                           35.000000 VRms < ... < 41.000000 VRms
+                                                           35.900002 VRms
+               Mesure <M_FXS_TRANS_FXS1_300HZ>           : FXS1 Mesure Trans 300Hz - Status 0
+                                                           8.100000 dB < ... < 11.100000 dB
+                                                           9.222583 dB
+               Mesure <M_FXS_TRANS_FXS1_1000HZ>          : FXS1 Mesure Trans 1000Hz - Status 0
+                                                           8.100000 dB < ... < 10.100000 dB
+                                                           9.164368 dB
+               Mesure <M_FXS_TRANS_FXS1_3400HZ>          : FXS1 Mesure Trans 3400Hz - Status 0
+                                                           8.100000 dB < ... < 11.100000 dB
+                                                           10.152817 dB
+               Mesure <M_FXS_TRANS_FXS2_300HZ>           : FXS2 Mesure Trans 300Hz - Status 0
+                                                           8.100000 dB < ... < 11.100000 dB
+                                                           8.832519 dB
+               Mesure <M_FXS_TRANS_FXS2_1000HZ>          : FXS2 Mesure Trans 1000Hz - Status 0
+                                                           8.100000 dB < ... < 10.100000 dB
+                                                           8.734918 dB
+               Mesure <M_FXS_TRANS_FXS2_3400HZ>          : FXS2 Mesure Trans 3400Hz - Status 0
+                                                           8.100000 dB < ... < 11.100000 dB
+                                                           9.403118 dB
+               Mesure <M_CONS_CONSUMPTION>               : Mesure Consommation - Status 0
+                                                           9.000000 W < ... < 17.000000 W
+                                                           9.679460 W
+               Mesure <M_CONSUMPTION_TURN_ON>            : Mesure Consommation Démarrage - Status 2
+                                                           2.000000 W < ... < 15.000000 W
+               Mesure <M_DEBIT_SENDER_ETH1>              : M_DEBIT_SENDER_ETH1 - Status 0
+                                                           400.000000 Mbits < ... < 1024.000000 Mbits
+                                                           954.000000 Mbits
+               Mesure <M_DEBIT_RECEIVER_ETH1>            : M_DEBIT_RECEIVER_ETH1 - Status 0
+                                                           400.000000 Mbits < ... < 1024.000000 Mbits
+                                                           924.000000 Mbits
+               Mesure <M_DEBIT_SENDER_ETH2>              : M_DEBIT_SENDER_ETH2 - Status 0
+                                                           400.000000 Mbits < ... < 1024.000000 Mbits
+                                                           960.000000 Mbits
+               Mesure <M_DEBIT_RECEIVER_ETH2>            : M_DEBIT_RECEIVER_ETH2 - Status 0
+                                                           400.000000 Mbits < ... < 1024.000000 Mbits
+                                                           931.000000 Mbits
+               Mesure <M_DEBIT_SENDER_WAN>               : M_DEBIT_SENDER_WAN - Status 0
+                                                           2000.000000 Mbits < ... < 10000.000000 Mbits
+                                                           3240.000000 Mbits
+               Mesure <M_DEBIT_RECEIVER_WAN>             : M_DEBIT_RECEIVER_WAN - Status 0
+                                                           2000.000000 Mbits < ... < 10000.000000 Mbits
+                                                           3210.000000 Mbits
+               Mesure <M_Temperature>                    : Mesure Température monitorée après calibration - Status 2
+                                                           15.000000 °C < ... < 35.000000 °C
+               Mesure <M_Tesion>                         : la valeur de la Tension monitorée après calibration - Status 2
+                                                           3.135000 V < ... < 3.465000 V
+               Mesure <M_BCTT_TpsTest>                   : Mesure du temps de test - Status 2
+                                                           0.000000 ms < ... < 100000.000000 ms
+               Mesure <M_Temperature_Measured>           : la valeur de la temperature mesurée par capteur après calibration - Status 0
+                                                           15.000000 °C < ... < 35.000000 °C
+                                                           29.000000 °C
+                                                           Duree 3000 ms
+               Mesure <M_Temperature_Measured_XGS>       : ATR_BCTT - Status 0
+                                                           15.000000 °C < ... < 35.000000 °C
+                                                           28.250000 °C
+                                                           Duree 3000 ms
+               Mesure <M_Measured_Tesion_XGS>            : ATR_BCTT - Status 0
+                                                           3.200000 V < ... < 3.400000 V
+                                                           3.298400 V
+                                                           Duree 3000 ms
+               Mesure <M_Measured_Tesion>                : la valeur de la Tension mesurée par le testeur après la calibration - Status 0
+                                                           3.200000 V < ... < 3.400000 V
+                                                           3.303200 V
+                                                           Duree 3000 ms
+               Mesure <M_Monitored_Temperature>          : la valeur monitorée de la température avant calibration - Status 2
+                                                           15.000000 °C < ... < 35.000000 °C
+               Mesure <M_Monitored_Tension>              : la valeur monitorée de la tension avant calibration - Status 2
+                                                           3.000000 V < ... < 4.000000 V
+               
+[09:00:48:169] 
