@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import autoTable from 'jspdf-autotable';
+
 import {
   Chart as ChartJS,
   BarElement,
@@ -27,17 +28,16 @@ ChartJS.register(
 );
 
 const Nftgraph = ({ filteredResults, min, max }) => {
-
   const [selectedMin, setSelectedMin] = useState(NaN);
   const [selectedMax, setSelectedMax] = useState(NaN);
 
-  const HandleChangeMin= () => {
+  const HandleChangeMin = () => {
     setSelectedMin(parseFloat(document.getElementById("inputMin").value));
-  }
+  };
 
-  const HandleChangeMax= () => {
+  const HandleChangeMax = () => {
     setSelectedMax(parseFloat(document.getElementById("inputMax").value));
-  }
+  };
 
   const reset = () => {
     setSelectedMin(NaN);
@@ -45,7 +45,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     document.getElementById("inputMin").value = "";
     document.getElementById("inputMax").value = "";
   };
-
 
   const chartRef = useRef();
 
@@ -58,19 +57,21 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     if (powerValues.length === 0) return null;
 
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
-    const stdDev = Math.sqrt(powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) / powerValues.length);
+    const stdDev = Math.sqrt(
+      powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
+        powerValues.length
+    );
 
     let dataMin = min;
     let dataMax = max;
 
-    if(!(isNaN(selectedMin))) {  
+    if (!isNaN(selectedMin)) {
       dataMin = parseFloat(selectedMin);
     }
-    
-    if(!(isNaN(selectedMax))) {
+
+    if (!isNaN(selectedMax)) {
       dataMax = parseFloat(selectedMax);
     }
-    
 
     const generateGaussianCurve = () => {
       const curve = [];
@@ -96,7 +97,13 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     };
   };
 
-  const stats = calculateStats(filteredResults, min, max, selectedMax, selectedMin);
+  const stats = calculateStats(
+    filteredResults,
+    min,
+    max,
+    selectedMax,
+    selectedMin
+  );
 
   const prepareChartData = () => {
     if (!stats) return { datasets: [] };
@@ -120,7 +127,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
             x: point.x,
             y: point.y,
           })),
-          borderColor: "#06b6d4",
+          borderColor: "#06b6d4", // Using hex color
           borderWidth: 3,
           pointRadius: 0,
           yAxisID: "y",
@@ -132,7 +139,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
             x: parseFloat(x),
             y: y * scaleFactor,
           })),
-          backgroundColor: "rgba(239, 68, 68, 0.7)",
+          backgroundColor: "rgba(239, 68, 68, 0.7)", // Using rgba color
           yAxisID: "y1",
         },
         {
@@ -145,7 +152,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#f59e0b",
+          borderColor: "#f59e0b", // Using hex color
           borderWidth: 2,
           borderDash: [5, 5],
           pointRadius: 0,
@@ -161,7 +168,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#f59e0b",
+          borderColor: "#f59e0b", // Using hex color
           borderWidth: 2,
           borderDash: [5, 5],
           pointRadius: 0,
@@ -177,7 +184,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#10B981",
+          borderColor: "#10B981", // Vert - tu peux changer la couleur
           borderWidth: 2,
           borderDash: [10, 5],
           pointRadius: 0,
@@ -189,41 +196,47 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
   const chartData = prepareChartData();
 
-
   // Indices long terme (Pp/Ppk)
-  const pp = stats?.stdDev > 0 ? (stats.limMax - stats.limMin) / (6 * stats.stdDev) : 0;
-  const ppk = stats?.stdDev > 0
-    ? Math.min(
-        (stats.limMax - stats.mean) / (3 * stats.stdDev),
-        (stats.mean - stats.limMin) / (3 * stats.stdDev)
-      )
-    : 0;
+  const pp =
+    stats?.stdDev > 0 ? (stats.limMax - stats.limMin) / (6 * stats.stdDev) : 0;
+  const ppk =
+    stats?.stdDev > 0
+      ? Math.min(
+          (stats.limMax - stats.mean) / (3 * stats.stdDev),
+          (stats.mean - stats.limMin) / (3 * stats.stdDev)
+        )
+      : 0;
 
   // Indices court terme (Cp/Cpk)
   const stdDevShortTerm = stats?.powerValues
     ? Math.sqrt(
-        stats.powerValues.reduce((sum, value) => sum + Math.pow(value - stats.mean, 2), 0) /
+        stats.powerValues.reduce(
+          (sum, value) => sum + Math.pow(value - stats.mean, 2),
+          0
+        ) /
           (stats.powerValues.length - 1)
       )
     : 0;
-  
-  const cp = stdDevShortTerm > 0
-    ? (stats?.limMax - stats?.limMin) / (6 * stdDevShortTerm)
-    : 0;
-  
-  const cpk = stdDevShortTerm > 0
-    ? Math.min(
-        (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
-        (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
-      )
-    : 0;
+
+  const cp =
+    stdDevShortTerm > 0
+      ? (stats?.limMax - stats?.limMin) / (6 * stdDevShortTerm)
+      : 0;
+
+  const cpk =
+    stdDevShortTerm > 0
+      ? Math.min(
+          (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
+          (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
+        )
+      : 0;
 
   const exportPDF = () => {
     if (!stats || !chartRef.current) return;
-  
+
     const pdf = new jsPDF("landscape");
     const canvas = chartRef.current.querySelector("canvas");
-    
+
     if (!canvas) {
       console.error("Canvas not found!");
       return;
@@ -244,24 +257,24 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     const imgHeight = 140;
     const imgX = 15;
     const imgY = 30;
-  
+
     const { mean, stdDev, limMin, limMax } = stats;
     const tableX = 215;
     const tableY = 45;
-    const title = `${filteredResults[0]?.mesure || 'Graphique'}`;
-  
+    const title = `${filteredResults[0]?.mesure || "Graphique"}`;
+
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 255);
     const titleX = (pdf.internal.pageSize.width - pdf.getTextWidth(title)) / 2;
     pdf.text(title, titleX, 15);
-  
+
     const data = [
       ["Cible", mean.toFixed(2)],
       ["Écart-type", stdDev.toFixed(2)],
       ["LSI", limMin],
       ["LSS", limMax],
     ];
-  
+
     pdf.setFontSize(13);
     pdf.setFont("helvetica", "bold");
     pdf.text("Caractéristiques du procédé", 215, 40);
@@ -277,19 +290,18 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       },
       theme: "plain",
     });
-  
-  
+
     const statistics = [
       ["Cp", cp.toFixed(2)],
       ["Pp", pp.toFixed(2)],
       ["Cpk", cpk.toFixed(2)],
       ["Ppk", ppk.toFixed(2)],
     ];
-  
+
     pdf.setFontSize(13);
     pdf.setFont("helvetica", "bold");
     pdf.text("Capabilité globale", 225, 120);
-  
+
     autoTable(pdf, {
       startY: tableY + 70,
       margin: { left: tableX },
@@ -302,48 +314,88 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       },
       theme: "plain",
     });
-  
+
     pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
-    pdf.save(`${title}.pdf`);  };
+    pdf.save(`${title}.pdf`);
+  };
 
   return (
     <>
-      {stats ? (
+      <h1 className="text-3xl text-cyan-400 font-bold mb-10 mt-20">
+        Courbe Gaussienne
+      </h1>
+
+      <div className="flex gap-5">
+        <div className="flex gap-3 mb-10">
+          <input
+            type="text"
+            id="inputMin"
+            placeholder="LSI"
+            className="border-3 border-orange-500 w-40 rounded-2xl text-xl p-3 h-14 font-medium text-orange-500 outline-none"
+          />
+          <input
+            type="text"
+            id="inputMax"
+            placeholder="LSS"
+            className="border-3 border-green-400 w-40 rounded-2xl text-xl p-3 h-14 font-medium text-green-400 outline-none"
+          />
+        </div>
+
+        <div className="flex place-items-center gap-3 mb-10">
+          <button
+            onClick={() => {
+              HandleChangeMax() || HandleChangeMin();
+            }}
+            className="text-black border-3 hover:border-cyan-400 hover:text-cyan-400  bg-cyan-400 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
+          >
+            Editer
+          </button>
+          <button
+            onClick={() => {
+              reset();
+            }}
+            className="text-black border-3 hover:border-red-500 hover:text-red-500  bg-red-500 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+      {filteredResults.length > 0 ? (
         <div
           ref={chartRef}
-          className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20"
+          className="p-6 bg-gray-800 rounded-lg hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20"
         >
           <h2 className="text-2xl text-cyan-400 mb-4">
-            {filteredResults[0]?.mesure || "Graphique"}
+            {filteredResults[0]?.mesure}
           </h2>
 
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Cible</h3>
               <p className="text-white text-xl">
-                {stats.mean?.toFixed(2) || "N/A"}
-                <span className="text-sm text-gray-400"> dBm</span>
+                {stats?.mean?.toFixed(2) || "N/A"}{" "}
+                <span className="text-sm text-gray-400">dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Écart-type</h3>
               <p className="text-white text-xl">
-                {stats.stdDev?.toFixed(2) || "N/A"}
-                <span className="text-sm text-gray-400"> dBm</span>
+                {stats?.stdDev?.toFixed(2) || "N/A"}{" "}
+                <span className="text-sm text-gray-400">dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">LSI</h3>
               <p className="text-white text-xl">
-                {stats.min?.toFixed(2) || "N/A"}
-                <span className="text-sm text-gray-400"> dBm</span>
+                {stats?.min?.toFixed(2) || "N/A"}{" "}
+                <span className="text-sm text-gray-400">dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">LSS</h3>
               <p className="text-white text-xl">
-                {stats.max?.toFixed(2) || "N/A"}
-                <span className="text-sm text-gray-400"> dBm</span>
+                {stats?.max?.toFixed(2) || "N/A"}{" "}
+                <span className="text-sm text-gray-400">dBm</span>
               </p>
             </div>
           </div>
@@ -363,8 +415,8 @@ const Nftgraph = ({ filteredResults, min, max }) => {
                       display: true,
                       color: "#4FC0D0",
                     },
-                    min: stats.min - 3 * stats.stdDev,
-                    max: stats.max + 3 * stats.stdDev,
+                    min: stats ? stats.min - 3 * stats.stdDev : undefined,
+                    max: stats ? stats.max + 3 * stats.stdDev : undefined,
                   },
                   y: {
                     display: false,
@@ -399,7 +451,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               }}
             />
           </div>
-
           <div className="grid grid-cols-4 gap-4 mt-6">
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Cp</h3>
@@ -418,9 +469,9 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               <p className="text-white text-xl">{ppk.toFixed(2)}</p>
             </div>
           </div>
-
+          <br/>
           <button
-            className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400 mt-6"
+            className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400"
             onClick={exportPDF}
           >
             Exporter en PDF
@@ -428,21 +479,15 @@ const Nftgraph = ({ filteredResults, min, max }) => {
         </div>
       ) : (
         <div className="p-6 bg-gray-800 rounded-lg mt-10 text-yellow-400">
-          {filteredResults.length === 0 
-            ? "Aucune donnée ne correspond aux filtres sélectionnés" 
-            : "Données invalides pour l'analyse"}
+          Aucune donnée ne correspond aux filtres sélectionnés
         </div>
       )}
     </>
   );
 };
-
 Nftgraph.propTypes = {
   filteredResults: PropTypes.arrayOf(
     PropTypes.shape({
-      valeur: PropTypes.string.isRequired,
-      mesure: PropTypes.string,
-      nbrfile: PropTypes.string,
       power: PropTypes.string.isRequired,
       lim_min: PropTypes.string,
       lim_max: PropTypes.string,
@@ -453,12 +498,6 @@ Nftgraph.propTypes = {
   ).isRequired,
   min: PropTypes.number,
   max: PropTypes.number,
-};
-
-Nftgraph.defaultProps = {
-  filteredResults: [],
-  min: 0,
-  max: 100,
 };
 
 export default Nftgraph;
