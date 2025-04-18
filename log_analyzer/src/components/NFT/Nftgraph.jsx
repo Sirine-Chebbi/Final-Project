@@ -26,11 +26,31 @@ ChartJS.register(
   Title
 );
 
-const Nftgraph = ({ filteredResults = [], min = 0, max = 100 }) => {
+const Nftgraph = ({ filteredResults, min, max }) => {
+
+  const [selectedMin, setSelectedMin] = useState(NaN);
+  const [selectedMax, setSelectedMax] = useState(NaN);
+
+  const HandleChangeMin= () => {
+    setSelectedMin(parseFloat(document.getElementById("inputMin").value));
+  }
+
+  const HandleChangeMax= () => {
+    setSelectedMax(parseFloat(document.getElementById("inputMax").value));
+  }
+
+  const reset = () => {
+    setSelectedMin(NaN);
+    setSelectedMax(NaN);
+    document.getElementById("inputMin").value = "";
+    document.getElementById("inputMax").value = "";
+  };
+
+
   const chartRef = useRef();
 
-  const calculateStats = (data, min, max) => {
-    if (!data || data.length === 0 || min == null || max == null) return null;
+  const calculateStats = (data, min, max, selectedMax, selectedMin) => {
+    if (!data || data.length === 0) return null;
 
     const powerValues = data
       .map((item) => parseFloat(item.valeur))
@@ -38,12 +58,19 @@ const Nftgraph = ({ filteredResults = [], min = 0, max = 100 }) => {
     if (powerValues.length === 0) return null;
 
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
-    const stdDev = Math.sqrt(
-      powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
-        powerValues.length
-    );
-    const dataMin = min;
-    const dataMax = max;
+    const stdDev = Math.sqrt(powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) / powerValues.length);
+
+    let dataMin = min;
+    let dataMax = max;
+
+    if(!(isNaN(selectedMin))) {  
+      dataMin = parseFloat(selectedMin);
+    }
+    
+    if(!(isNaN(selectedMax))) {
+      dataMax = parseFloat(selectedMax);
+    }
+    
 
     const generateGaussianCurve = () => {
       const curve = [];
@@ -69,7 +96,7 @@ const Nftgraph = ({ filteredResults = [], min = 0, max = 100 }) => {
     };
   };
 
-  const stats = calculateStats(filteredResults, min, max);
+  const stats = calculateStats(filteredResults, min, max, selectedMax, selectedMin);
 
   const prepareChartData = () => {
     if (!stats) return { datasets: [] };
@@ -201,16 +228,17 @@ const Nftgraph = ({ filteredResults = [], min = 0, max = 100 }) => {
       console.error("Canvas not found!");
       return;
     }
-  
+
+    // Scale the canvas to improve image quality
     const scaledCanvas = document.createElement("canvas");
     const scale = 3;
     scaledCanvas.width = canvas.width * scale;
     scaledCanvas.height = canvas.height * scale;
-  
+
     const ctx = scaledCanvas.getContext("2d");
     ctx.scale(scale, scale);
     ctx.drawImage(canvas, 0, 0);
-  
+
     const imgData = scaledCanvas.toDataURL("image/png");
     const imgWidth = 192;
     const imgHeight = 140;
@@ -415,6 +443,12 @@ Nftgraph.propTypes = {
       valeur: PropTypes.string.isRequired,
       mesure: PropTypes.string,
       nbrfile: PropTypes.string,
+      power: PropTypes.string.isRequired,
+      lim_min: PropTypes.string,
+      lim_max: PropTypes.string,
+      bande: PropTypes.string,
+      antenne: PropTypes.string,
+      mesure: PropTypes.string,
     })
   ).isRequired,
   min: PropTypes.number,
