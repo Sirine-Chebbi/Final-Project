@@ -31,7 +31,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
   const calculateStats = (data, min, max) => {
     if (!data || data.length === 0) return null;
 
-    const powerValues = data.map((item) => parseFloat(item.power)).filter((p) => !isNaN(p));
+    const powerValues = data.map((item) => parseFloat(item.valeur)).filter((p) => !isNaN(p));
     if (powerValues.length === 0) return null;
 
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
@@ -198,7 +198,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       {filteredResults.length > 0 ? (
         <div ref={chartRef} className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
           <h2 className="text-2xl text-cyan-400 mb-4">
-            {filteredResults[0]?.bande} - Antenne {filteredResults[0]?.antenne}
+            {filteredResults[0]?.mesure}
           </h2>
 
           <div className="grid grid-cols-4 gap-4 mb-6">
@@ -241,7 +241,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
                     position: 'bottom',
                     title: {
                       display: true,
-                      text: 'Valeur Power (dBm)',
                       color: '#4FC0D0'
                     },
                     min: stats ? stats.min - 3 * stats.stdDev : undefined,
