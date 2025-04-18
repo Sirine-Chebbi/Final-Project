@@ -84,6 +84,7 @@ def upload_nft_results(request):
     # Optionnel: vider les anciennes données
     NftResults.objects.all().delete()
 
+
     for uploaded_file in request.FILES.getlist('nft_files'):
         try:
             content = uploaded_file.read().decode('latin-1')

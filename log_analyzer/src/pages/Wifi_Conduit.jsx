@@ -3,6 +3,7 @@
   import Upload from "../components/Wifi_Conduit/Upload"
   import Table from "../components/Wifi_Conduit/Table"
   import Menu from "../components/Wifi_Conduit/Menu"
+  import ExportAllGraphs from "../components/Wifi_Conduit/Graphs/ExportAllGraphs";
 
   import Rssigraph from "../components/Wifi_Conduit/Graphs/Rssigraph"
   import Powergraph from "../components/Wifi_Conduit/Graphs/Powergraph"
@@ -57,6 +58,10 @@
           </div>
             <Filters setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
             <Table testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility} setFilteredResults={setFilteredResults} setSelectedCaisson={setSelectedCaisson}></Table>
+            <ExportAllGraphs
+          filteredResults={filteredResults}
+          selectedCaisson={selectedCaisson}
+        />
             <Powergraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Powergraph>
             <Evmgraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Evmgraph>
             <Rssigraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Rssigraph>

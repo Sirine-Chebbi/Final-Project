@@ -112,7 +112,7 @@ const TableNFT = ({
                   {result.valeur}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
-                  {result.unite}
+                  {result.unite || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
                   {result.status === 0 ? 'OK' : result.status === 1 ? 'KO' : 'Non fait'}

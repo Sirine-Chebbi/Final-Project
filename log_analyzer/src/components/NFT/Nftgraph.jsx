@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
 import { useRef } from "react";
+import autoTable from 'jspdf-autotable';
 import {
   Chart as ChartJS,
   BarElement,
@@ -25,17 +26,22 @@ ChartJS.register(
   Title
 );
 
-const Nftgraph = ({ filteredResults, min, max }) => {
+const Nftgraph = ({ filteredResults = [], min = 0, max = 100 }) => {
   const chartRef = useRef();
 
   const calculateStats = (data, min, max) => {
-    if (!data || data.length === 0) return null;
+    if (!data || data.length === 0 || min == null || max == null) return null;
 
-    const powerValues = data.map((item) => parseFloat(item.valeur)).filter((p) => !isNaN(p));
+    const powerValues = data
+      .map((item) => parseFloat(item.valeur))
+      .filter((p) => !isNaN(p));
     if (powerValues.length === 0) return null;
 
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
-    const stdDev = Math.sqrt(powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) / powerValues.length);
+    const stdDev = Math.sqrt(
+      powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
+        powerValues.length
+    );
     const dataMin = min;
     const dataMax = max;
 
@@ -43,7 +49,9 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       const curve = [];
       const step = (dataMax - dataMin) / 100;
       for (let x = dataMin - 3 * stdDev; x <= dataMax + 3 * stdDev; x += step) {
-        const y = (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2));
+        const y =
+          (1 / (stdDev * Math.sqrt(2 * Math.PI))) *
+          Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2));
         curve.push({ x, y });
       }
       return curve;
@@ -57,7 +65,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       powerValues,
       gaussianCurve: generateGaussianCurve(),
       limMin: dataMin,
-      limMax: dataMax
+      limMax: dataMax,
     };
   };
 
@@ -68,7 +76,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
     const binSize = 0.5;
     const histogram = {};
-    stats.powerValues.forEach(value => {
+    stats.powerValues.forEach((value) => {
       const bin = Math.round(value / binSize) * binSize;
       histogram[bin] = (histogram[bin] || 0) + 1;
     });
@@ -78,7 +86,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
     return {
       datasets: [
-        
         {
           type: "line",
           label: "Distribution Gaussienne",
@@ -86,7 +93,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
             x: point.x,
             y: point.y,
           })),
-          borderColor: "#06b6d4", // Using hex color
+          borderColor: "#06b6d4",
           borderWidth: 3,
           pointRadius: 0,
           yAxisID: "y",
@@ -98,7 +105,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
             x: parseFloat(x),
             y: y * scaleFactor,
           })),
-          backgroundColor: "rgba(239, 68, 68, 0.7)", // Using rgba color
+          backgroundColor: "rgba(239, 68, 68, 0.7)",
           yAxisID: "y1",
         },
         {
@@ -111,7 +118,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#f59e0b", // Using hex color
+          borderColor: "#f59e0b",
           borderWidth: 2,
           borderDash: [5, 5],
           pointRadius: 0,
@@ -127,7 +134,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#f59e0b", // Using hex color
+          borderColor: "#f59e0b",
           borderWidth: 2,
           borderDash: [5, 5],
           pointRadius: 0,
@@ -143,13 +150,12 @@ const Nftgraph = ({ filteredResults, min, max }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderColor: "#10B981",
           borderWidth: 2,
           borderDash: [10, 5],
           pointRadius: 0,
           yAxisID: "y",
         },
-        
       ],
     };
   };
@@ -157,18 +163,45 @@ const Nftgraph = ({ filteredResults, min, max }) => {
   const chartData = prepareChartData();
 
 
-  //Exporter en PDF
+  // Indices long terme (Pp/Ppk)
+  const pp = stats?.stdDev > 0 ? (stats.limMax - stats.limMin) / (6 * stats.stdDev) : 0;
+  const ppk = stats?.stdDev > 0
+    ? Math.min(
+        (stats.limMax - stats.mean) / (3 * stats.stdDev),
+        (stats.mean - stats.limMin) / (3 * stats.stdDev)
+      )
+    : 0;
+
+  // Indices court terme (Cp/Cpk)
+  const stdDevShortTerm = stats?.powerValues
+    ? Math.sqrt(
+        stats.powerValues.reduce((sum, value) => sum + Math.pow(value - stats.mean, 2), 0) /
+          (stats.powerValues.length - 1)
+      )
+    : 0;
+  
+  const cp = stdDevShortTerm > 0
+    ? (stats?.limMax - stats?.limMin) / (6 * stdDevShortTerm)
+    : 0;
+  
+  const cpk = stdDevShortTerm > 0
+    ? Math.min(
+        (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
+        (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
+      )
+    : 0;
 
   const exportPDF = () => {
-    const pdf = new jsPDF("landscape");
+    if (!stats || !chartRef.current) return;
   
-    const canvas = chartRef.current?.querySelector("canvas");
+    const pdf = new jsPDF("landscape");
+    const canvas = chartRef.current.querySelector("canvas");
+    
     if (!canvas) {
       console.error("Canvas not found!");
       return;
     }
   
-    // Scale the canvas to improve image quality
     const scaledCanvas = document.createElement("canvas");
     const scale = 3;
     scaledCanvas.width = canvas.width * scale;
@@ -179,137 +212,219 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     ctx.drawImage(canvas, 0, 0);
   
     const imgData = scaledCanvas.toDataURL("image/png");
-    const imgWidth = 275;
-    const imgHeight = 155;
+    const imgWidth = 192;
+    const imgHeight = 140;
     const imgX = 15;
     const imgY = 30;
   
-    const bande = filteredResults[0]?.bande || 'unknown';
-    const antenne = filteredResults[0]?.antenne || 'unknown';
-    const title = `${filteredResults[0]?.mesure}`;
+    const { mean, stdDev, limMin, limMax } = stats;
+    const tableX = 215;
+    const tableY = 45;
+    const title = `${filteredResults[0]?.mesure || 'Graphique'}`;
   
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 255);
     const titleX = (pdf.internal.pageSize.width - pdf.getTextWidth(title)) / 2;
     pdf.text(title, titleX, 15);
   
-    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
-    pdf.save(`${filteredResults[0]?.mesure}.pdf`);
-  };
+    const data = [
+      ["Cible", mean.toFixed(2)],
+      ["Écart-type", stdDev.toFixed(2)],
+      ["LSI", limMin],
+      ["LSS", limMax],
+    ];
+  
+    pdf.setFontSize(13);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Caractéristiques du procédé", 215, 40);
+    autoTable(pdf, {
+      startY: tableY,
+      margin: { left: tableX },
+      head: [["", ""]],
+      body: data,
+      styles: {
+        fontSize: 12,
+        halign: "left",
+        cellPadding: 3,
+      },
+      theme: "plain",
+    });
   
   
+    const statistics = [
+      ["Cp", cp.toFixed(2)],
+      ["Pp", pp.toFixed(2)],
+      ["Cpk", cpk.toFixed(2)],
+      ["Ppk", ppk.toFixed(2)],
+    ];
+  
+    pdf.setFontSize(13);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Capabilité globale", 225, 120);
+  
+    autoTable(pdf, {
+      startY: tableY + 70,
+      margin: { left: tableX },
+      head: [["", ""]],
+      body: statistics,
+      styles: {
+        fontSize: 12,
+        halign: "left",
+        cellPadding: 3,
+      },
+      theme: "plain",
+    });
+  
+    pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
+    pdf.save(`${title}.pdf`);  };
 
   return (
     <>
-      {filteredResults.length > 0 ? (
-        <div ref={chartRef} className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
+      {stats ? (
+        <div
+          ref={chartRef}
+          className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20"
+        >
           <h2 className="text-2xl text-cyan-400 mb-4">
-            {filteredResults[0]?.mesure}
+            {filteredResults[0]?.mesure || "Graphique"}
           </h2>
 
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Cible</h3>
               <p className="text-white text-xl">
-                {stats?.mean?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
+                {stats.mean?.toFixed(2) || "N/A"}
+                <span className="text-sm text-gray-400"> dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Écart-type</h3>
               <p className="text-white text-xl">
-                {stats?.stdDev?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
+                {stats.stdDev?.toFixed(2) || "N/A"}
+                <span className="text-sm text-gray-400"> dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">LSI</h3>
               <p className="text-white text-xl">
-                {stats?.min?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
+                {stats.min?.toFixed(2) || "N/A"}
+                <span className="text-sm text-gray-400"> dBm</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">LSS</h3>
               <p className="text-white text-xl">
-                {stats?.max?.toFixed(2) || 'N/A'} <span className="text-sm text-gray-400">dBm</span>
+                {stats.max?.toFixed(2) || "N/A"}
+                <span className="text-sm text-gray-400"> dBm</span>
               </p>
             </div>
           </div>
 
           <div className="h-96">
             <Chart
-              type='scatter'
+              type="scatter"
               data={chartData}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                   x: {
-                    type: 'linear',
-                    position: 'bottom',
+                    type: "linear",
+                    position: "bottom",
                     title: {
                       display: true,
-                      color: '#4FC0D0'
+                      color: "#4FC0D0",
                     },
-                    min: stats ? stats.min - 3 * stats.stdDev : undefined,
-                    max: stats ? stats.max + 3 * stats.stdDev : undefined
+                    min: stats.min - 3 * stats.stdDev,
+                    max: stats.max + 3 * stats.stdDev,
                   },
                   y: {
                     display: false,
                     grid: {
                       display: false,
-                    }
+                    },
                   },
                   y1: {
                     display: false,
                     grid: {
                       display: false,
-                    }
-                  }
+                    },
+                  },
                 },
                 plugins: {
                   tooltip: {
                     callbacks: {
                       label: function (context) {
-                        let label = context.dataset.label || '';
+                        let label = context.dataset.label || "";
                         if (label) {
-                          label += ': ';
+                          label += ": ";
                         }
-                        label += context.parsed.x.toFixed(2) + ' dBm';
+                        label += context.parsed.x.toFixed(2) + " dBm";
                         if (context.parsed.y !== undefined) {
-                          label += ', ' + context.parsed.y.toFixed(2);
+                          label += ", " + context.parsed.y.toFixed(2);
                         }
                         return label;
-                      }
-                    }
-                  }
-                }
+                      },
+                    },
+                  },
+                },
               }}
             />
           </div>
-          <button className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400" onClick={exportPDF}>
+
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-cyan-400">Cp</h3>
+              <p className="text-white text-xl">{cp.toFixed(2)}</p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-cyan-400">Cpk</h3>
+              <p className="text-white text-xl">{cpk.toFixed(2)}</p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-cyan-400">Pp</h3>
+              <p className="text-white text-xl">{pp.toFixed(2)}</p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-cyan-400">Ppk</h3>
+              <p className="text-white text-xl">{ppk.toFixed(2)}</p>
+            </div>
+          </div>
+
+          <button
+            className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400 mt-6"
+            onClick={exportPDF}
+          >
             Exporter en PDF
           </button>
-
         </div>
       ) : (
         <div className="p-6 bg-gray-800 rounded-lg mt-10 text-yellow-400">
-          Aucune donnée ne correspond aux filtres sélectionnés
+          {filteredResults.length === 0 
+            ? "Aucune donnée ne correspond aux filtres sélectionnés" 
+            : "Données invalides pour l'analyse"}
         </div>
       )}
     </>
   );
-}
+};
+
 Nftgraph.propTypes = {
   filteredResults: PropTypes.arrayOf(
     PropTypes.shape({
-      power: PropTypes.string.isRequired,
-      lim_min: PropTypes.string,
-      lim_max: PropTypes.string,
-      bande: PropTypes.string,
-      antenne: PropTypes.string,
+      valeur: PropTypes.string.isRequired,
+      mesure: PropTypes.string,
+      nbrfile: PropTypes.string,
     })
   ).isRequired,
   min: PropTypes.number,
   max: PropTypes.number,
+};
+
+Nftgraph.defaultProps = {
+  filteredResults: [],
+  min: 0,
+  max: 100,
 };
 
 export default Nftgraph;
