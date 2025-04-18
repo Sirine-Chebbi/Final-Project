@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-
 import {
   Chart as ChartJS,
   BarElement,
@@ -26,7 +25,7 @@ ChartJS.register(
   Title
 );
 
-const Deltagraph = ({ Results = [], selectedCaisson }, ref) => {
+const Deltagraph = forwardRef(({ Results , selectedCaisson }, ref) => {
   const calculateStats = (data) => {
     if (!data || data.length === 0) return null;
 
@@ -300,7 +299,7 @@ const Deltagraph = ({ Results = [], selectedCaisson }, ref) => {
       </div>
     </>
   );
-};
+});
 Deltagraph.propTypes = {
   Results: PropTypes.array.isRequired,
   selectedCaisson: PropTypes.string.isRequired,

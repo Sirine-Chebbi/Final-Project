@@ -1,5 +1,5 @@
-import { forwardRef } from "react";
 
+import { forwardRef } from "react";
 import {
   Chart as ChartJS,
   BarElement,
@@ -306,4 +306,4 @@ Evmgraph.propTypes = {
   selectedCaisson: PropTypes.string.isRequired,
 };
 
-export default Evmgraph;
+export default forwardRef(Evmgraph);

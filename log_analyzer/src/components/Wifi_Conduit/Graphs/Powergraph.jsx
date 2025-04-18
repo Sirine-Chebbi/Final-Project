@@ -306,4 +306,4 @@ Powergraph.propTypes = {
   selectedCaisson: PropTypes.string.isRequired,
 };
 
-export default Powergraph;
+export default forwardRef(Powergraph);

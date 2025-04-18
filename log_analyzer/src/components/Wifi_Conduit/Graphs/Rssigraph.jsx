@@ -306,4 +306,4 @@ Rssigraph.propTypes = {
   selectedCaisson: PropTypes.string.isRequired,
 };
 
-export default Rssigraph;
+export default forwardRef(Rssigraph);

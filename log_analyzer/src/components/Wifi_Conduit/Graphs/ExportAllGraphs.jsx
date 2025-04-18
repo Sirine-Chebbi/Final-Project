@@ -24,13 +24,30 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
     const pdf = new jsPDF('landscape');
     const margin = 15;
     const pageWidth = pdf.internal.pageSize.getWidth();
-    const imgWidth = pageWidth * 0.6; // 60% de la largeur pour le graphique
-    const imgHeight = 120; // Hauteur augmentée pour mieux voir les détails
-    const tableWidth = pageWidth * 0.35; // 35% pour le tableau
+    const imgWidth = pageWidth * 0.6;
+    const imgHeight = 120;
+    const tableWidth = pageWidth * 0.35;
 
     // Style global
     pdf.setFont('helvetica');
     pdf.setTextColor(40, 40, 40);
+
+    // Fonction pour extraire les indicateurs de capabilité
+    const extractCapabilityIndices = (ref) => {
+      if (!ref.current) return {};
+      
+      const indicesContainer = ref.current.querySelector('.grid.grid-cols-4:last-child');
+      if (!indicesContainer) return {};
+      
+      const indices = {};
+      Array.from(indicesContainer.children).forEach(div => {
+        const label = div.querySelector('h3').textContent;
+        const value = div.querySelector('p').textContent;
+        indices[label] = value;
+      });
+      
+      return indices;
+    };
 
     // Fonction pour capturer un graphique avec ses stats
     const captureGraphData = async (ref, title) => {
@@ -41,8 +58,8 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
       
       const imgData = canvas.toDataURL('image/png', 1.0);
       
-      // Extraction des statistiques
-      const statsContainer = ref.current.querySelector('.grid.grid-cols-4');
+      // Extraction des statistiques de base
+      const statsContainer = ref.current.querySelector('.grid.grid-cols-4:first-child');
       const stats = {};
       if (statsContainer) {
         Array.from(statsContainer.children).forEach(div => {
@@ -52,7 +69,15 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
         });
       }
 
-      return { imgData, title, stats };
+      // Extraction des indicateurs de capabilité
+      const capabilityIndices = extractCapabilityIndices(ref);
+
+      return { 
+        imgData, 
+        title,
+        stats,
+        capabilityIndices
+      };
     };
 
     // Capturer les données des 4 graphiques
@@ -67,10 +92,10 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
     graphData.forEach((data, index) => {
       if (!data) return;
 
-      // Nouvelle page pour chaque graphique (sauf la première)
       if (index > 0) {
         pdf.addPage('landscape');
       }
+      pdf.setTextColor(0, 0, 255);
 
       // En-tête de page
       pdf.setFontSize(16);
@@ -78,23 +103,22 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
       pdf.setFontSize(12);
       pdf.text(`${filteredResults[0]?.frequence}-A${filteredResults[0]?.ant} | Caisson: ${selectedCaisson}`, margin, margin + 10);
 
-      // Positionnement du graphique (à gauche)
-      pdf.addImage(data.imgData, 'PNG', margin, margin + 10, imgWidth, imgHeight);
+      // Graphique
+      pdf.addImage(data.imgData, 'PNG', margin, margin + 20, imgWidth, imgHeight);
 
-      // Positionnement du tableau (à droite du graphique)
+      // Tableau des caractéristiques de base
       const tableX = margin + imgWidth + 10;
-      const tableY = margin + 20;
+      let tableY = margin + 20;
 
       pdf.setFontSize(13);
       pdf.setFont("helvetica", "bold");
-      pdf.setTextColor(0, 0, 255);
-
-      pdf.text("Caractéristiques du procédé", 215, 40);
+      pdf.text("Caractéristiques du procédé", tableX, tableY);
+      tableY += 5;
 
       autoTable(pdf, {
         startY: tableY,
         margin: { left: tableX },
-        head: [['', '']],
+        head: [['Métrique', 'Valeur']],
         body: [
           ['Moyenne', data.stats['Moyenne'] || 'N/A'],
           ['Écart-type', data.stats['Écart-type'] || 'N/A'],
@@ -102,20 +126,43 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
           ['LSS', data.stats['Maximum'] || 'N/A']
         ],
         styles: {
-          fontSize: 12,
-          halign: "left",
-        cellPadding: 3,
+          fontSize: 11,
+          cellPadding: 3,
+          halign: 'left'
         },
         tableWidth: tableWidth,
         theme: 'plain'
       });
 
-      // Ligne de séparation
+      // Tableau des indicateurs de capabilité
+      tableY = pdf.lastAutoTable.finalY + 10;
+      pdf.text("Indicateurs de capabilité", tableX, tableY);
+      tableY += 5;
+
+      autoTable(pdf, {
+        startY: tableY,
+        margin: { left: tableX },
+        head: [['Indicateur', 'Valeur']],
+        body: [
+          ['Cp', data.capabilityIndices['Cp'] || 'N/A'],
+          ['Cpk', data.capabilityIndices['Cpk'] || 'N/A'],
+          ['Pp', data.capabilityIndices['Pp'] || 'N/A'],
+          ['Ppk', data.capabilityIndices['Ppk'] || 'N/A']
+        ],
+        styles: {
+          fontSize: 11,
+          cellPadding: 3,
+          halign: 'left',
+        },
+        tableWidth: tableWidth,
+        theme: 'plain'
+      });
+
+      // Pied de page
       pdf.setDrawColor(200, 200, 200);
       pdf.line(margin, pdf.internal.pageSize.getHeight() - 20, 
                pageWidth - margin, pdf.internal.pageSize.getHeight() - 20);
 
-      // Pied de page
       pdf.setFontSize(10);
       pdf.text(
         `Page ${index + 1} sur ${graphData.length}`,
@@ -160,8 +207,8 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson }) => {
 
       <button
         onClick={exportToPDF}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-200"
-      >
+        className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400"
+        >
         Générer le Rapport Complet
       </button>
     </>
