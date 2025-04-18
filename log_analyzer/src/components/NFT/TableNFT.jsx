@@ -61,39 +61,82 @@ const TableNFT = ({
     setFilteredResults(filteredResults);
   }, [minLimit, maxLimit, filteredResults, setSelectedMin, setSelectedMax, setFilteredResults]);
 
-  useEffect(() => {
-    console.log('Filtres appliqués:', { mesure, antenne, bande });
-    console.log('Résultats filtrés:', filteredResults);
-  }, [filteredResults, mesure, antenne, bande]);
-
   return (
-    <div className="mb-10 flex-auto overflow-x-auto rounded-xl border-cyan-400 border-2 max-h-150 p-10 hover:scale-101 duration-200 hover:shadow-cyan-400 shadow-2xl mt-10">
-      <table className="table-fixed text-white text-lg w-full">
-        <thead className="text-cyan-400">
-          <tr className="items-stretch text-2xl">
-            <th className="font-bold whitespace-nowrap pb-8 pt-2">Bande</th>
-            <th className="font-medium whitespace-nowrap pb-8 pt-2">Antenne</th>
-            <th className="font-medium whitespace-nowrap pb-8 pt-2">Mesure</th>
-            <th className="font-medium whitespace-nowrap pb-8 pt-2">Power</th>
-            <th className="font-medium whitespace-nowrap pb-8 pt-2">Limite Min</th>
-            <th className="font-medium whitespace-nowrap pb-8 pt-2">Limite Max</th>
+    <div className="mb-10 flex-auto overflow-x-auto rounded-xl h-160 border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 mt-10 bg-gray-900 max-h-max hover:scale-102 duration-200">
+      <table className="min-w-full divide-y divide-cyan-400">
+        <thead className="bg-gray-900">
+          <tr>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+            Nom  Fichier
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Mesure
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Valeur
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Unité
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Statut
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Min
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Max
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Bande
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Antenne
+            </th>
+            <th scope="col" className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap">
+              Durée
+            </th>
           </tr>
         </thead>
-        <tbody className="divide-y text-lg text-center divide-cyan-400">
+        <tbody className="divide-y divide-cyan-400 bg-gray-900">
           {filteredResults.length > 0 ? (
             filteredResults.map((result, index) => (
-              <tr key={index} className="text-xl">
-                <td className="py-2">{result.bande}</td>
-                <td>{result.antenne}</td>
-                <td>{result.mesure}</td>
-                <td>{result.power}</td>
-                <td>{result.lim_min}</td>
-                <td>{result.lim_max}</td>
+              <tr key={index} className="hover:bg-gray-800">
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.source_file}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.mesure}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.valeur}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.unite}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.status === 0 ? 'OK' : result.status === 1 ? 'KO' : 'Non fait'}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.lim_min}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.lim_max}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.bande || '-'}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.antenne }
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                  {result.duree ? `${result.duree} ms` : '-'}
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="py-4 text-cyan-400">
+              <td colSpan="10" className="px-6 py-4 text-center text-lg text-cyan-400">
                 Aucune donnée disponible pour les filtres :
                 <br />
                 Mesure: {mesure || 'Aucun'}, 
@@ -113,11 +156,15 @@ TableNFT.propTypes = {
     PropTypes.shape({
       bande: PropTypes.string,
       ant: PropTypes.string,
-      antenne: PropTypes.string,
+      antenne: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       mesure: PropTypes.string,
-      power: PropTypes.string,
-      lim_min: PropTypes.string,
-      lim_max: PropTypes.string,
+      valeur: PropTypes.number,
+      lim_min: PropTypes.number,
+      lim_max: PropTypes.number,
+      duree: PropTypes.number,
+      unite: PropTypes.string,
+      status: PropTypes.number,
+      source_file: PropTypes.string,
     })
   ),
   antenne: PropTypes.string,
