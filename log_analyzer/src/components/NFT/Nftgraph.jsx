@@ -156,6 +156,9 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
   const chartData = prepareChartData();
 
+
+  //Exporter en PDF
+
   const exportPDF = () => {
     const pdf = new jsPDF("landscape");
   
@@ -176,14 +179,14 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     ctx.drawImage(canvas, 0, 0);
   
     const imgData = scaledCanvas.toDataURL("image/png");
-    const imgWidth = 160;
-    const imgHeight = 140;
+    const imgWidth = 275;
+    const imgHeight = 155;
     const imgX = 15;
     const imgY = 30;
   
     const bande = filteredResults[0]?.bande || 'unknown';
     const antenne = filteredResults[0]?.antenne || 'unknown';
-    const title = `POWER_RMS_AVG_VSA1 ${filteredResults[0]?.bande} A${filteredResults[0]?.antenne}`;
+    const title = `${filteredResults[0]?.mesure}`;
   
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 255);
@@ -191,8 +194,9 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     pdf.text(title, titleX, 15);
   
     pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
-    pdf.save(`power_graph_${filteredResults[0]?.bande}_A${filteredResults[0]?.antenne}.pdf`);
+    pdf.save(`${filteredResults[0]?.mesure}.pdf`);
   };
+  
   
 
   return (
