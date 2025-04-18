@@ -181,8 +181,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
     const imgX = 15;
     const imgY = 30;
   
-    const bande = filteredResults[0]?.bande || 'unknown';
-    const antenne = filteredResults[0]?.antenne || 'unknown';
     const title = `POWER_RMS_AVG_VSA1 ${filteredResults[0]?.bande} A${filteredResults[0]?.antenne}`;
   
     pdf.setFontSize(18);
