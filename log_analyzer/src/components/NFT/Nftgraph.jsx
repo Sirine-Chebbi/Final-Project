@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import { useRef } from "react";
+import { useRef, useState} from "react";
 import {
   Chart as ChartJS,
   BarElement,
@@ -26,9 +26,29 @@ ChartJS.register(
 );
 
 const Nftgraph = ({ filteredResults, min, max }) => {
+
+  const [selectedMin, setSelectedMin] = useState(NaN);
+  const [selectedMax, setSelectedMax] = useState(NaN);
+
+  const HandleChangeMin= () => {
+    setSelectedMin(parseFloat(document.getElementById("inputMin").value));
+  }
+
+  const HandleChangeMax= () => {
+    setSelectedMax(parseFloat(document.getElementById("inputMax").value));
+  }
+
+  const reset = () => {
+    setSelectedMin(NaN);
+    setSelectedMax(NaN);
+    document.getElementById("inputMin").value = "";
+    document.getElementById("inputMax").value = "";
+  };
+
+
   const chartRef = useRef();
 
-  const calculateStats = (data, min, max) => {
+  const calculateStats = (data, min, max, selectedMax, selectedMin) => {
     if (!data || data.length === 0) return null;
 
     const powerValues = data.map((item) => parseFloat(item.valeur)).filter((p) => !isNaN(p));
@@ -36,8 +56,18 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
     const stdDev = Math.sqrt(powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) / powerValues.length);
-    const dataMin = min;
-    const dataMax = max;
+
+    let dataMin = min;
+    let dataMax = max;
+
+    if(!(isNaN(selectedMin))) {  
+      dataMin = parseFloat(selectedMin);
+    }
+    
+    if(!(isNaN(selectedMax))) {
+      dataMax = parseFloat(selectedMax);
+    }
+    
 
     const generateGaussianCurve = () => {
       const curve = [];
@@ -57,11 +87,11 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       powerValues,
       gaussianCurve: generateGaussianCurve(),
       limMin: dataMin,
-      limMax: dataMax
+      limMax: dataMax,
     };
   };
 
-  const stats = calculateStats(filteredResults, min, max);
+  const stats = calculateStats(filteredResults, min, max, selectedMax, selectedMin);
 
   const prepareChartData = () => {
     if (!stats) return { datasets: [] };
@@ -78,7 +108,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
     return {
       datasets: [
-        
+
         {
           type: "line",
           label: "Distribution Gaussienne",
@@ -149,7 +179,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
           pointRadius: 0,
           yAxisID: "y",
         },
-        
+
       ],
     };
   };
@@ -158,45 +188,83 @@ const Nftgraph = ({ filteredResults, min, max }) => {
 
   const exportPDF = () => {
     const pdf = new jsPDF("landscape");
-  
+
     const canvas = chartRef.current?.querySelector("canvas");
     if (!canvas) {
       console.error("Canvas not found!");
       return;
     }
-  
+
     // Scale the canvas to improve image quality
     const scaledCanvas = document.createElement("canvas");
     const scale = 3;
     scaledCanvas.width = canvas.width * scale;
     scaledCanvas.height = canvas.height * scale;
-  
+
     const ctx = scaledCanvas.getContext("2d");
     ctx.scale(scale, scale);
     ctx.drawImage(canvas, 0, 0);
-  
+
     const imgData = scaledCanvas.toDataURL("image/png");
     const imgWidth = 160;
     const imgHeight = 140;
     const imgX = 15;
     const imgY = 30;
-  
+
     const title = `POWER_RMS_AVG_VSA1 ${filteredResults[0]?.bande} A${filteredResults[0]?.antenne}`;
-  
+
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 255);
     const titleX = (pdf.internal.pageSize.width - pdf.getTextWidth(title)) / 2;
     pdf.text(title, titleX, 15);
-  
+
     pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
     pdf.save(`power_graph_${filteredResults[0]?.bande}_A${filteredResults[0]?.antenne}.pdf`);
   };
-  
+
 
   return (
     <>
+      <h1 className="text-3xl text-cyan-400 font-bold mb-10 mt-20">Courbe Gaussienne</h1>
+
+      <div className="flex gap-5">
+
+        <div className="flex gap-3 mb-10">
+          <input
+            type="text"
+            id="inputMin"
+            placeholder="LSI"
+            className="border-3 border-orange-500 w-40 rounded-2xl text-xl p-3 h-14 font-medium text-orange-500 outline-none"
+          />
+          <input
+            type="text"
+            id="inputMax"
+            placeholder="LSS"
+            className="border-3 border-green-400 w-40 rounded-2xl text-xl p-3 h-14 font-medium text-green-400 outline-none"
+          />
+        </div>
+
+        <div className="flex place-items-center gap-3 mb-10">
+          <button
+            onClick={() => { HandleChangeMax() || HandleChangeMin(); }}
+            className="text-black border-3 hover:border-cyan-400 hover:text-cyan-400  bg-cyan-400 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
+          >
+            Editer
+          </button>
+          <button
+            onClick={() => {
+              reset()
+            }}
+            className="text-black border-3 hover:border-red-500 hover:text-red-500  bg-red-500 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
+          >
+            Annuler
+          </button>
+        </div>
+
+      </div>
       {filteredResults.length > 0 ? (
-        <div ref={chartRef} className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
+
+        <div ref={chartRef} className="p-6 bg-gray-800 rounded-lg hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
           <h2 className="text-2xl text-cyan-400 mb-4">
             {filteredResults[0]?.mesure}
           </h2>
@@ -300,6 +368,7 @@ Nftgraph.propTypes = {
       lim_max: PropTypes.string,
       bande: PropTypes.string,
       antenne: PropTypes.string,
+      mesure: PropTypes.string,
     })
   ).isRequired,
   min: PropTypes.number,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import NftFilter from '../components/NFT/NftFilter';
-import Nftgraph from '../components/NFT/Nftgraph';
+import Nftgraph from '../components/NFT/NFTgraph';
 import TableNFT from '../components/NFT/TableNFT';
 import UploadNFT from '../components/NFT/UploadNft';
 import axios from 'axios';
