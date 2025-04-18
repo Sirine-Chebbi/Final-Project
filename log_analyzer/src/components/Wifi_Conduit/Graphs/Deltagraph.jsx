@@ -25,8 +25,6 @@ ChartJS.register(
 );
 
 const Deltagraph = ({Results, selectedCaisson}) => {
-
-    console.log("Results", Results);
     
     const calculateStats = (data) => {
         

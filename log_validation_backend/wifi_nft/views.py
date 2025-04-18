@@ -10,10 +10,10 @@ def extract_measure_data(content, filename=None):
     measure_pattern = re.compile(
         r'Mesure <(?P<mesure>[^>]+)>\s*:(?P<description>[^\n]*)\s*Status\s*(?P<status>\d+).*?'
         r'(?P<lim_min>-?\d+\.\d+)\s*(?P<unite_min>[^\s<]+)\s*<\s*\.\.\.\s*<\s*(?P<lim_max>-?\d+\.\d+)\s*(?P<unite_max>[^\s>]+).*?'
-        r'(?P<valeur>-?\d+\.\d+)\s*(?P<unite_valeur>\S+)?',
+        r'(?:\n\s*(?P<valeur>-?\d+\.\d+))\s*(?P<unite_valeur>)?',
         re.DOTALL
     )
-
+    
     # Pattern spécifique pour la durée
     duree_pattern = re.compile(r'Duree\s*(\d+)\s*ms')
 
@@ -42,7 +42,7 @@ def extract_measure_data(content, filename=None):
             for part in parts:
                 if part.startswith('PWR'):
                     antenne = int(part[3:]) if part[3:].isdigit() else None
-                elif part in ['2G', '5G', '6G']:
+                elif part in ['2G', '5G', '6G', 'ZIGBEE']:
                     bande = part
         
         # Vérification cohérence des unités
@@ -61,7 +61,7 @@ def extract_measure_data(content, filename=None):
             'bande': bande,
             'antenne': antenne,
             'duree': duree,
-            'unite': unite,
+            'unite': unite if unite != '0' else None,
             'source_file': filename
         })
     

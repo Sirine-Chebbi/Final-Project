@@ -50,7 +50,7 @@
       <>
       <Navbar></Navbar>
         <Menu></Menu>   
-        <div className="pr-35 pl-60 mb-10">
+        <div className="pr-30 pl-60 mb-10">
           <div className="flex justify-between mt-10">
             <Upload></Upload> 
             <Delta setSelectedAntenneDelta={setSelectedAntenneDelta} setselectedBande={setselectedBande} setfetchResult={setfetchResult}></Delta>
