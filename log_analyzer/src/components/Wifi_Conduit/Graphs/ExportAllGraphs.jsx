@@ -18,6 +18,7 @@ GraphWithRef.propTypes = {
 };
 
 const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
+
   const chartRefs = {
     power: useRef(),
     evm: useRef(),
@@ -55,6 +56,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
   console.log('Fifoo', charts);
 
   const exportToPDF = async () => {
+
     const pdf = new jsPDF('landscape');
     const margin = 15;
     const pageWidth = pdf.internal.pageSize.getWidth();
@@ -84,14 +86,16 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
     };
 
     // Updated function with conditional capability extraction
-    const captureGraphData = async (ref, title, extractCapability = true) => {
-      if (!ref.current) return null;
-
+    const captureGraphData = async (chart, title, extractCapability = true) => {
+      const ref = chart.ref; // fixed this line
+    
+      if (!ref?.current) return null;
+    
       const canvas = ref.current.querySelector('canvas');
       if (!canvas) return null;
-
+    
       const imgData = canvas.toDataURL('image/png', 1.0);
-
+    
       const stats = {};
       const statsContainer = ref.current.querySelector('.grid.grid-cols-4');
       if (statsContainer) {
@@ -101,9 +105,9 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
           if (label && value) stats[label] = value;
         });
       }
-
+    
       const capabilityIndices = extractCapability ? extractCapabilityIndices(ref) : {};
-
+    
       return {
         imgData,
         title,
@@ -111,6 +115,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
         capabilityIndices
       };
     };
+    
 
 
     // Capturer les données des 4 graphiques
@@ -118,8 +123,9 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
       captureGraphData(charts[0], 'Analyse Power'),
       captureGraphData(charts[1], 'Analyse EVM'),
       captureGraphData(charts[2], 'Analyse RSSI'),
-      captureGraphData(charts[3], 'Analyse RSSI'),
     ]);
+
+    console.log('GraphData:', graphData);
 
 
     // Génération des pages PDF
@@ -246,7 +252,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
         <GraphWithRef
           ref={chartRefs.delta}
           Component={Deltagraph}
-          Results={filteredResults}
+          Results={Results}
           selectedCaisson={selectedCaisson}
         />
       </div>
