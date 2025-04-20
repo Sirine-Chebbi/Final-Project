@@ -27,7 +27,7 @@ ChartJS.register(
   Title
 );
 
-const Nftgraph = ({ filteredResults, min, max }) => {
+const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
   const [selectedMin, setSelectedMin] = useState(NaN);
   const [selectedMax, setSelectedMax] = useState(NaN);
 
@@ -365,7 +365,7 @@ const Nftgraph = ({ filteredResults, min, max }) => {
           className="p-6 bg-gray-800 rounded-lg hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20"
         >
           <h2 className="text-2xl text-cyan-400 mb-4">
-            {filteredResults[0]?.mesure}
+            {filteredResults[0]?.mesure}  || Position: {selectedPosition}
           </h2>
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-700 p-4 rounded-lg">
@@ -497,6 +497,7 @@ Nftgraph.propTypes = {
   ).isRequired,
   min: PropTypes.number,
   max: PropTypes.number,
+  selectedPosition: PropTypes.string.isRequired,
 };
 
 export default Nftgraph;

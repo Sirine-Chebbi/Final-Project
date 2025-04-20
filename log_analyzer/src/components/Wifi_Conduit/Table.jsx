@@ -20,7 +20,6 @@ const Table = ({
       results = selectedFrequency || selectedAntenne
         ? testResults.filter((result) => (result.frequence == selectedFrequency) && (result.ant == selectedAntenne))
         : testResults;
-
     } else {
       results = selectedFrequency || selectedAntenne
         ? testResults.filter((result) => (result.frequence == selectedFrequency) || (result.ant == selectedAntenne))
@@ -30,14 +29,15 @@ const Table = ({
     return results;
   }, [testResults, selectedFrequency, selectedAntenne]);
 
-  setFilteredResults(filteredResults);
+  // Move the filteredResults update to useEffect
+  useEffect(() => {
+    setFilteredResults(filteredResults);
+  }, [filteredResults, setFilteredResults]);
 
   useEffect(() => {
     if (filteredResults.length > 0) {
-      if (document.getElementById("input1").value == "") {
-        setMin(0);
-        setMax(0);
-      } else if ( filteredResults[0].limit_max == null || filteredResults[0].limit_min == null) {
+      // Remove direct DOM access - use state instead
+      if (filteredResults[0].limit_max == null || filteredResults[0].limit_min == null) {
         setMax(0);
         setMin(0);
       } else {
@@ -49,13 +49,14 @@ const Table = ({
           setMin(filteredResults[0].rssi_min);
           setMax(filteredResults[0].rssi_max);
         }
-       else {
-        setMin(filteredResults[0].limit_min);
-        setMax(filteredResults[0].limit_max);
+        else {
+          setMin(filteredResults[0].limit_min);
+          setMax(filteredResults[0].limit_max);
+        }
       }
     }
-  }
   }, [filteredResults, selectedMetric]);
+
 
 const exportToExcel = () => {
   const worksheet = XLSX.utils.json_to_sheet(filteredResults);
@@ -203,8 +204,9 @@ return (
 Table.propTypes = {
   testResults: PropTypes.array,
   selectedFrequency: PropTypes.string,
-    selectedVisibility: PropTypes.string,
-      selectedAntenne: PropTypes.string,
-        setFilteredResults: PropTypes.array,
+  selectedVisibility: PropTypes.string,
+  selectedAntenne: PropTypes.string,
+  setFilteredResults: PropTypes.func, // Changed from array to func
 };
+
 export default Table;
