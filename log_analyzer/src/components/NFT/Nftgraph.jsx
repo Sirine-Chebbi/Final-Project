@@ -260,7 +260,7 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
     const { mean, stdDev, limMin, limMax } = stats;
     const tableX = 215;
     const tableY = 45;
-    const title = `${filteredResults[0]?.mesure || "Graphique"}`;
+    const title = `${filteredResults[0]?.mesure} || Position: ${selectedPosition}`;
 
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 255);
