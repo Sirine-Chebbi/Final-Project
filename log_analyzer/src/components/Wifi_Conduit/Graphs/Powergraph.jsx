@@ -97,6 +97,22 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
           yAxisID: "y",
         },
         {
+          type: "line",
+          label: "Cible",
+          data: [
+            { x: stats.mean, y: 0 },
+            {
+              x: stats.mean,
+              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
+            },
+          ],
+          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderWidth: 2,
+          borderDash: [10, 5],
+          pointRadius: 0,
+          yAxisID: "y",
+        },
+        {
           type: "bar",
           label: "Histogramme",
           data: Object.entries(histogram).map(([x, y]) => ({
@@ -181,8 +197,7 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
 
   return (
     <>
-      <div ref={ref} id="power-graph">
-        <p id="pwr"></p>
+      <div ref={ref} id="power-graph">        
         {filteredResults.length > 0 ? (
           <div className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
             <h2 className="text-2xl text-cyan-400 mb-4">

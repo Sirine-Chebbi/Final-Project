@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+
 import {
   Chart as ChartJS,
   BarElement,
@@ -25,7 +26,8 @@ ChartJS.register(
   Title
 );
 
-const Deltagraph = forwardRef(({ Results , selectedCaisson }, ref) => {
+const Deltagraph = ({ Results , selectedCaisson }, ref) => {
+
   const calculateStats = (data) => {
     if (!data || data.length === 0) return null;
 
@@ -92,6 +94,22 @@ const Deltagraph = forwardRef(({ Results , selectedCaisson }, ref) => {
           })),
           borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 2,
+          pointRadius: 0,
+          yAxisID: "y",
+        },
+        {
+          type: "line",
+          label: "Cible",
+          data: [
+            { x: stats.mean, y: 0 },
+            {
+              x: stats.mean,
+              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
+            },
+          ],
+          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderWidth: 2,
+          borderDash: [10, 5],
           pointRadius: 0,
           yAxisID: "y",
         },
@@ -181,7 +199,6 @@ const Deltagraph = forwardRef(({ Results , selectedCaisson }, ref) => {
   return (
     <>
       <div ref={ref} id="delta-graph">
-        <p id="deltagraph"></p>
         {Results.length > 0 ? (
           <div className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
             <h2 className="text-2xl text-cyan-400 mb-4">
@@ -194,28 +211,28 @@ const Deltagraph = forwardRef(({ Results , selectedCaisson }, ref) => {
                 <h3 className="text-cyan-400">Moyenne</h3>
                 <p className="text-white text-xl">
                   {stats?.mean?.toFixed(2) || "N/A"}{" "}
-                  <span className="text-sm text-gray-400">dBm</span>
+                  <span className="text-sm text-gray-400">dB</span>
                 </p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-cyan-400">Écart-type</h3>
                 <p className="text-white text-xl">
                   {stats?.stdDev?.toFixed(2) || "N/A"}{" "}
-                  <span className="text-sm text-gray-400">dBm</span>
+                  <span className="text-sm text-gray-400">dB</span>
                 </p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-cyan-400">Minimum</h3>
                 <p className="text-white text-xl">
                   {stats?.min?.toFixed(2) || "N/A"}{" "}
-                  <span className="text-sm text-gray-400">dBm</span>
+                  <span className="text-sm text-gray-400">dB</span>
                 </p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-cyan-400">Maximum</h3>
                 <p className="text-white text-xl">
                   {stats?.max?.toFixed(2) || "N/A"}{" "}
-                  <span className="text-sm text-gray-400">dBm</span>
+                  <span className="text-sm text-gray-400">dB</span>
                 </p>
               </div>
             </div>
@@ -299,10 +316,10 @@ const Deltagraph = forwardRef(({ Results , selectedCaisson }, ref) => {
       </div>
     </>
   );
-});
+};
 Deltagraph.propTypes = {
   Results: PropTypes.array.isRequired,
   selectedCaisson: PropTypes.string.isRequired,
 };
 
-export default Deltagraph;
+export default forwardRef(Deltagraph);

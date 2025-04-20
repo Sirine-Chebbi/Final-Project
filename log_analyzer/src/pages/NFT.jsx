@@ -8,7 +8,6 @@ import axios from 'axios';
 
 const NFT = () => {
   const [testResults, setTestResults] = useState([]);
-  const [selectedCaisson, setSelectedCaisson] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [antenne, setSelectedAntenne] = useState("");
   const [mesure, setSelectedMesure] = useState("");

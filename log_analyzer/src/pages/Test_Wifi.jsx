@@ -77,7 +77,7 @@ const Test_Wifi = () => {
                 <div className=" flex justify-between h-fit ml-20 mr-20 -mt-2 p-5 ">
                     <div className=' mr-20'>
                         <Uploadtest></Uploadtest><br />
-                        <input onChange={onChangeHandler} type="text" placeholder="ligne de test" className="border-2 border-cyan-400 rounded-xl p-5 outline-none text-cyan-400 h-10 text-xl"/><br />
+                        <input onChange={onChangeHandler} type="text" placeholder="ligne de test" className="border-2 border-red-400 rounded-xl p-5 outline-none text-red-400 h-10 text-xl"/><br />
                         <button
                             onClick={() => exportPDF(`Environnement des tests`, testResults)}
                             className=" mt-10 px-4 py-2 bg-cyan-400 font-bold hover:text-cyan-400 hover:bg-black duration-150 border-2 border-cyan-400 rounded-xl cursor-pointer text-black"

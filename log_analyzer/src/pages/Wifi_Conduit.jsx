@@ -26,13 +26,8 @@
     const [testResults, setTestResults] = useState([]);
     const [Results, setfetchResult] = useState([]);
 
-    const [Antenne, setSelectedAntenneDelta] = useState(0);
-    const [Bande, setselectedBande] = useState("");
-
     const [filteredResults ,setFilteredResults] = useState([]);
 
-    console.log("selectedAntenne:", Antenne);
-    console.log("selectedFrequency:", Bande);
     
     useEffect(() => {
       const fetchTestResults = async () => {
@@ -54,17 +49,22 @@
         <div className="pr-30 pl-60 mb-10">
           <div className="flex justify-between mt-10">
             <Upload></Upload> 
-            <Delta setSelectedAntenneDelta={setSelectedAntenneDelta} setselectedBande={setselectedBande} setfetchResult={setfetchResult}></Delta>
+            <Delta setfetchResult={setfetchResult}></Delta>
           </div>
             <Filters setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
             <Table testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility} setFilteredResults={setFilteredResults} setSelectedCaisson={setSelectedCaisson}></Table>
             <ExportAllGraphs
-          filteredResults={filteredResults}
-          selectedCaisson={selectedCaisson}
-        />
+                  filteredResults={filteredResults}
+                  selectedCaisson={selectedCaisson}
+                  Results={Results}
+            />
+            <p id="pwr"></p>
             <Powergraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Powergraph>
+            <p id="evm"></p>
             <Evmgraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Evmgraph>
+            <p id="rssi"></p>
             <Rssigraph filteredResults={filteredResults} selectedCaisson={selectedCaisson}></Rssigraph>
+            <p id="deltagraph"></p>
             <Deltagraph Results={Results} selectedCaisson={selectedCaisson}></Deltagraph>
         </div> 
       </>

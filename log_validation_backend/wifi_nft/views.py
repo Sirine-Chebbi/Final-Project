@@ -89,7 +89,6 @@ def upload_nft_results(request):
         try:
             content = uploaded_file.read().decode('latin-1')
             measures = extract_measure_data(content, uploaded_file.name)
-            print("Mesures extraites:", measures)  # Debug
 
             if not measures:
                 errors.append(f"Fichier {uploaded_file.name}: aucune mesure valide trouvée")

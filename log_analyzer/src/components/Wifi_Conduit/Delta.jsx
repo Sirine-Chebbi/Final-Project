@@ -3,7 +3,7 @@ import "./delta.css"
 import axios from "axios";
 import PropTypes from 'prop-types'
 
-export const Delta = ({setSelectedAntenneDelta, setselectedBande, setfetchResult}) => {
+export const Delta = ({ setfetchResult }) => {
 
     const [value, setValue] = useState(2);
     const [Results, setTestResults] = useState([]);
@@ -25,14 +25,6 @@ export const Delta = ({setSelectedAntenneDelta, setselectedBande, setfetchResult
         setBande("");
      };
 
-
-    useEffect(() => {
-        setSelectedAntenneDelta(Antenne);
-    }, [Antenne, setSelectedAntenneDelta]);
-    
-    useEffect(() => {
-        setselectedBande(Bande);
-    }, [Bande, setselectedBande]);
 
     const filteredResults = useMemo(() => {
           let results = [...Results];
@@ -114,8 +106,6 @@ export const Delta = ({setSelectedAntenneDelta, setselectedBande, setfetchResult
 }
 
 Delta.propTypes = {
-    setSelectedAntenneDelta: PropTypes.func.isRequired,
-    setselectedBande: PropTypes.func.isRequired,
     setfetchResult: PropTypes.array,
 };
 

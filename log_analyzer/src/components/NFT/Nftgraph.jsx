@@ -133,6 +133,22 @@ const Nftgraph = ({ filteredResults, min, max }) => {
           yAxisID: "y",
         },
         {
+          type: "line",
+          label: "Cible",
+          data: [
+            { x: stats.mean, y: 0 },
+            {
+              x: stats.mean,
+              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
+            },
+          ],
+          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderWidth: 2,
+          borderDash: [10, 5],
+          pointRadius: 0,
+          yAxisID: "y",
+        },
+        {
           type: "bar",
           label: "Histogramme",
           data: Object.entries(histogram).map(([x, y]) => ({
@@ -171,22 +187,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
           borderColor: "#f59e0b", // Using hex color
           borderWidth: 2,
           borderDash: [5, 5],
-          pointRadius: 0,
-          yAxisID: "y",
-        },
-        {
-          type: "line",
-          label: "Cible",
-          data: [
-            { x: stats.mean, y: 0 },
-            {
-              x: stats.mean,
-              y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
-            },
-          ],
-          borderColor: "#10B981", // Vert - tu peux changer la couleur
-          borderWidth: 2,
-          borderDash: [10, 5],
           pointRadius: 0,
           yAxisID: "y",
         },
@@ -242,7 +242,6 @@ const Nftgraph = ({ filteredResults, min, max }) => {
       return;
     }
 
-    // Scale the canvas to improve image quality
     const scaledCanvas = document.createElement("canvas");
     const scale = 3;
     scaledCanvas.width = canvas.width * scale;
@@ -368,34 +367,33 @@ const Nftgraph = ({ filteredResults, min, max }) => {
           <h2 className="text-2xl text-cyan-400 mb-4">
             {filteredResults[0]?.mesure}
           </h2>
-
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Cible</h3>
               <p className="text-white text-xl">
                 {stats?.mean?.toFixed(2) || "N/A"}{" "}
-                <span className="text-sm text-gray-400">dBm</span>
+                <span className="text-sm text-gray-400">{filteredResults[0]?.unite}</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Écart-type</h3>
               <p className="text-white text-xl">
                 {stats?.stdDev?.toFixed(2) || "N/A"}{" "}
-                <span className="text-sm text-gray-400">dBm</span>
+                <span className="text-sm text-gray-400">{filteredResults[0]?.unite}</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">LSI</h3>
               <p className="text-white text-xl">
                 {stats?.min?.toFixed(2) || "N/A"}{" "}
-                <span className="text-sm text-gray-400">dBm</span>
+                <span className="text-sm text-gray-400">{filteredResults[0]?.unite}</span>
               </p>
             </div>
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">LSS</h3>
               <p className="text-white text-xl">
                 {stats?.max?.toFixed(2) || "N/A"}{" "}
-                <span className="text-sm text-gray-400">dBm</span>
+                <span className="text-sm text-gray-400">{filteredResults[0]?.unite}</span>
               </p>
             </div>
           </div>
@@ -491,6 +489,7 @@ Nftgraph.propTypes = {
       power: PropTypes.string.isRequired,
       lim_min: PropTypes.string,
       lim_max: PropTypes.string,
+      unite: PropTypes.string,
       bande: PropTypes.string,
       antenne: PropTypes.string,
       mesure: PropTypes.string,
