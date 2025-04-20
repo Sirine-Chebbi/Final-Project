@@ -28,18 +28,27 @@
 
     const [filteredResults ,setFilteredResults] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
     
     useEffect(() => {
       const fetchTestResults = async () => {
         try {
+          setLoading(true);
           const response = await axios.get("http://127.0.0.1:8000/api/wifi-conduit/results/without-delta-desc/");
           setTestResults(response.data.results);
         } catch (error) {
           console.error("Error fetching test results", error);
+        } finally {
+          setLoading(false);
         }
       };
       fetchTestResults();
     }, []);
+  
+    if (loading) return <div>Loading...</div>;
+  
+  
 
 
     return (
@@ -51,7 +60,7 @@
             <Upload></Upload> 
             <Delta setfetchResult={setfetchResult}></Delta>
           </div>
-            <Filters setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
+            <Filters testResults={testResults} setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
             <Table testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility} setFilteredResults={setFilteredResults} setSelectedCaisson={setSelectedCaisson}></Table>
             <ExportAllGraphs
                   filteredResults={filteredResults}

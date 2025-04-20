@@ -14,6 +14,8 @@ const NFT = () => {
   const [bande, setSelectedBande] = useState("");
   const [min, setSelectedMin] = useState("");
   const [max, setSelectedMax] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState(""); 
+
 
   const fetchTestResults = async () => {
     try {
@@ -42,6 +44,7 @@ const NFT = () => {
           setSelectedBande={setSelectedBande}
           max={max}
           min={min}
+          setSelectedPosition={setSelectedPosition}
         />
         <TableNFT
           testResults={testResults}
@@ -51,8 +54,9 @@ const NFT = () => {
           mesure={mesure}
           bande={bande}
           setFilteredResults={setFilteredResults}
+          setSelectedPosition={setSelectedPosition}
         />
-        <Nftgraph filteredResults={filteredResults} min={min} max={max} />
+        <Nftgraph filteredResults={filteredResults} min={min} max={max} selectedPosition={selectedPosition}/>
 
       </div>
     </>

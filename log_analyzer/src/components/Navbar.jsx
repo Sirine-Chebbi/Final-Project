@@ -11,9 +11,9 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="flex gap-15 mr-20 text-xl">
-            <Link to="/nft" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Wifi NFT</Link>
+            <Link to="/nft" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Divers Testeurs</Link>
             <Link to="/wifi" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Wifi Conduit</Link>
-            <Link to="/test" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Envirenement Des Tests</Link>
+            <Link to="/test" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Environnement De Test</Link>
           </div>
         </div>
       </div>
