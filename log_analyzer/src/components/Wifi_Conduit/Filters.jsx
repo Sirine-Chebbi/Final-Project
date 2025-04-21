@@ -66,6 +66,7 @@ const Filters = ({
 
   return (
     <>
+      <p id="table"></p>
       <input
         ref={inputRef}
         type="text"
@@ -115,7 +116,7 @@ const Filters = ({
             onChange={(a) => setAntenne(a.target.value)}
             name="antenne"
             id="select"
-            className="max-h- text-xl text-cyan-400 p-3 outline-none "
+            className="max-h- text-xl text-cyan-400 p-3 pl-5 outline-none "
             value={antenne}
           >
             <option value="">Antenne</option>

@@ -123,6 +123,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
       captureGraphData(charts[0], 'Analyse Power'),
       captureGraphData(charts[1], 'Analyse EVM'),
       captureGraphData(charts[2], 'Analyse RSSI'),
+      captureGraphData(charts[3], 'Analyse Rx GainError'),
     ]);
 
     console.log('GraphData:', graphData);
@@ -130,7 +131,8 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
     // Génération des pages PDF
     graphData.forEach((data, index) => {
-      if (!data) return;
+
+      console.log('Data:', data);
 
       if (index > 0) {
         pdf.addPage('landscape');
@@ -142,8 +144,8 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
       pdf.text(data.title, margin, margin);
       pdf.setFontSize(12);
 
-      if (data.name === 'Deltagraph') {
-        pdf.text(`${Results[0]?.frequence}Hz - Antenne ${Results[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
+      if (data.title == "Analyse Rx GainError") {
+        pdf.text(`${Results[0]?.type_gega}Hz - Antenne ${Results[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
       }
       else {
         pdf.text(`${filteredResults[0]?.frequence}Hz - Antenne ${filteredResults[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
@@ -216,10 +218,6 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
         pdf.internal.pageSize.getHeight() - 10,
         { align: 'right' }
       );
-
-      console.log('DATA:', data);
-      console.log('Stats:', data.stats);
-      console.log('Capability Indices:', data.capabilityIndices);
 
     });
 

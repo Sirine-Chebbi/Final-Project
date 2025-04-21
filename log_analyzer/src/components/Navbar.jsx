@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+
   return (
     <header className="">
       <div className="p-10" id="upload">

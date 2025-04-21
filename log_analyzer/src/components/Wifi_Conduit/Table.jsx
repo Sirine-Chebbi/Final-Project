@@ -68,14 +68,15 @@ const exportToExcel = () => {
 
 return (
   <>
-    <p id="table"></p>
     <div className="flex gap-5 justify-end mt-5">
+
+      <div className="border-cyan-400 border-3 w-35 rounded-2xl text-center">
       <select
         name=""
         id="metric-select"
         value={selectedMetric}
         onChange={handleSelectChange}
-        className="text-xl text-cyan-400 font-mono border-cyan-400 border-3 p-4 w-35 outline-none h-15 ound font-bold rounded-2xl"
+        className="text-xl text-cyan-400 font-mono outline-none w-30 flex h-14 justify-self-center font-bold"
       >
         <option className="text-black" value="Power">
           Power
@@ -87,6 +88,8 @@ return (
           Rssi
         </option>
       </select>
+      </div>
+      
 
       <div className="flex flex-wrap gap-5">
         <div

@@ -199,7 +199,7 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
     <>
       <div ref={ref} id="power-graph">        
         {filteredResults.length > 0 ? (
-          <div className="p-6 bg-gray-800 rounded-lg mt-20 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
+          <div className="p-6 bg-gray-800 rounded-lg mt-10 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
             <h2 className="text-2xl text-cyan-400 mb-4">
               Power - {filteredResults[0]?.frequence}Hz - Antenne{" "}
               {filteredResults[0]?.ant} || Caisson: {selectedCaisson}
