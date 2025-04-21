@@ -129,7 +129,6 @@ def get_nft_results(request):
         return Response({"message": "Aucune donnée disponible"}, 
                        status=status.HTTP_404_NOT_FOUND)
     
-    # Sérialisation des données
     results = []
     for result in queryset:
         res = {

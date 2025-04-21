@@ -69,7 +69,7 @@ const UploadNFT = () => {
   };
 
   return (
-    <div className="flex-none justify-center justify-self-center w-300 hover:scale-105 duration-200">
+    <div className="ml-auto mr-auto w-300 hover:scale-105 duration-200">
       <div className="border-2 flex justify-between border-cyan-400 p-3 rounded-2xl shadow-lg hover:shadow-cyan-400">
         <div className="flex gap-10 text-xl ml-5">
           <svg

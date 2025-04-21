@@ -36,7 +36,7 @@ const NFT = () => {
     <>
       <Navbar />
       <div className="ml-40 mr-40 mt-10">
-        <UploadNFT />
+        <UploadNFT/>
         <NftFilter
           testResults={testResults}
           setSelectedAntenne={setSelectedAntenne}

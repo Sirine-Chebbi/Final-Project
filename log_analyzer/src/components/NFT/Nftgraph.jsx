@@ -31,6 +31,8 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
   const [selectedMin, setSelectedMin] = useState(NaN);
   const [selectedMax, setSelectedMax] = useState(NaN);
 
+
+  const nbr = filteredResults.length;
   const HandleChangeMin = () => {
     setSelectedMin(parseFloat(document.getElementById("inputMin").value));
   };
@@ -268,7 +270,8 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
     pdf.text(title, titleX, 15);
 
     const data = [
-      ["Cible", mean.toFixed(2)],
+      ["Nombre d'échantillon", nbr],
+      ["Moyenne", mean.toFixed(2)],
       ["Écart-type", stdDev.toFixed(2)],
       ["LSI", limMin],
       ["LSS", limMax],
@@ -276,7 +279,7 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
 
     pdf.setFontSize(13);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Caractéristiques du procédé", 215, 40);
+    pdf.text("Caractéristiques du procédé", 215, 50);
     autoTable(pdf, {
       startY: tableY,
       margin: { left: tableX },

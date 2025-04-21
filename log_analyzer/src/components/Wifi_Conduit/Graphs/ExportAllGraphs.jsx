@@ -19,6 +19,10 @@ GraphWithRef.propTypes = {
 
 const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
+  const nbr = filteredResults.length;
+  const nbrdelta = Results.length;
+  let nombre=0;
+
   const chartRefs = {
     power: useRef(),
     evm: useRef(),
@@ -132,8 +136,6 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
     // Génération des pages PDF
     graphData.forEach((data, index) => {
 
-      console.log('Data:', data);
-
       if (index > 0) {
         pdf.addPage('landscape');
       }
@@ -146,12 +148,13 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
       if (data.title == "Analyse Rx GainError") {
         pdf.text(`${Results[0]?.type_gega}Hz - Antenne ${Results[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
+        nombre=nbrdelta;
       }
       else {
         pdf.text(`${filteredResults[0]?.frequence}Hz - Antenne ${filteredResults[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
+        nombre=nbr;
       }
 
-      // Graphique
       pdf.addImage(data.imgData, 'PNG', margin, margin + 20, imgWidth, imgHeight);
 
       // Tableau des caractéristiques de base
@@ -160,18 +163,19 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
       pdf.setFontSize(13);
       pdf.setFont("helvetica", "bold");
-      pdf.text("Caractéristiques du procédé", tableX, tableY);
+      pdf.text("Caractéristiques du procédé", tableX, tableY+10);
       tableY += 5;
 
       autoTable(pdf, {
         startY: tableY,
         margin: { left: tableX },
-        head: [['Métrique', 'Valeur']],
+        head: [['', '']],
         body: [
-          ['Moyenne', data.stats['Moyenne'] || 'N/A'],
-          ['Écart-type', data.stats['Écart-type'] || 'N/A'],
-          ['LSI', data.stats['Minimum'] || 'N/A'],
-          ['LSS', data.stats['Maximum'] || 'N/A']
+          ["Nombre d'échantillon", nombre],
+          ['Moyenne', data.stats['Moyenne']],
+          ['Écart-type', data.stats['Écart-type']],
+          ['LSI', data.stats['Minimum'] ],
+          ['LSS', data.stats['Maximum'] ]
         ],
         styles: {
           fontSize: 11,
@@ -184,18 +188,18 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
       // Tableau des indicateurs de capabilité
       tableY = pdf.lastAutoTable.finalY + 10;
-      pdf.text("Indicateurs de capabilité", tableX, tableY);
+      pdf.text("Capabilité globale", tableX, tableY+10);
       tableY += 5;
 
       autoTable(pdf, {
         startY: tableY,
         margin: { left: tableX },
-        head: [['Indicateur', 'Valeur']],
+        head: [['', '']],
         body: [
-          ['Cp', data.capabilityIndices['Cp'] || 'N/A'],
-          ['Cpk', data.capabilityIndices['Cpk'] || 'N/A'],
-          ['Pp', data.capabilityIndices['Pp'] || 'N/A'],
-          ['Ppk', data.capabilityIndices['Ppk'] || 'N/A']
+          ['Cp', data.capabilityIndices['Cp']],
+          ['Cpk', data.capabilityIndices['Cpk']],
+          ['Pp', data.capabilityIndices['Pp']],
+          ['Ppk', data.capabilityIndices['Ppk']]
         ],
         styles: {
           fontSize: 11,
