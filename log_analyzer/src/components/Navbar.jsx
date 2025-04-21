@@ -1,20 +1,46 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-
   return (
     <header className="">
       <div className="p-10" id="upload">
         <div className="flex h-16 items-center justify-between">
           <div className="md:flex ml-5">
-            <Link to="/">
+            <NavLink to="/">
               { <img className="h-40 justify-self: start;" alt="sagemcom" src="../src/assets/logo.png"/> }  
-            </Link>
+            </NavLink>
           </div>
           <div className="flex gap-15 mr-20 text-xl">
-            <Link to="/nft" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Divers Testeurs</Link>
-            <Link to="/wifi" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Wifi Conduit</Link>
-            <Link to="/test" className="hover:scale-115 duration-200 text-cyan-400 font-bold hover:text-cyan-300 hover:border-b-2">Environnement De Test</Link>
+            <NavLink 
+              to="/nft" 
+              className={({isActive}) => 
+                `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
+                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                }`
+              }
+            >
+              Divers Testeurs
+            </NavLink>
+            <NavLink 
+              to="/wifi" 
+              className={({isActive}) => 
+                `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
+                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                }`
+              }
+            >
+              Wifi Conduit
+            </NavLink>
+            <NavLink 
+              to="/test" 
+              className={({isActive}) => 
+                `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
+                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                }`
+              }
+            >
+              Environnement De Test
+            </NavLink>
           </div>
         </div>
       </div>
@@ -22,4 +48,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default Navbar;
