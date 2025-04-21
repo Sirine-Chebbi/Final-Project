@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as XLSX from 'xlsx';
 
 const Table = ({
-  selectedFrequency, selectedAntenne, testResults, setFilteredResults
+  selectedFrequency, selectedAntenne, testResults, setFilteredResults, selectedRessource
 }) => {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
@@ -57,14 +57,19 @@ const Table = ({
     }
   }, [filteredResults, selectedMetric]);
 
-
 const exportToExcel = () => {
-  const worksheet = XLSX.utils.json_to_sheet(filteredResults);
+  const exportData = filteredResults.map((row) => ({
+    ...row,
+    ressource: selectedRessource, // Add the selectedRessource field to each row
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Test Results");
 
   XLSX.writeFile(workbook, "test_results.xlsx");
 };
+
 
 return (
   <>
@@ -126,6 +131,7 @@ return (
               Frequence
             </th>
             <th className="px-4 py-4 font-medium whitespace-nowrap">Ant</th>
+            <th className="px-4 py-4 font-medium whitespace-nowrap">Ressource</th>
             <th className="px-4 py-4 font-medium whitespace-nowrap">Evm</th>
             <th className="px-4 py-4 font-medium whitespace-nowrap">Rssi</th>
             <th className="px-4 py-4 font-medium whitespace-nowrap">
@@ -179,6 +185,7 @@ return (
               <td className="px-4 py-2">{result.type_gega}</td>
               <td className="px-4 py-2">{result.frequence}</td>
               <td className="px-4 py-2">{result.ant}</td>
+              <td className="px-4 py-2">{selectedRessource}</td>
               <td className="px-4 py-2">{result.evm}</td>
               <td className="px-4 py-2">{result.rssi}</td>
               <td className="px-4 py-2">{result.power_rms_avg}</td>
@@ -210,6 +217,7 @@ Table.propTypes = {
   selectedVisibility: PropTypes.string,
   selectedAntenne: PropTypes.string,
   setFilteredResults: PropTypes.func, // Changed from array to func
+  selectedRessource: PropTypes.string,
 };
 
 export default Table;

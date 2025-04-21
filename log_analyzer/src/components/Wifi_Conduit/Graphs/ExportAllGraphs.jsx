@@ -57,8 +57,6 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
     }
   ];
 
-  console.log('Fifoo', charts);
-
   const exportToPDF = async () => {
 
     const pdf = new jsPDF('landscape');
@@ -119,8 +117,6 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
         capabilityIndices
       };
     };
-    
-
 
     // Capturer les données des 4 graphiques
     const graphData = await Promise.all([
@@ -129,9 +125,6 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
       captureGraphData(charts[2], 'Analyse RSSI'),
       captureGraphData(charts[3], 'Analyse Rx GainError'),
     ]);
-
-    console.log('GraphData:', graphData);
-
 
     // Génération des pages PDF
     graphData.forEach((data, index) => {

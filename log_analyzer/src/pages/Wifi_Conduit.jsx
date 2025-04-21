@@ -22,6 +22,7 @@
     const [selectedAntenne, setSelectedAntenne] = useState(""); 
     const [selectedCaisson, setSelectedCaisson] = useState(""); 
     const [selectedVisibility, setVisibility] = useState("hidden");
+    const [selectedRessource, setSelectedRessource] = useState("");
 
     const [testResults, setTestResults] = useState([]);
     const [Results, setfetchResult] = useState([]);
@@ -57,8 +58,8 @@
             <Upload></Upload> 
             <Delta setfetchResult={setfetchResult}></Delta>
           </div>
-            <Filters testResults={testResults} setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson}></Filters>
-            <Table testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility} setFilteredResults={setFilteredResults} setSelectedCaisson={setSelectedCaisson}></Table>
+            <Filters testResults={testResults} setSelectedFrequency={setSelectedFrequency} setSelectedAntenne={setSelectedAntenne} setVisibility={setVisibility} setSelectedCaisson={setSelectedCaisson} setSelectedRessource={setSelectedRessource}></Filters>
+            <Table testResults={testResults} selectedFrequency={selectedFrequency} selectedAntenne={selectedAntenne} selectedVisibility={selectedVisibility} setFilteredResults={setFilteredResults} setSelectedCaisson={setSelectedCaisson} selectedRessource={selectedRessource}></Table>
             <ExportAllGraphs
                   filteredResults={filteredResults}
                   selectedCaisson={selectedCaisson}
