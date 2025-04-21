@@ -22,13 +22,9 @@ def upload_log(request):
     all_test_results = [] 
 
     for file in files:
-        # Sauvegarde temporaire du fichier
-        file_path = default_storage.save(f"uploads/{file.name}", file)
-
-        # Lecture du fichier
-        with default_storage.open(file_path, 'rb') as f:
-            content = f.read().decode('latin-1').splitlines()
-            print(f"File read with {len(content)} lines.")
+        
+        content = file.read().decode('latin-1').splitlines()
+        print(f"File read with {len(content)} lines.")
 
         # Extraction du code
         code = None
@@ -269,6 +265,7 @@ def upload_log(request):
 
         if test_results:
             all_test_results.extend(test_results)
+
 
     if not all_test_results:
         return Response({"error": "Aucun test trouvé dans les fichiers"}, status=400)

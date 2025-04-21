@@ -7,9 +7,6 @@ from rest_framework.decorators import api_view
 
 from .models import TestCondition
 
-# Create your views here.
-
-
 @api_view(['POST'])
 def upload_test_condition(request):
     TestCondition.objects.all().delete()
