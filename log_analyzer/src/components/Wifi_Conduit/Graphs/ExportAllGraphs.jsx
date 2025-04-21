@@ -266,6 +266,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
     </>
   );
 };
+
 ExportAllGraphs.propTypes = {
   filteredResults: PropTypes.array.isRequired,
   selectedCaisson: PropTypes.string.isRequired,

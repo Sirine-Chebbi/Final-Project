@@ -123,7 +123,6 @@ def upload_nft_results(request):
 
 @api_view(['GET'])
 def get_nft_results(request):
-    # Filtrer seulement les mesures avec status 0 ou 1
     queryset = NftResults.objects.exclude(status=2)
     
     if not queryset.exists():

@@ -64,6 +64,7 @@ function NftFilter({
 
   return (
     <>
+    <div>
     <input
         ref={inputRef}
         type="text"
@@ -85,6 +86,7 @@ function NftFilter({
       >
         Annuler
       </button>
+    </div>
       <div className="mt-20 flex justify-between gap-5">
         <div className="flex place-items-center gap-3">
           <div className="border-cyan-500 border-3 h-15 rounded-2xl font-bold w-80">
