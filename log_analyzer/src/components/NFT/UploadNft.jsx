@@ -38,31 +38,18 @@ const UploadNFT = () => {
         }
       );
 
-      console.log("Réponse complète:", response);
-
       if (response.data.errors) {
         setMessage(
-          `${response.data.message}\n` +
-          `Erreurs: ${response.data.errors.join('\n')}`
-        );
+          `${response.data.message}\n`);
+        setTimeout(() => window.location.reload(), 2000);
       } else {
         setMessage(response.data.message);
         setTimeout(() => window.location.reload(), 2000);
       }
 
     } catch (error) {
-      console.error("Erreur complète:", error);
-      let errorDetails = "";
-
-      if (error.response) {
-        errorDetails = `Serveur: ${error.response.status}\n${JSON.stringify(error.response.data)}`;
-      } else if (error.request) {
-        errorDetails = "Pas de réponse du serveur";
-      } else {
-        errorDetails = error.message;
-      }
-
-      setMessage(`Échec: ${errorDetails}`);
+      console.error("Erreur lors de l'envoi des fichiers:", error);
+      setMessage(`Aucune mesure valide trouvée !`);
     } finally {
       setIsUploading(false);
     }

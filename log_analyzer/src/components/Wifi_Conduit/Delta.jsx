@@ -79,7 +79,7 @@ export const Delta = ({ setfetchResult }) => {
                 </button>
             </div>
 
-            <div id="delta" className=" flex-auto overflow-x-auto rounded-xl border-3 border-yellow-400 max-h-75 mt-5 p-2 w-200">
+            <div id="delta" className=" flex-auto overflow-x-auto rounded-xl border-3 border-yellow-400 max-h-75 mt-5 p-2 w-200 mb-10">
                 <table className="min-w-full text-white text-sm text-center">
                     <thead className="text-lg text-yellow-400">
                         <tr>

@@ -60,7 +60,6 @@ const Test_Wifi = () => {
             try {
                 const response = await axios.get("http://127.0.0.1:8000/api/environnement-test/test_environnement/");
                 setTestResults(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error("Error fetching test results", error);
             }
