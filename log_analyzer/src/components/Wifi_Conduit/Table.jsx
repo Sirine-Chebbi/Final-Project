@@ -185,7 +185,7 @@ return (
               <td className="px-4 py-2">{result.type_gega}</td>
               <td className="px-4 py-2">{result.frequence}</td>
               <td className="px-4 py-2">{result.ant}</td>
-              <td className="px-4 py-2">{selectedRessource}</td>
+              <td className="px-4 py-2">{result.ressource}</td>
               <td className="px-4 py-2">{result.evm}</td>
               <td className="px-4 py-2">{result.rssi}</td>
               <td className="px-4 py-2">{result.power_rms_avg}</td>

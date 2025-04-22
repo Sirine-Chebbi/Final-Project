@@ -22,7 +22,6 @@ def upload_log(request):
     all_test_results = [] 
 
     for file in files:
-        
         content = file.read().decode('latin-1').splitlines()
         print(f"File read with {len(content)} lines.")
 
@@ -40,6 +39,7 @@ def upload_log(request):
 
         test_results = []
         current_type_gega = None
+        ressource = None  # Variable pour stocker la ressource
 
         # ==================================================
         # SECTION: Extraction des deltas
@@ -84,6 +84,7 @@ def upload_log(request):
                 description=entry['description'],
                 ant=entry['ant'],
                 delta=entry['delta'],
+                ressource=ressource,  # Ajout de la ressource
                 # Tous les autres champs à None
                 frequence=None,
                 evm=None,
@@ -133,12 +134,20 @@ def upload_log(request):
             "BSS_FREQ_MHZ_PRIMARY": r"BSS_FREQ_MHZ_PRIMARY\s*:\s*(\d+)",
             "RSSI_RX": r"(RSSI_RX\d+)\s*:\s*(-?\d+\.\d+)\s*dBm\s*\(\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\)",
             "LIMITS_EVM": r"(PK_EVM_DB_AVG_S1)\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.\d*)?\s*,\s*(-?\d+\.\d*)\s*\)",
+            "RESSOURCE": r"Ressource:\s*([A-Za-z0-9_\-]+)\.",
         }
 
         in_rssi_section = False
         rssi_values = {}
         rssi_freq, rssi_value, rssi_min, rssi_max = None, None, None, None
         evm, evm_min, evm_max = None, None, None
+
+        # Extraction de la ressource
+        for line in content:
+            match = re.search(regex_patterns["RESSOURCE"], line)
+            if match:
+                ressource = match.group(1)
+                break
 
         for i, line in enumerate(content):         
             if "Verify_RSSI" in line:
@@ -182,7 +191,6 @@ def upload_log(request):
                         rssi_value = rssi_values[rssi_key]['value']
                         rssi_min = rssi_values[rssi_key]['min']
                         rssi_max = rssi_values[rssi_key]['max']
-                        print(f"✅ Found RSSI value for ANT{ant}: {rssi_value} dBm at {rssi_freq} MHz")
 
                     # Initialisation des valeurs
                     values = {key: None for key in regex_patterns}
@@ -197,8 +205,7 @@ def upload_log(request):
                                 if key == "LIMITS":
                                     limit_min = float(match.group(2))
                                     limit_max = float(match.group(3))
-                                    print(f"✅ Extracted limits: limit_min={limit_min}, limit_max={limit_max} (Line: {content[j]})")
-
+                                    
                                 if key == "LIMITS_EVM":
                                     evm = match.group(2)
                                     evm_min = match.group(3)
@@ -214,8 +221,6 @@ def upload_log(request):
                                         evm_max = float(evm_max)
                                     else: evm_max = None
 
-                                print(f"✅ EEEEVVVVVMMMMMMMM=(EVM: {evm})")
-
                                 if key != "ERROR_MESSAGE":
                                     try:
                                         values[key] = float(match.group(1))
@@ -228,7 +233,7 @@ def upload_log(request):
                             break
 
                     # Vérification que les valeurs requises sont présentes
-                    required_fields = [k for k in regex_patterns if k not in ["ERROR_MESSAGE", "LIMITS", "RSSI_RX", "LIMITS_EVM"]]
+                    required_fields = [k for k in regex_patterns if k not in ["ERROR_MESSAGE", "LIMITS", "RSSI_RX", "LIMITS_EVM", "RESSOURCE"]]
                     if all(values[key] is not None for key in required_fields):
                         test_results.append(ConduitResult(
                             nom_fichier=file.name,
@@ -238,6 +243,7 @@ def upload_log(request):
                             description=None,  # Pas de description pour les tests normaux
                             frequence=frequence,
                             ant=ant,
+                            ressource=ressource,  # Ajout de la ressource
                             delta=None,  # Pas de delta pour les tests normaux
                             evm=evm,
                             power_rms_avg=values["POWER_RMS_AVG_VSA1"],
@@ -265,7 +271,6 @@ def upload_log(request):
 
         if test_results:
             all_test_results.extend(test_results)
-
 
     if not all_test_results:
         return Response({"error": "Aucun test trouvé dans les fichiers"}, status=400)

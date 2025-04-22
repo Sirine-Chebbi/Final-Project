@@ -12,6 +12,7 @@ class ConduitResult(models.Model):
     limit_min = models.FloatField(null=True)
     limit_max = models.FloatField(null=True)
     ant = models.IntegerField(null=True)  # Numéro d’antenne
+    ressource = models.CharField(max_length=300, null=True)
     evm = models.FloatField(null=True)
     power_rms_avg = models.FloatField(null=True)
     power_rms_max = models.FloatField(null=True)

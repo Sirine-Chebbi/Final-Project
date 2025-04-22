@@ -7,12 +7,10 @@ const Filters = ({
   setVisibility,
   setSelectedAntenne,
   setSelectedCaisson,
-  setSelectedRessource,
 }) => {
   const [frequence, setFrequence] = useState("");
   const [antenne, setAntenne] = useState("");
   const [caisson, setCaisson] = useState("");
-  const [ressource, setRessource] = useState("");
   const inputRef = useRef(null);
 
   const handleClickAntenne = (antenne) => {
@@ -21,14 +19,13 @@ const Filters = ({
 
   const handleClickPara = (caisson) => {
     setSelectedCaisson(caisson);
-    setSelectedRessource(ressource);
-    alert("Parametre mis à jour");
+    alert("Caisson mis à jour");
   };
 
   const handleClickAnnulerpara = () => {
     setSelectedCaisson("");
-    setSelectedRessource("");
-    alert("Parametre Annuler");
+
+    alert("Caisson Annuler");
   };
 
   const handleClick = (frequency) => {
@@ -48,10 +45,8 @@ const Filters = ({
   };
 
   const annulerPara = () => {
-    document.getElementById("inputr").value = "";
     document.getElementById("inputc").value = "";
     setCaisson("");
-    setRessource("");
     handleClickAnnulerpara();
   };
 
@@ -73,22 +68,13 @@ const Filters = ({
       <p id="table"></p>
 
       <div className="mt-2">
-      <input
-          ref={inputRef}
-          type="text"
-          id="inputr"
-          placeholder="Ressource"
-          onChange={(e) => setRessource(e.target.value)}
-          className="border-3 border-red-400 w-50 p-5 rounded-2xl text-xl font-medium text-red-400 h-15 mb-5 mt-10 outline-none"
-        />
-
         <input
           ref={inputRef}
           type="text"
           id="inputc"
           placeholder="Caisson"
           onChange={(e) => setCaisson(e.target.value)}
-          className="border-3 ml-4 border-red-400 w-50 p-5 rounded-2xl text-xl font-medium text-red-400 h-15 mb-5 mt-10 outline-none"
+          className="border-3 border-red-400 w-50 p-5 rounded-2xl text-xl font-medium text-red-400 h-15 mb-5 mt-10 outline-none"
         />
 
         <button
@@ -181,7 +167,6 @@ Filters.propTypes = {
   setVisibility: PropTypes.func.isRequired,
   setSelectedAntenne: PropTypes.func.isRequired,
   setSelectedCaisson: PropTypes.string,
-  setSelectedRessource: PropTypes.string,
 };
 
 export default Filters;
