@@ -110,7 +110,7 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
   const prepareChartData = () => {
     if (!stats) return { datasets: [] };
 
-    const binSize = 0.5;
+    const binSize = 0.1;
     const histogram = {};
     stats.powerValues.forEach((value) => {
       const bin = Math.round(value / binSize) * binSize;
@@ -159,6 +159,8 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
           })),
           backgroundColor: "rgba(239, 68, 68, 0.7)", // Using rgba color
           yAxisID: "y1",
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
         },
         {
           type: "line",

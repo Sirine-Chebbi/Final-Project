@@ -72,7 +72,7 @@ const Test_Wifi = () => {
     return (
         <>
         <Navbar></Navbar>
-            <div>
+            <div className="mt-20 mb-15">
                 <div className=" flex justify-between h-fit ml-20 mr-20 -mt-2 p-5 ">
                     <div className=' mr-20'>
                         <Uploadtest></Uploadtest><br />

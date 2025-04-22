@@ -38,7 +38,7 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
     const stdDev = Math.sqrt(
       powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
-        powerValues.length
+      powerValues.length
     );
     const dataMin = parseFloat(data[0].limit_min);
     const dataMax = parseFloat(data[0].limit_max);
@@ -72,7 +72,7 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
   const prepareChartData = () => {
     if (!stats) return { datasets: [] };
 
-    const binSize = 0.5;
+    const binSize = 0.1;
     const histogram = {};
     stats.powerValues.forEach((value) => {
       const bin = Math.round(value / binSize) * binSize;
@@ -121,6 +121,8 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
           })),
           backgroundColor: "rgba(255, 99, 132, 0.6)",
           yAxisID: "y1",
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
         },
         {
           type: "line",
@@ -164,20 +166,20 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
   const ppk =
     stats?.stdDev > 0
       ? Math.min(
-          (stats.limMax - stats.mean) / (3 * stats.stdDev),
-          (stats.mean - stats.limMin) / (3 * stats.stdDev)
-        )
+        (stats.limMax - stats.mean) / (3 * stats.stdDev),
+        (stats.mean - stats.limMin) / (3 * stats.stdDev)
+      )
       : 0;
 
   // Indices court terme (Cp/Cpk)
   const stdDevShortTerm = stats?.powerValues
     ? Math.sqrt(
-        stats.powerValues.reduce(
-          (sum, value) => sum + Math.pow(value - stats.mean, 2),
-          0
-        ) /
-          (stats.powerValues.length - 1)
-      )
+      stats.powerValues.reduce(
+        (sum, value) => sum + Math.pow(value - stats.mean, 2),
+        0
+      ) /
+      (stats.powerValues.length - 1)
+    )
     : 0;
 
   const cp =
@@ -188,16 +190,16 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
   const cpk =
     stdDevShortTerm > 0
       ? Math.min(
-          (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
-          (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
-        )
+        (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
+        (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
+      )
       : 0;
 
   const chartData = prepareChartData();
 
   return (
     <>
-      <div ref={ref} id="power-graph">        
+      <div ref={ref} id="power-graph">
         {filteredResults.length > 0 ? (
           <div className="p-6 bg-gray-800 rounded-lg mt-10 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
             <h2 className="text-2xl text-cyan-400 mb-4">
