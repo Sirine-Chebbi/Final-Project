@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import NftFilter from '../components/NFT/NftFilter';
 import Nftgraph from '../components/NFT/Nftgraph';
 import TableNFT from '../components/NFT/TableNFT';
-import UploadNFT from '../components/NFT/UploadNft';
+import UploadNFT from '../components/Analyse_temps/UploadTemps';
 import axios from 'axios';
 
 const NFT = () => {

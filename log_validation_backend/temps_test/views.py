@@ -16,7 +16,7 @@ def extract_test_time_data(content, filename=None):
     # Pattern optimisé pour extraire juste l'heure (premier nombre du timestamp)
     time_pattern = re.compile(
         r'\[(?P<heure>\d{2}):\d{2}:\d{2}:\d{3}\].*?'  # Capture juste l'heure (HH)
-        r'Mesure\s*<(?P<mesure>MES_\w+)>\s*:.*?Status\s*(?P<status>\d+)\s*'
+        r'Mesure\s*<(?P<mesure>MES_\w+_Temps_Test)>\s*:[^\n]*Status\s*(?P<status>\d+).*?\n'
         r'(?:.*?\n)+?'  # Skip any lines in between
         r'\s*(?P<valeur>-?\d+\.\d+)\s*(?P<unite>[a-zA-Z/%°]+)?\s*(?:\n|$)',
         re.DOTALL
@@ -128,6 +128,7 @@ def get_test_time_results(request):
             "mesure": result.mesure,
             "status": result.status,
             "valeur": result.valeur,
+            "heure": result.heure,
             "unite": result.unite,
             "source_file": result.source_file,
         }
