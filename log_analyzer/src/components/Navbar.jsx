@@ -15,7 +15,7 @@ const Navbar = () => {
               to="/tmp" 
               className={({isActive}) => 
                 `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
-                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                  isActive ? "text-cyan-400 scale-115 hover:text-cyan-400" : "text-cyan-400/40 line-through"
                 }`
               }
             >
@@ -24,8 +24,8 @@ const Navbar = () => {
             <NavLink 
               to="/nft" 
               className={({isActive}) => 
-                `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
-                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                `hover:scale-115 duration-200 font-bold hover:text-cyan-300  ${
+                  isActive ? "text-cyan-400 scale-115 hover:text-cyan-400" : "text-cyan-400/40 line-through"
                 }`
               }
             >
@@ -35,7 +35,7 @@ const Navbar = () => {
               to="/wifi" 
               className={({isActive}) => 
                 `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
-                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                  isActive ? "text-cyan-400 scale-115 hover:text-cyan-400" : "text-cyan-400/40 line-through"
                 }`
               }
             >
@@ -45,7 +45,7 @@ const Navbar = () => {
               to="/test" 
               className={({isActive}) => 
                 `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
-                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                  isActive ? "text-cyan-400 scale-115 hover:text-cyan-400" : "text-cyan-400/40 line-through"
                 }`
               }
             >

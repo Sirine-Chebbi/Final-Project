@@ -9,6 +9,8 @@ import Graph_temps from '../components/Analyse_temps/Graph_temps';
 const Temps = () => {
 
     const [tempsResults, setTempsResults] = useState([]);
+    const [operation, setOperation] = useState("");
+    const [equipe, setEquipe] = useState("");
 
     const fetchTestResults = async () => {
         try {
@@ -28,9 +30,9 @@ const Temps = () => {
             <Navbar></Navbar>
             <div className="ml-40 mr-40 mt-10">
                 <UploadTemps />
-                <Parametre_temps tempsResults={tempsResults} />
+                <Parametre_temps tempsResults={tempsResults} setOperation={setOperation} setEquipe={setEquipe} />
                 <Table_temps tempsResults={tempsResults} />
-                <Graph_temps />
+                <Graph_temps tempsResults={tempsResults} operation={operation} equipe={equipe}/>
             </div>
 
         </>
