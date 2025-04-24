@@ -14,6 +14,7 @@ const Temps = () => {
         try {
             const response = await axios.get("http://127.0.0.1:8000/api/temps-test/get-temps-test/");
             setTempsResults(response.data.results);
+
         } catch (error) {
             console.error("Error fetching test results", error);
         }
@@ -23,6 +24,7 @@ const Temps = () => {
         fetchTestResults();
     }, []);
 
+
     return (
         <>
             <Navbar></Navbar>
@@ -30,7 +32,7 @@ const Temps = () => {
                 <UploadTemps />
                 <Parametre_temps tempsResults={tempsResults} />
                 <Table_temps tempsResults={tempsResults} />
-                <Graph_temps />
+                <Graph_temps tempsResults={tempsResults} />            
             </div>
 
         </>
