@@ -15,7 +15,6 @@ def calculate_gaussian(power_values):
     min_val = np.min(power_array)
     max_val = np.max(power_array)
     x = np.linspace(min_val - 3*std, max_val + 3*std, 100)
-    y = norm.pdf(x, mean, std)
     
     return {
         'mean': float(mean),

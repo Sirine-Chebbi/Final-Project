@@ -11,6 +11,16 @@ const Navbar = () => {
             </NavLink>
           </div>
           <div className="flex gap-15 mr-20 text-xl">
+          <NavLink 
+              to="/tmp" 
+              className={({isActive}) => 
+                `hover:scale-115 duration-200 font-bold hover:text-cyan-300 ${
+                  isActive ? "text-yellow-400 scale-115 hover:text-yellow-400" : "text-cyan-400"
+                }`
+              }
+            >
+              Analyse temps
+            </NavLink>
             <NavLink 
               to="/nft" 
               className={({isActive}) => 
