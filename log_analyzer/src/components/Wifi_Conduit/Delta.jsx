@@ -15,35 +15,38 @@ export const Delta = ({ setfetchResult }) => {
     };
 
     const filterResult = () => {
-       setAntenne(document.getElementById("antenne").value);
-       setBande(value + "G");
+        setAntenne(document.getElementById("antenne").value);
+        setBande(value + "G");
     };
 
     const reset = () => {
         setAntenne(0);
         document.getElementById("antenne").value = "";
         setBande("");
-     };
+    };
 
 
     const filteredResults = useMemo(() => {
-          let results = [...Results];
-    
-          if (Antenne != 0 && Bande != "") {
+        let results = [...Results];
+
+        if (Antenne != 0 && Bande != "") {
             results = Antenne || Bande
                 ? Results.filter((result) => (result.ant == Antenne) && (result.type_gega == Bande))
                 : Results;
-    
+
         } else {
             results = Antenne || Bande
                 ? Results.filter((result) => (result.type_gega == Bande) || (result.ant == Antenne))
                 : Results;
         }
-    
-            return results;
-          }, [Results, Antenne, Bande]);
-    
-      setfetchResult(filteredResults);
+
+        return results;
+    }, [Results, Antenne, Bande]);
+
+
+    useEffect(() => {
+        setfetchResult(filteredResults);
+    }, [filteredResults, setfetchResult]);
 
 
 
