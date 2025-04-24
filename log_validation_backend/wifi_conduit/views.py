@@ -2,7 +2,6 @@ import os
 import re
 import numpy as np
 
-from .statistics import calculate_gaussian
 from django.core.files.storage import default_storage
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -288,27 +287,8 @@ def results_without_delta_desc(request):
     queryset = ConduitResult.objects.filter(delta__isnull=True, description__isnull=True)
     results = list(queryset.values(*fields))
     
-    # Calculs statistiques pour chaque métrique
-    metrics = ['rssi', 'power_rms_avg', 'evm']
-    statistics = {}
-    
-    for metric in metrics:
-        values = [r[metric] for r in results if r[metric] is not None]
-        if values:
-            statistics[metric] = {
-                'count': len(values),
-                'mean': np.mean(values),
-                'std': np.std(values),
-                'min': np.min(values),
-                'max': np.max(values),
-                'gaussian': calculate_gaussian(values)
-            }
-        else:
-            statistics[metric] = None
-    
     return Response({
         "results": results,
-        "statistics": statistics
     })
 
 @api_view(['GET'])
@@ -335,29 +315,10 @@ def results_with_delta_desc(request):
                 "message": "No results found with both delta and description values", 
                 "results": [] 
             }, status=200)
-            
-        # Calculs statistiques pour delta et autres métriques
-        metrics = ['delta', 'rssi', 'power_rms_avg', 'evm']
-        statistics = {}
-        
-        for metric in metrics:
-            values = [r[metric] for r in results if r[metric] is not None]
-            if values:
-                statistics[metric] = {
-                    'count': len(values),
-                    'mean': np.mean(values),
-                    'std': np.std(values),
-                    'min': np.min(values),
-                    'max': np.max(values),
-                    'gaussian': calculate_gaussian(values)
-                }
-            else:
-                statistics[metric] = None
         
         return Response({ 
             "count": len(results), 
             "results": results,
-            "statistics": statistics
         })
         
     except Exception as e:

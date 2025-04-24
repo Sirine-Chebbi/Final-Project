@@ -25,11 +25,13 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
     <>
       <div className="mt-20 flex justify-between gap-5">
         <div className="place-items-center gap-5">
+          {/* Champs en lecture seule */}
           <input
             type="text"
             id="input1"
-            placeholder="Referance"
-            value={"Referance: " + tempsResults[0]?.reference || ''}
+            placeholder="Référence"
+            value={"Référence: " + (tempsResults[0]?.reference || "")}
+            readOnly
             className="border-3 border-green-400 w-fit rounded-2xl text-xl p-3 h-14 font-medium text-green-400 outline-none mb-5"
           />
           <br />
@@ -37,11 +39,13 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
             type="text"
             id="input2"
             placeholder="Nom"
-            value={"Nom: " + tempsResults[0]?.nom || ''}
+            value={"Nom: " + (tempsResults[0]?.nom || "")}
+            readOnly
             className="border-3 border-orange-500 rounded-2xl text-xl p-3 h-14 font-medium text-orange-500 outline-none w-140"
           />
         </div>
         <div>
+          {/* Champs modifiables */}
           <input
             type="text"
             id="equipe"
@@ -54,7 +58,7 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
             id="operation"
             onChange={(e) => {setOp(e.target.value)}}
             placeholder="Operation"
-            className=" ml-5 border-3 border-red-400 w-50 p-5 rounded-2xl text-xl font-medium text-red-400 h-15 outline-none"
+            className="ml-5 border-3 border-red-400 w-50 p-5 rounded-2xl text-xl font-medium text-red-400 h-15 outline-none"
           />
           <button
             onClick={() => {
@@ -75,9 +79,6 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
     </>
   );
 }
-
-
-
 
 Parametre_temps.propTypes = {
   tempsResults: PropTypes.array.isRequired,
