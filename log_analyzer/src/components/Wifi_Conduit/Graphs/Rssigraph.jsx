@@ -72,7 +72,7 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
   const prepareChartData = () => {
     if (!stats) return { datasets: [] };
 
-    const binSize = 0.5;
+    const binSize = 0.1;
     const histogram = {};
     stats.powerValues.forEach((value) => {
       const bin = Math.round(value / binSize) * binSize;
@@ -106,7 +106,7 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderColor: "#10B981",
           borderWidth: 2,
           borderDash: [10, 5],
           pointRadius: 0,
@@ -121,6 +121,8 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
           })),
           backgroundColor: "rgba(255, 99, 132, 0.6)",
           yAxisID: "y1",
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
         },
         {
           type: "line",

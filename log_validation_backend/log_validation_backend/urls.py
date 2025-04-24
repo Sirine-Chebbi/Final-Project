@@ -6,4 +6,5 @@ urlpatterns = [
     path('api/wifi-conduit/', include('wifi_conduit.urls')),
     path('api/wifi-nft/', include('wifi_nft.urls')),
     path('api/environnement-test/', include('environnement_test.urls')),
+    path('api/temps-test/', include('temps_test.urls')),
 ]
