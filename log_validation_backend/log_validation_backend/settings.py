@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'wifi_conduit',
     'wifi_nft',
     'environnement_test',
+    'temps_test',
     'corsheaders',
 ]
 

@@ -106,7 +106,7 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#10B981", // Vert - tu peux changer la couleur
+          borderColor: "#10B981",
           borderWidth: 2,
           borderDash: [10, 5],
           pointRadius: 0,

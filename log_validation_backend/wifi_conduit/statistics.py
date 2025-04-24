@@ -12,8 +12,7 @@ def calculate_gaussian(values):
     # Ajustement des bornes pour une meilleure visualisation
     min_val = np.min(values_array)
     max_val = np.max(values_array)
-    # x = np.linspace(min_val - 3*std, max_val + 3*std, 100)
-    x = np.linspace(0, 1000, 100) 
+    x = np.linspace(min_val - 4*std, max_val + 4*std, 400)
     y = norm.pdf(x, mean, std)
     
     return {
