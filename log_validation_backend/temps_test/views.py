@@ -128,6 +128,7 @@ def get_test_time_results(request):
             "mesure": result.mesure,
             "status": result.status,
             "valeur": result.valeur,
+            "heure": result.heure,
             "unite": result.unite,
             "source_file": result.source_file,
         }
