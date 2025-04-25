@@ -56,10 +56,12 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         });
 
         const heures = Object.keys(hourlyData).sort((a, b) => a - b);
-        const moyennes = heures.map((heure) => {
+        let moyennes = heures.map((heure) => {
             const avg = hourlyData[heure].total / hourlyData[heure].count;
             return Number(avg.toFixed(2));
         });
+        
+        
 
         const datasets = [
             {
@@ -75,15 +77,24 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 pointHoverBackgroundColor: "rgb(74, 222, 128)",
                 pointHitRadius: 10,
                 pointBorderWidth: 2,
+                segment: {
+                    borderColor: ctx => {
+                        if (target !== null && !isNaN(target)) {;
+                            return ctx.p1.parsed.y >= target ? "rgb(239, 68, 68)" : "rgb(74, 222, 128)";
+                        }
+                        return "rgb(74, 222, 128)";
+                    }
+                }
+
             },
         ];
 
-        // Ajouter la ligne d'objectif si une valeur est définie
+
         if (target !== null && !isNaN(target)) {
             datasets.push({
                 label: "Objectif",
                 data: Array(heures.length).fill(target),
-                borderColor: "rgb(239, 68, 68)",
+                borderColor: "yellow",
                 backgroundColor: "rgba(239, 68, 68, 0.1)",
                 borderWidth: 2,
                 borderDash: [5, 5],
@@ -187,7 +198,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                                 },
                                 title: (context) => `Plage horaire: ${context[0].label}`,
                             },
-                            backgroundColor: "rgb(34, 211, 238)",
+                            backgroundColor: "rgb(0, 0, 0, 0.7)",
                             titleColor: "rgb(34, 211, 238)",
                             bodyColor: "rgb(34, 211, 238)",
                             borderColor: "rgb(34, 211, 238)",
@@ -260,62 +271,62 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
 
     const exportPDF = () => {
         if (!stats || !chartContainerRef.current) return;
-    
+
         const pdf = new jsPDF("landscape");
         const canvas = chartContainerRef.current.querySelector("canvas");
-    
+
         if (!canvas) {
-          console.error("Canvas not found!");
-          return;
+            console.error("Canvas not found!");
+            return;
         }
-    
+
         const scaledCanvas = document.createElement("canvas");
         const scale = 3;
         scaledCanvas.width = canvas.width * scale;
         scaledCanvas.height = canvas.height * scale;
-    
+
         const ctx = scaledCanvas.getContext("2d");
         ctx.scale(scale, scale);
         ctx.drawImage(canvas, 0, 0);
-    
+
         const imgData = scaledCanvas.toDataURL("image/png");
         const imgWidth = 270;
         const imgHeight = 100;
         const imgX = 15;
         const imgY = 30;
-    
+
         const tableX = 20;
         const tableY = 150;
         const title = `Variation du temps || ${tempsResults[0]?.reference}`;
-    
+
         pdf.setFontSize(18);
         pdf.setTextColor(0, 0, 255);
         const titleX = (pdf.internal.pageSize.width - pdf.getTextWidth(title)) / 2;
         pdf.text(title, titleX, 15);
-    
+
         const data = [
             ["Equipe", equipe],
             ["Operation", operation],
         ];
-    
+
         pdf.setFontSize(13);
         pdf.setFont("helvetica", "bold");
         pdf.text("Caractéristiques du procédé", 20, 150);
         autoTable(pdf, {
-          startY: tableY + 10,
-          margin: { left: tableX },
-          body: data,
-          styles: {
-            fontSize: 12,
-            halign: "left",
-            cellPadding: 3,
-          },
-          theme: "grid",
+            startY: tableY + 10,
+            margin: { left: tableX },
+            body: data,
+            styles: {
+                fontSize: 12,
+                halign: "left",
+                cellPadding: 3,
+            },
+            theme: "grid",
         });
-    
+
         pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
         pdf.save(`${title}.pdf`);
-      };
+    };
 
     return (
         <>
@@ -358,13 +369,13 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                     <div className="relative h-100 w-full" ref={chartContainerRef}></div>
                 )}
                 <button
-                className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2  font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400"
-                onClick={exportPDF}
-            >
-                Exporter en PDF
-            </button>
+                    className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2  font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400"
+                    onClick={exportPDF}
+                >
+                    Exporter en PDF
+                </button>
             </div>
-            
+
         </>
     );
 };

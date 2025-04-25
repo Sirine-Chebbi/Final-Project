@@ -256,14 +256,14 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
     ctx.drawImage(canvas, 0, 0);
 
     const imgData = scaledCanvas.toDataURL("image/png");
-    const imgWidth = 192;
-    const imgHeight = 140;
+    const imgWidth = 190;
+    const imgHeight = 120;
     const imgX = 15;
-    const imgY = 30;
+    const imgY = 40;
 
     const { mean, stdDev, limMin, limMax } = stats;
     const tableX = 215;
-    const tableY = 45;
+    const tableY = 40;
     const title = `${filteredResults[0]?.mesure} || Position: ${selectedPosition}`;
 
     pdf.setFontSize(18);
@@ -281,7 +281,7 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
 
     pdf.setFontSize(13);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Caractéristiques du procédé", 215, 50);
+    pdf.text("Caractéristiques du procédé", 215, 40);
     autoTable(pdf, {
       startY: tableY,
       margin: { left: tableX },
@@ -304,10 +304,10 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
 
     pdf.setFontSize(13);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Capabilité globale", 225, 120);
+    pdf.text("Capabilité globale", 215, 120);
 
     autoTable(pdf, {
-      startY: tableY + 70,
+      startY: tableY + 80,
       margin: { left: tableX },
       head: [["", ""]],
       body: statistics,
