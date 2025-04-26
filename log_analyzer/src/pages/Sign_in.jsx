@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 const Sign_in = () => {
   return (
     <>
-      <div className="bg-linear-to-br  from-gray-950 to-sky-600 h-screen">
+      <div className="bg-linear-to-br from-gray-950 to-sky-600 h-screen">
         <header className="">
           <div className="p-10" id="upload">
             <div className="flex h-16 items-center justify-between">
