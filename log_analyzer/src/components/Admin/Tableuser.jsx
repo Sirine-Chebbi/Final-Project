@@ -100,7 +100,7 @@ const Tableuser = (props) => {
           </button>
         </div>
 
-        <div className="w-350 overflow-x-auto rounded-xl h-150 border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 bg-gray-900 max-h-max duration-200">
+        <div className="w-350 overflow-x-auto rounded-xl border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 bg-gray-900 max-h-max duration-200">
           {loading ? (
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>

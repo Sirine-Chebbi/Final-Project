@@ -26,13 +26,13 @@ const Admin = () => {
 
   return (
     <>
-      <div className="bg-linear-to-br from-gray-950 to-sky-600 h-screen">
+      <div className="bg-linear-to-br from-gray-950 to-sky-600 h-fit">
         <Nav></Nav>
         <Ajouteru trigger={User} setVisibilityuser={setVisibilityuser}></Ajouteru>
         <div className="mt-20 flex justify-center">
           <Tableuser User={User} setVisibilityuser={setVisibilityuser} Hidden={Hidden} setVisibility={setVisibility}></Tableuser>
         </div>
-        <div className="mt-10">
+        <div className="mt-10 flex justify-center">
           <Tablerole></Tablerole>
         </div>
       </div>
