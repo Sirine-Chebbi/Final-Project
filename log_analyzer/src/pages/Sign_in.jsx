@@ -40,15 +40,16 @@ const Sign_in = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
 
         localStorage.setItem("access_token", data.access);
         localStorage.setItem("refresh_token", data.refresh);
 
-        if (response.role == "admin") {
+        if (data.role == "admin") {
           navigate("/admin");
         }
-        else { navigate("/wifi");}
+        else { 
+          navigate("/wifi");
+        }
       } else {
         const errorData = await response.json();
         if (errorData.detail) {
