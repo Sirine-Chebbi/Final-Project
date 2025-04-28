@@ -1,28 +1,22 @@
-import { useState } from "react";
-import Ajouteru from "./Ajouteru";
+import PropTypes from "prop-types";
 
-const Tableuser = () => {
-
-    const [Hidden, setVisibility] = useState(false);
-    const [User, setVisibilityuser] = useState(false);
-
+const Tableuser = (props) => {
 
     return (
         <>
-            <Ajouteru trigger={User} setVisibilityuser={setVisibilityuser}></Ajouteru>
             <div>
                 <div className="justify-between flex">
                     <div className="flex place-items-center gap-3 mb-10">
-                        <h1 onClick={() => setVisibility(!Hidden)} className="text-cyan-400 -mb-5 text-2xl font-medium place-items-center flex gap-3 hover:bg-cyan-200/20 cursor-pointer p-3 rounded-2xl h-20 duration-200">
+                        <h1 onClick={() => props.setVisibility(!props.Hidden)} className="text-cyan-400 -mb-5 text-2xl font-medium place-items-center flex gap-3 hover:bg-cyan-200/20 cursor-pointer p-3 rounded-2xl h-20 duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-13">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             Chercher
                         </h1>
-                        <input type="text" name="" id="" placeholder="Nom" className={`${Hidden ? "opacity-100 ml-10" : "opacity-0"} border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`} />
-                        <input type="text" name="" id="" placeholder="poste" className={`${Hidden ? "opacity-100 ml-10" : "opacity-0"} border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`} />
+                        <input type="text" name="" id="" placeholder="Nom" className={`${props.Hidden ? "opacity-100 ml-10" : "opacity-0"} border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`} />
+                        <input type="text" name="" id="" placeholder="poste" className={`${props.Hidden ? "opacity-100 ml-10" : "opacity-0"} border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`} />
                     </div>
-                    <button onClick={() => setVisibilityuser(!User)} className="outline-none hover:bg-gray-900 hover:text-cyan-400 mr-5 mt-10 border-2 border-cyan-400 h-15 p-5 rounded-tr-2xl rounded-tl-2xl duration-200 hover:h-20 cursor-pointer font-medium text-xl bg-cyan-400">
+                    <button onClick={() => props.setVisibilityuser(!props.User)} className="outline-none hover:bg-gray-900 hover:text-cyan-400 mr-5 mt-10 border-2 border-cyan-400 h-15 p-5 rounded-tr-2xl rounded-tl-2xl duration-200 hover:h-20 cursor-pointer font-medium text-xl bg-cyan-400">
                         Ajouter Un utilisateur
                     </button>
                 </div>
@@ -98,5 +92,11 @@ const Tableuser = () => {
         </>
     )
 }
+Tableuser.propTypes = {
+    setVisibility: PropTypes.func.isRequired,
+    Hidden: PropTypes.bool.isRequired,
+    setVisibilityuser: PropTypes.func.isRequired,
+    User: PropTypes.bool.isRequired,
+};
 
-export default Tableuser
+export default Tableuser;
