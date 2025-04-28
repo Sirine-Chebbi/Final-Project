@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from datetime import timedelta
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,16 +47,32 @@ INSTALLED_APPS = [
     'wifi_nft',
     'environnement_test',
     'temps_test',
+    'auth_app',
     'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 
 
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'USER_ID_FIELD': 'matricule',  # Use matricule instead of id
+    'USER_ID_CLAIM': 'matricule',
+    'TOKEN_OBTAIN_SERIALIZER': 'auth_app.serializers.MyTokenObtainPairSerializer',
+}
+
+
 
 
 MIDDLEWARE = [
@@ -68,6 +88,9 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://127.0.0.1:5173",
 ]
 
 ROOT_URLCONF = 'log_validation_backend.urls'
@@ -95,11 +118,21 @@ WSGI_APPLICATION = 'log_validation_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'log-analyzer',      # Nom de votre base de données
+        'USER': 'root',              # Utilisateur par défaut de XAMPP
+        'PASSWORD': '',              # Mot de passe vide pour XAMPP
+        'HOST': 'localhost',         # XAMPP tourne en local
+        'PORT': '3306',              # Port par défaut de MySQL dans XAMPP
+        'OPTIONS': {
+            'charset': 'utf8mb4',    # Support des emojis/unicode
+            'sql_mode': 'STRICT_TRANS_TABLES',  # Mode strict pour éviter les erreurs silencieuses
+            'init_command': "SET foreign_key_checks = 0;",  # Désactive temporairement les vérifications de clés étrangères
+        },
     }
 }
 
+AUTH_USER_MODEL = 'auth_app.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

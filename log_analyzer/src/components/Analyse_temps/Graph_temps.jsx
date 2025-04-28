@@ -29,6 +29,9 @@ const Graph_temps = ({ tempsResults }) => {
   const [targetValue, setTargetValue] = useState(null);
   const [showTarget, setShowTarget] = useState(false);
 
+
+  
+
   // Fonction pour préparer les données pour le graphique
   const prepareChartData = (data, target) => {
     if (!data || data.length === 0) return null;
@@ -58,6 +61,8 @@ const Graph_temps = ({ tempsResults }) => {
       return Number(avg.toFixed(2));
     });
 
+    
+
     const datasets = [
       {
         label: `Durée moyenne des tests (${tempsResults[0]?.unite}) par heure`,
@@ -72,6 +77,14 @@ const Graph_temps = ({ tempsResults }) => {
         pointHoverBackgroundColor: "rgb(74, 222, 128)",
         pointHitRadius: 10,
         pointBorderWidth: 2,
+        segment: {
+          borderColor: ctx => {
+            if (target !== null && !isNaN(target)) {
+              return ctx.p1.parsed.y >= target ? "rgb(239, 68, 68)" : "rgb(74, 222, 128)";
+            }
+            return "rgb(74, 222, 128)";
+          }
+        }
       },
     ];
 
@@ -80,7 +93,7 @@ const Graph_temps = ({ tempsResults }) => {
       datasets.push({
         label: "Objectif",
         data: Array(heures.length).fill(target),
-        borderColor: "rgb(239, 68, 68)",
+        borderColor: "yellow",
         backgroundColor: "rgba(239, 68, 68, 0.1)",
         borderWidth: 2,
         borderDash: [5, 5],
@@ -103,6 +116,7 @@ const Graph_temps = ({ tempsResults }) => {
     setTargetValue(null);
     setShowTarget(false);
   };
+  
   useEffect(() => {
     updateChart();
   }, [showTarget, targetValue]);

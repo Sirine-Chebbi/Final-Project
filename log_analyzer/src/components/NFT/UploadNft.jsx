@@ -8,7 +8,7 @@ const UploadNFT = () => {
 
   const handleFileChange = (event) => {
     setFiles(event.target.files);
-    setMessage(""); // Reset message when new files are selected
+    setMessage(""); 
   };
 
   const handleUpload = async () => {

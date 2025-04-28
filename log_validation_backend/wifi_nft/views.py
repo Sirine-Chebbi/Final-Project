@@ -31,10 +31,9 @@ def extract_measure_data(content, filename=None):
             continue
             
         status_val = int(match.group('status'))
-        if status_val == 2:  # On ignore les mesures avec status 2
+        if status_val == 2:  
             continue
             
-        # Extraction bande et antenne si présents dans le nom de la mesure
         bande, antenne = None, None
         mesure_name = match.group('mesure')
         if '_PWR' in mesure_name:
@@ -45,10 +44,8 @@ def extract_measure_data(content, filename=None):
                 elif part in ['2G', '5G', '6G', 'ZIGBEE']:
                     bande = part
         
-        # Vérification cohérence des unités
         unite = match.group('unite_valeur') or match.group('unite_max') or match.group('unite_min')
         
-        # Extraction durée - recherche dans tout le bloc de la mesure
         duree_match = duree_pattern.search(raw_measure)
         duree = int(duree_match.group(1)) if duree_match else None
         
@@ -94,7 +91,6 @@ def upload_nft_results(request):
                 errors.append(f"Fichier {uploaded_file.name}: aucune mesure valide trouvée")
                 continue
                 
-            # Création des objets en bulk pour meilleure performance
             objs = [
                 NftResults(**measure_data)
                 for measure_data in measures
