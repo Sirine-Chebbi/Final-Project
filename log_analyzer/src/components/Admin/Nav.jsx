@@ -1,6 +1,16 @@
 import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const Nav = () => {
+  const navigate = useNavigate(); 
+
+  const handleLogout = () => {
+  
+    localStorage.removeItem('token'); 
+
+    navigate('/');
+  };
+
   return (
     <header className="">
           <div className="p-10" id="upload">
@@ -11,14 +21,12 @@ const Nav = () => {
                 </a>
               </div>
               <div className="bg-black/40 rounded-3xl w-120 h-20 mr-15 flex items-center justify-between p-10">
-                <NavLink to="/">
-                  <button className="text-cyan-400 cursor-pointer group flex items-center gap-2">
+                  <button onClick={handleLogout} className="text-cyan-400 cursor-pointer group flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-10 group-hover:scale-110">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                     </svg>
                     Déconnecter
                   </button>
-                </NavLink>
                 <NavLink to="/wifi">
                   <button className="text-cyan-400 cursor-pointer group flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-10 group-hover:scale-110">

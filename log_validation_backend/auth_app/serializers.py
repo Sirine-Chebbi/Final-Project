@@ -12,7 +12,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ('matricule', 'nom', 'prenom', 'poste', 'role')
+        fields = ('matricule', 'matricule', 'prenom', 'poste', 'role')
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod

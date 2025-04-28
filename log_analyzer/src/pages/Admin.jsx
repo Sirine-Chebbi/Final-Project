@@ -2,13 +2,23 @@ import Nav from '../components/Admin/Nav';
 import Tablerole from '../components/Admin/Tablerole';
 import Tableuser from '../components/Admin/Tableuser';
 import Ajouteru from "../components/Admin/Ajouteru";
-
-import {useState} from "react"
+import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
+import {useState, useEffect} from "react"
 
 const Admin = () => {
   
     const [User, setVisibilityuser] = useState(false);
     const [Hidden, setVisibility] = useState(false);
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      const decoded = jwtDecode(token);
+      if (!token || decoded.role != "admin") {
+        navigate('/'); 
+      }
+    }, [navigate]);
 
   return (
     <>
