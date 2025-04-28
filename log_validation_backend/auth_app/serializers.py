@@ -14,7 +14,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ('matricule', 'matricule', 'prenom', 'poste', 'role')
+        fields = ('matricule', 'nom', 'prenom', 'poste', 'role')
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

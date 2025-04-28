@@ -46,8 +46,7 @@ const Sign_in = () => {
 
         if (data.role == "admin") {
           navigate("/admin");
-        }
-        else { 
+        } else {
           navigate("/wifi");
         }
       } else {
@@ -91,7 +90,6 @@ const Sign_in = () => {
         </header>
 
         <form onSubmit={handleLogin}>
-
           <div className="bg-black/60 backdrop-blur-sm rounded-2xl border-2 border-cyan-400 w-190 h-150 m-auto grid justify-items-center p-10">
             <h2 className="text-cyan-400 mt-5 text-5xl font-medium">
               Bienvenue
