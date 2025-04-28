@@ -18,6 +18,8 @@
     "jspdf": "^3.0.0",
     "jspdf-autotable": "^5.0.2",
     "log_analyzer": "file:",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.5",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
