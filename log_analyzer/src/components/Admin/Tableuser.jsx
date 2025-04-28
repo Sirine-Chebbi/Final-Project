@@ -48,8 +48,9 @@ const Tableuser = (props) => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsers(); 
   }, []);
+
 
   return (
     <>
