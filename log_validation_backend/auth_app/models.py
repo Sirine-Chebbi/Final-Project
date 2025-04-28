@@ -70,7 +70,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     
     USERNAME_FIELD = 'matricule'
-    REQUIRED_FIELDS = ['nom', 'prenom', 'poste']  # Retiré 'role' car géré différemment
+    REQUIRED_FIELDS = ['nom', 'prenom', 'poste']  
     
     def __str__(self):
         return f"{self.prenom} {self.nom} ({self.matricule})"

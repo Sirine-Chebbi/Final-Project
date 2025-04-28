@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import CustomUser, Role
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
+
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,23 +16,39 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('matricule', 'matricule', 'prenom', 'poste', 'role')
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        # Add custom claims
         token['matricule'] = user.matricule
         token['role'] = user.role.name if user.role else None
         return token
 
     def validate(self, attrs):
+        matricule = attrs.get('matricule')
+        password = attrs.get('password')
+
+        try:
+            user = CustomUser.objects.get(matricule=matricule)
+        except CustomUser.DoesNotExist:
+            raise AuthenticationFailed('Matricule incorrect ou inexistant.')
+
+        if not user.check_password(password):
+            raise AuthenticationFailed('Mot de passe incorrect.')
+
+        if not user.is_active:
+            raise AuthenticationFailed('Compte désactivé.')
+
         data = super().validate(attrs)
-        # Add custom response data
+
+        # Ajout des données custom dans la réponse
         data.update({
             'matricule': self.user.matricule,
             'role': self.user.role.name if self.user.role else None
         })
         return data
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
