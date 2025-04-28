@@ -3,22 +3,26 @@ import Tablerole from '../components/Admin/Tablerole';
 import Tableuser from '../components/Admin/Tableuser';
 import Ajouteru from "../components/Admin/Ajouteru";
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
-import {useState, useEffect} from "react"
+import { jwtDecode } from 'jwt-decode';
+import { useState, useEffect } from "react"
 
 const Admin = () => {
-  
-    const [User, setVisibilityuser] = useState(false);
-    const [Hidden, setVisibility] = useState(false);
-    const navigate = useNavigate(); 
 
-    useEffect(() => {
-      const token = localStorage.getItem('token');
+  const [User, setVisibilityuser] = useState(false);
+  const [Hidden, setVisibility] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/');
+    } else {
       const decoded = jwtDecode(token);
-      if (!token || decoded.role != "admin") {
-        navigate('/'); 
+      if (decoded.role != "admin") {
+        navigate('/');
       }
-    }, [navigate]);
+    }
+  }, [navigate]);
 
   return (
     <>

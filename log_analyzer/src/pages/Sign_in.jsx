@@ -45,7 +45,10 @@ const Sign_in = () => {
         localStorage.setItem("access_token", data.access);
         localStorage.setItem("refresh_token", data.refresh);
 
-        navigate("/admin");
+        if (response.role == "admin") {
+          navigate("/admin");
+        }
+        else { navigate("/wifi");}
       } else {
         const errorData = await response.json();
         if (errorData.detail) {
@@ -68,7 +71,7 @@ const Sign_in = () => {
 
   return (
     <>
-      <Toast ref={toastBL} position="top-center"/>
+      <Toast ref={toastBL} position="top-center" />
       <div className="bg-gradient-to-br from-gray-950 to-sky-600 h-screen">
         <header>
           <div className="p-10" id="upload">
@@ -87,6 +90,7 @@ const Sign_in = () => {
         </header>
 
         <form onSubmit={handleLogin}>
+
           <div className="bg-black/60 backdrop-blur-sm rounded-2xl border-2 border-cyan-400 w-190 h-150 m-auto grid justify-items-center p-10">
             <h2 className="text-cyan-400 mt-5 text-5xl font-medium">
               Bienvenue
