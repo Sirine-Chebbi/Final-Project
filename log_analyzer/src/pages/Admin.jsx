@@ -32,7 +32,7 @@ const Admin = () => {
         <div className="mt-20 flex justify-center">
           <Tableuser User={User} setVisibilityuser={setVisibilityuser} Hidden={Hidden} setVisibility={setVisibility}></Tableuser>
         </div>
-        <div className="mt-10">
+        <div className="mt-10 flex justify-center">
           <Tablerole></Tablerole>
         </div>
       </div>
