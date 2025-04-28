@@ -148,7 +148,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
         nombre=nbr;
       }
 
-      pdf.addImage(data.imgData, 'PNG', margin, margin + 20, imgWidth, imgHeight);
+      pdf.addImage(data.imgData, 'PNG', margin, margin + 40, imgWidth, imgHeight);
 
       // Tableau des caractéristiques de base
       const tableX = margin + imgWidth + 10;
