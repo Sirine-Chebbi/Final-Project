@@ -40,19 +40,29 @@ function Ajouteru(props) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(data) 
+                body: JSON.stringify(data)
             });
 
             if (response.ok) {
                 showToast('success', 'Utilisateur ajouté avec succés');
+                props.setAdd(true);
             } else {
-                showToast('warn', 'Attention', 'Erreur de serveur');
+                const errorData = await response.json();
+                if (errorData) {
+                    if (errorData.matricule) {
+                        showToast('warn', 'Attention', "Matricule deja existe !");
+                    }
+                    else {
+                        showToast('warn', 'Attention', errorData.detail || "Erreur lors de la creation");
+                    }
+                }
             }
         } catch (error) {
             console.error("An error occurred while adding the user:", error);
             showToast('error', 'Erreur', 'Une erreur est survenue');
         }
     }
+
     return (props.trigger) ? (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black/50'>
             <Toast ref={toast} position="top-center" />
@@ -76,8 +86,8 @@ function Ajouteru(props) {
                             <input onChange={(e) => setMotdpass(e.target.value)} required type="text" placeholder='Mot de passe' className='m-2 border-2 border-cyan-400 rounded-lg p-2 text-cyan-400 outline-none' /><br />
                             <div className='m-2 border-2 border-cyan-400 p-2 w-fit rounded-lg '>
                                 <select id="" required onChange={(e) => setRole(e.target.value)} className='text-cyan-400 outline-none w-50'>
-                                    <option onClick={(e) => setRole(e.target.value)} value="1" className='text-black'>Admin</option>
                                     <option onClick={(e) => setRole(e.target.value)} value="2" className='text-black'>Utilisateur</option>
+                                    <option onClick={(e) => setRole(e.target.value)} value="1" className='text-black'>Admin</option>
                                 </select>
                             </div>
                         </div>
@@ -92,6 +102,7 @@ function Ajouteru(props) {
 Ajouteru.propTypes = {
     trigger: PropTypes.bool.isRequired,
     setVisibilityuser: PropTypes.func.isRequired,
+    setAdd: PropTypes.func.isRequired
 };
 
 export default Ajouteru
