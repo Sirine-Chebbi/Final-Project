@@ -1,8 +1,9 @@
 import Nav from '../components/Admin/Nav';
-/*import Tablerole from '../components/Admin/Tablerole';*/
 import Tableuser from '../components/Admin/Tableuser';
 import Ajouteru from "../components/Admin/Ajouteru";
 import Deleteuser from '../components/Admin/deleteuser';
+import Profile from '../components/Admin/Profile';
+
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { useState, useEffect, useRef } from "react"
@@ -17,11 +18,16 @@ const Admin = () => {
   const [Hidden, setVisibility] = useState(false);
   const navigate = useNavigate();
   const toast = useRef(null);
+
   const [users, setUsers] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [add, setAdd] = useState(false);
   const [Matricule, setMatricule] = useState("");
   const [Mod, setVisibilitymod] = useState("");
+
+  const [showProfile, setShowProfile] = useState(false);
+
   
 
 
@@ -96,7 +102,8 @@ const Admin = () => {
     <>
       <Toast ref={toast} position="top-center" />
       <div className="bg-linear-to-br from-gray-950 to-sky-600 pb-30 h-screen min-h-fit">
-        <Nav></Nav>
+        <Nav showProfile={showProfile} setShowProfile={setShowProfile}></Nav>
+        <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
         <Modifieruser setAdd={setAdd} Matricule={Matricule} trigger={Mod} setVisibilitymod={setVisibilitymod}></Modifieruser>
         <Ajouteru setAdd={setAdd} trigger={User} setVisibilityuser={setVisibilityuser}></Ajouteru>
         <Deleteuser setAdd={setAdd} Matricule={Matricule} trigger={Delete} setVisibilitydelete={setVisibilitydelete}></Deleteuser>

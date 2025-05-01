@@ -4,6 +4,7 @@ import NftFilter from '../components/NFT/NftFilter';
 import Nftgraph from '../components/NFT/Nftgraph';
 import TableNFT from '../components/NFT/TableNFT';
 import UploadNFT from '../components/NFT/UploadNft';
+import Profile from "../components/Admin/Profile"
 import axios from 'axios';
 
 const NFT = () => {
@@ -15,6 +16,7 @@ const NFT = () => {
   const [min, setSelectedMin] = useState("");
   const [max, setSelectedMax] = useState("");
   const [selectedPosition, setSelectedPosition] = useState(""); 
+  const [showProfile, setShowProfile] = useState(false);
 
 
   const fetchTestResults = async () => {
@@ -34,7 +36,8 @@ const NFT = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar showProfile={showProfile} setShowProfile={setShowProfile}></Navbar>
+      <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
       <div className="ml-40 mr-40 mt-10">
         <UploadNFT/>
         <NftFilter

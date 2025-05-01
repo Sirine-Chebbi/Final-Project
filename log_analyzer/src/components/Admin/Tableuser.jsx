@@ -1,6 +1,18 @@
 import PropTypes from "prop-types";
+import {useState} from 'react'
 
 const Tableuser = (props) => {  
+
+  const [prenom , setPrenom] = useState('');
+  const [Poste , setPoste] = useState('');
+
+  const resetSearch = () =>{
+    setPrenom('');
+    setPoste('');
+    document.getElementById("valuePoste").value = '';
+    document.getElementById("valuePrenom").value = '';
+  }
+
 
   return (
     <>
@@ -8,7 +20,7 @@ const Tableuser = (props) => {
         <div className="justify-between flex">
           <div className="flex place-items-center gap-3 mb-10">
             <h1
-              onClick={() => props.setVisibility(!props.Hidden)}
+              onClick={() => props.setVisibility(!props.Hidden) | resetSearch()}
               className="text-cyan-400 -mb-5 text-2xl font-medium place-items-center flex gap-3 hover:bg-cyan-200/20 cursor-pointer p-3 rounded-2xl h-20 duration-200"
             >
               <svg
@@ -29,14 +41,18 @@ const Tableuser = (props) => {
             </h1>
             <input
               type="text"
-              placeholder="Nom"
+              id="valuePrenom"
+              onChange={(e) => setPrenom(e.target.value)}
+              placeholder="Prenom"
               className={`${
                 props.Hidden ? "opacity-100 ml-10" : "opacity-0"
               } border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`}
             />
             <input
               type="text"
+              id="valuePoste"
               placeholder="poste"
+              onChange={(e) => setPoste(e.target.value)}
               className={`${
                 props.Hidden ? "opacity-100 ml-10" : "opacity-0"
               } border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`}
@@ -93,7 +109,12 @@ const Tableuser = (props) => {
               </thead>
               <tbody className="divide-y divide-cyan-400 bg-gray-900">
                 {props.users.length > 0 ? (
-                  props.users.map((user) => (
+                  props.users
+                  .filter(user =>
+                    user.prenom.toLowerCase().includes(prenom.toLowerCase()) &&
+                    user.poste.toLowerCase().includes(Poste.toLowerCase())
+                  )
+                  .map((user) => (
                     <tr
                       key={user.matricule}
                       className={`hover:bg-gray-800 text-xl text-center ${user.role.id == "1" ? "hidden" : ""}`}

@@ -3,6 +3,7 @@
   import Upload from "../components/Wifi_Conduit/Upload"
   import Table from "../components/Wifi_Conduit/Table"
   import Menu from "../components/Wifi_Conduit/Menu"
+  import Profile from "../components/Admin/Profile"
   import ExportAllGraphs from "../components/Wifi_Conduit/Graphs/ExportAllGraphs";
 
   import Rssigraph from "../components/Wifi_Conduit/Graphs/Rssigraph"
@@ -30,6 +31,7 @@
     const [filteredResults ,setFilteredResults] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [showProfile, setShowProfile] = useState(false);
 
     
     useEffect(() => {
@@ -51,7 +53,8 @@
 
     return (
       <>
-      <Navbar></Navbar>
+      <Navbar showProfile={showProfile} setShowProfile={setShowProfile}></Navbar>
+      <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
         <Menu></Menu>   
         <div className="pr-30 pl-60 mb-10">
           <div className="flex justify-between mt-10">
