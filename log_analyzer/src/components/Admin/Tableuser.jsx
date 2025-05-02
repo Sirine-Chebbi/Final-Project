@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
+import api from "../../Services/api"
 
 const Tableuser = (props) => {
   const [users, setUsers] = useState([]);
@@ -19,29 +20,12 @@ const Tableuser = (props) => {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        showErrorToast("Token d'authentification manquant");
-        return;
-      }
-
-      const response = await fetch("http://127.0.0.1:8000/api/auth/users/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data);
-      } else {
-        showErrorToast("Erreur lors du chargement des utilisateurs");
-      }
+      setLoading(true);
+      const response = await api.get("auth/users/");
+      setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
-      showErrorToast("Erreur de connexion au serveur");
+      showErrorToast(error.response?.data?.detail || "Erreur lors du chargement des utilisateurs");
     } finally {
       setLoading(false);
     }
@@ -50,6 +34,7 @@ const Tableuser = (props) => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
 
   return (
     <>

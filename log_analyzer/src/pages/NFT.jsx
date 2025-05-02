@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../Services/api'; // Importez votre instance API configurée
+import { authService } from '../Services/authService';
 import Navbar from '../components/Navbar';
 import NftFilter from '../components/NFT/NftFilter';
 import Nftgraph from '../components/NFT/Nftgraph';
 import TableNFT from '../components/NFT/TableNFT';
 import UploadNFT from '../components/NFT/UploadNft';
-import axios from 'axios';
 
 const NFT = () => {
   const [testResults, setTestResults] = useState([]);
@@ -14,29 +16,59 @@ const NFT = () => {
   const [bande, setSelectedBande] = useState("");
   const [min, setSelectedMin] = useState("");
   const [max, setSelectedMax] = useState("");
-  const [selectedPosition, setSelectedPosition] = useState(""); 
-
+  const [selectedPosition, setSelectedPosition] = useState("");
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchTestResults = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/wifi-nft/get-nft-results/"
-      );
+      setLoading(true);
+      const token = localStorage.getItem('access_token');
+      
+      if (!token) {
+        navigate('/');
+        return;
+      }
+
+      const response = await api.get("wifi-nft/get-nft-results/");
       setTestResults(response.data.results || []);
     } catch (error) {
       console.error("Error fetching test results", error);
+      
+      if (error.response?.status === 401) {
+        try {
+          // Tentative de rafraîchissement du token
+          const newToken = await authService.refreshToken();
+          // Réessayer la requête avec le nouveau token
+          const retryResponse = await api.get("wifi-nft/get-nft-results/");
+          setTestResults(retryResponse.data.results || []);
+        } catch (refreshError) {
+          console.error("Refresh token failed", refreshError);
+          navigate('/');
+        }
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchTestResults();
-  }, []);
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="h-screen grid place-items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
+      </div>
+    );
+  }
 
   return (
     <>
       <Navbar />
       <div className="ml-40 mr-40 mt-10">
-        <UploadNFT/>
+        <UploadNFT onUploadSuccess={fetchTestResults} />
         <NftFilter
           testResults={testResults}
           setSelectedAntenne={setSelectedAntenne}
@@ -56,8 +88,12 @@ const NFT = () => {
           setFilteredResults={setFilteredResults}
           setSelectedPosition={setSelectedPosition}
         />
-        <Nftgraph filteredResults={filteredResults} min={min} max={max} selectedPosition={selectedPosition}/>
-
+        <Nftgraph 
+          filteredResults={filteredResults} 
+          min={min} 
+          max={max} 
+          selectedPosition={selectedPosition}
+        />
       </div>
     </>
   );

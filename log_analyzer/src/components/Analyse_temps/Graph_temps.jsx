@@ -112,6 +112,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
     const handleTargetSubmit = () => {
         setShowTarget(true);
         setTargetValue(document.getElementById("targetInput").value);
+        updateChart();
     };
 
     const handleTargetCancel = () => {
@@ -119,10 +120,6 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         setShowTarget(false);
         document.getElementById("targetInput").value = "";
     }
-
-    useEffect(() => {
-        updateChart();
-    }, [showTarget, targetValue]);
 
     const updateChart = () => {
         if (!chartInstanceRef.current || !tempsResults) return;
@@ -262,7 +259,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 chartContainerRef.current.innerHTML = "";
             }
         };
-    }, [tempsResults]);
+    }, [tempsResults,showTarget]);
 
 
     const stats = [

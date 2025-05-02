@@ -1,52 +1,105 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../Services/api"; // Ajustez le chemin selon votre structure
+import { useNavigate } from "react-router-dom";
 
-const Upload = () => {
-  
-  const [file, setFile] = useState(null);
+const Upload = ({ onUploadSuccess }) => {
+  const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
-    setFile(event.target.files);
+    setFiles(event.target.files);
+    setMessage("");
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      setMessage("Veuillez sélectionner un fichier.");
+    if (!files || files.length === 0) {
+      setMessage("Veuillez sélectionner au moins un fichier.");
       return;
     }
-
-    const formData = new FormData();
-    for (let i = 0; i < file.length; i++) {
-      formData.append("file", file[i]);
+  
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/');
+      return;
     }
-
-
+  
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("file", files[i]);
+    }
+  
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/wifi-conduit/upload/",
+      setIsUploading(true);
+      setMessage("Envoi des fichiers en cours...");
+  
+      const response = await api.post(
+        "wifi-conduit/upload/",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+          },
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setMessage(`Envoi... ${percentCompleted}%`);
+            }
+          }
         }
       );
-
-      setMessage(response.data.message);
-      
-    } catch (error) {
-      console.error("Erreur lors de l'envoi:", error);
-      setMessage(error.response?.data.error || "Erreur inconnue");
-    }
-
-    window.location.reload();
-  };
   
+      setMessage(response.data.message || "Fichiers envoyés avec succès");
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
+  
+    } catch (error) {
+      console.error("Erreur complète:", error);
+      console.error("Réponse d'erreur:", error.response);
+      
+      if (error.response) {
+        // Erreur avec réponse du serveur
+        console.error("Détails de l'erreur:", error.response.data);
+        setMessage(
+          error.response.data?.detail || 
+          error.response.data?.message || 
+          "Erreur lors de l'envoi des fichiers"
+        );
+      } else if (error.request) {
+        // La requête a été faite mais aucune réponse n'a été reçue
+        setMessage("Pas de réponse du serveur");
+      } else {
+        // Erreur lors de la configuration de la requête
+        setMessage("Erreur de configuration de la requête");
+      }
+      
+      if (error.response?.status === 401) {
+        try {
+          const newToken = await authService.refreshToken();
+          localStorage.setItem('access_token', newToken);
+          await handleUpload();
+          return;
+        } catch (refreshError) {
+          console.error("Refresh token failed", refreshError);
+          navigate('/');
+          return;
+        }
+      }
+    } finally {
+      setIsUploading(false);
+    }
+  };
   return (
-    
-    <div className="flex-none  justify-between bg-gray-950 w-90 hover:scale-105 duration-200 mt-15">
+    <div className="flex-none justify-between bg-gray-950 w-90 hover:scale-105 duration-200 mt-15">
       <div className="py-6">
         <div className="grid border-2 border-cyan-400 p-7 rounded-lg">
-          <svg
+        <svg
             className="mx-auto"
             width="45"
             height="55"
@@ -65,18 +118,51 @@ const Upload = () => {
             <h4 className="text-center text-cyan-400 text-l font-medium leading-snug">
               Télécharger les logs ici !
             </h4>
-            {message && <p className="mt-4 text-l text-cyan-400 mx-auto">{message}</p>}
+            
+            {message && (
+              <p className="mt-4 text-l text-cyan-400 mx-auto">
+                {message}
+                {isUploading && "..."}
+              </p>
+            )}
+
             <div className="flex items-center justify-center gap-4">
               <label>
-                <input multiple onChange={handleFileChange} type="file" hidden />
-                <div className="flex w-40 h-9 px-2 flex-col hover:text-cyan-400 hover:bg-gray-950 hover:border-2 p-4 bg-cyan-400 rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">Choisir les fichiers</div>
+                <input 
+                  multiple 
+                  onChange={handleFileChange} 
+                  type="file" 
+                  hidden 
+                  disabled={isUploading}
+                />
+                <div className={`
+                  flex w-40 h-9 px-2 flex-col p-4 rounded-xl mt-2 font-semibold 
+                  leading-4 items-center justify-center cursor-pointer focus:outline-none
+                  ${
+                    isUploading 
+                      ? 'bg-cyan-600 text-gray-300' 
+                      : 'bg-cyan-400 hover:text-cyan-400 hover:bg-gray-950 hover:border-2 border-cyan-400 text-black'
+                  }
+                `}>
+                  {files?.length > 0 ? `${files.length} fichier(s)` : 'Choisir les fichiers'}
+                </div>
               </label>
-              <div
+              
+              <button
                 onClick={handleUpload}
-                className="flex w-28 h-9 px-2 flex-col hover:text-cyan-400 hover:bg-gray-950 hover:border-2 p-4 bg-cyan-400 rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
+                disabled={isUploading || !files || files.length === 0}
+                className={`
+                  flex w-28 h-9 px-2 flex-col p-4 rounded-xl mt-2 font-semibold 
+                  leading-4 items-center justify-center cursor-pointer focus:outline-none
+                  ${
+                    isUploading || !files || files.length === 0
+                      ? 'bg-cyan-600 text-gray-300 cursor-not-allowed'
+                      : 'bg-cyan-400 hover:text-cyan-400 hover:bg-gray-950 hover:border-2 border-cyan-400 text-black'
+                  }
+                `}
               >
-                Télécharger
-              </div>
+                {isUploading ? 'Envoi...' : 'Télécharger'}
+              </button>
             </div>
           </div>
         </div>

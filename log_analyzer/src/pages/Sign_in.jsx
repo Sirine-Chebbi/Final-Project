@@ -2,12 +2,14 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Toast } from "primereact/toast";
+import { authService } from "../Services/authService"
 
 const Sign_in = () => {
   const [matricule, setMatricule] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const toastBL = useRef(null); // Ref pour le toast
+  const toastBL = useRef(null);
 
   const showErrorToast = (message) => {
     toastBL.current.show({
@@ -19,53 +21,33 @@ const Sign_in = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    
     if (!matricule.trim()) {
       showErrorToast("Veuillez entrer votre matricule");
+      setLoading(false);
       return;
     }
 
     if (!password) {
       showErrorToast("Veuillez entrer votre mot de passe");
+      setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/auth/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ matricule, password }),
-      });
+      const data = await authService.login(matricule, password);
 
-      if (response.ok) {
-        const data = await response.json();
-
-        localStorage.setItem("access_token", data.access);
-        localStorage.setItem("refresh_token", data.refresh);
-
-        if (data.role == "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/wifi");
-        }
+      if (data.role === "admin") {
+        navigate("/admin");
       } else {
-        const errorData = await response.json();
-        if (errorData.detail) {
-          if (errorData.detail.includes("matricule")) {
-            showErrorToast("Matricule inexistant !");
-          } else if (errorData.detail.includes("mot de passe")) {
-            showErrorToast("Mot de passe incorrect !");
-          } else {
-            showErrorToast(errorData.detail || "Erreur lors de la connexion");
-          }
-        } else {
-          showErrorToast("Erreur lors de la connexion");
-        }
+        navigate("/wifi");
       }
-    } catch (err) {
-      console.error("Erreur:", err);
-      showErrorToast("Erreur de connexion au serveur");
+    } catch (error) {
+      console.error("Erreur:", error);
+      showErrorToast(error.response?.data?.detail || "Erreur lors de la connexion");
+    } finally {
+      setLoading(false);
     }
   };
 

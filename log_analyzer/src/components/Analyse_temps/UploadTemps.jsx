@@ -1,14 +1,17 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../Services/api";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../../Services/authService";
 
-const UploadTemps = () => {
+const UploadTemps = ({ onUploadSuccess }) => {
   const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     setFiles(event.target.files);
-    setMessage(""); // Reset message when new files are selected
+    setMessage("");
   };
 
   const handleUpload = async () => {
@@ -17,39 +20,63 @@ const UploadTemps = () => {
       return;
     }
 
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/');
+      return;
+    }
+
     const formData = new FormData();
     Array.from(files).forEach(file => {
       formData.append("files", file);
-      console.log("Fichier ajouté:", file.name, file.size, file.type);
     });
 
     try {
       setIsUploading(true);
       setMessage("Analyse des fichiers...");
 
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/temps-test/upload-temps-test/",
+      const response = await api.post(
+        "temps-test/upload-temps-test/",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          },
           onUploadProgress: progress => {
-            setMessage(`Envoi... ${Math.round((progress.loaded / progress.total) * 100)}%`);
+            const percentCompleted = Math.round((progress.loaded / progress.total) * 100);
+            setMessage(`Envoi... ${percentCompleted}%`);
           }
         }
       );
 
-      if (response.data.errors) {
-        setMessage(
-          `${response.data.message}\n`);
-        setTimeout(() => window.location.reload(), 2000);
-      } else {
-        setMessage(response.data.message);
-        setTimeout(() => window.location.reload(), 2000);
+      setMessage(response.data.message || "Fichiers envoyés avec succès");
+      
+      if (onUploadSuccess) {
+        await onUploadSuccess();
       }
 
     } catch (error) {
-      console.error("Erreur lors de l'envoi des fichiers:", error);
-      setMessage(`Aucune mesure valide trouvée !`);
+      console.error("Erreur lors de l'envoi:", error);
+      
+      if (error.response?.status === 401) {
+        try {
+          const newToken = await authService.refreshToken();
+          localStorage.setItem('access_token', newToken);
+          await handleUpload();
+          return;
+        } catch (refreshError) {
+          console.error("Refresh token failed", refreshError);
+          navigate('/');
+          return;
+        }
+      }
+
+      setMessage(
+        error.response?.data?.error || 
+        error.response?.data?.message || 
+        "Erreur lors de l'envoi des fichiers"
+      );
     } finally {
       setIsUploading(false);
     }
@@ -97,16 +124,18 @@ const UploadTemps = () => {
               hidden
               disabled={isUploading}
             />
-            <div className={`flex w-40 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${isUploading ? 'bg-cyan-500' : 'bg-cyan-300'
-              } rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none`}>
+            <div className={`flex w-40 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${
+              isUploading ? 'bg-cyan-500' : 'bg-cyan-300'
+            } rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none`}>
               {files?.length > 0 ? `${files.length} fichier(s)` : 'Choisir les fichiers'}
             </div>
           </label>
           <button
             onClick={handleUpload}
             disabled={isUploading || !files || files.length === 0}
-            className={`flex w-28 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${isUploading ? 'bg-cyan-500' : 'bg-cyan-300'
-              } rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none`}
+            className={`flex w-28 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${
+              isUploading ? 'bg-cyan-500' : 'bg-cyan-300'
+            } rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none`}
           >
             {isUploading ? 'Envoi...' : 'Télécharger'}
           </button>

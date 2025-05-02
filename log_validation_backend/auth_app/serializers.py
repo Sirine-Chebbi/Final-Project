@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import CustomUser, Role
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from rest_framework_simplejwt.exceptions import InvalidToken
+
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -21,33 +22,32 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        # Ajoutez les claims personnalisés
         token['matricule'] = user.matricule
         token['role'] = user.role.name if user.role else None
+        token['is_admin'] = user.role.is_admin if user.role else False
         return token
 
     def validate(self, attrs):
-        matricule = attrs.get('matricule')
-        password = attrs.get('password')
-
-        try:
-            user = CustomUser.objects.get(matricule=matricule)
-        except CustomUser.DoesNotExist:
-            raise AuthenticationFailed('Matricule incorrect ou inexistant.')
-
-        if not user.check_password(password):
-            raise AuthenticationFailed('Mot de passe incorrect.')
-
-        if not user.is_active:
-            raise AuthenticationFailed('Compte désactivé.')
-
         data = super().validate(attrs)
-
-        # Ajout des données custom dans la réponse
+        
+        # Ajoutez les données supplémentaires
         data.update({
             'matricule': self.user.matricule,
-            'role': self.user.role.name if self.user.role else None
+            'role': self.user.role.name if self.user.role else None,
+            'is_admin': self.user.role.is_admin if self.user.role else False
         })
         return data
+
+class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
+    
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise InvalidToken('No valid refresh token found')
 
 
 class RegisterSerializer(serializers.ModelSerializer):
