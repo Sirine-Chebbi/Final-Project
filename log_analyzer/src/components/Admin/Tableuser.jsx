@@ -1,44 +1,13 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
-import api from "../../Services/api";
 
 const Tableuser = (props) => {  
   const [prenom, setPrenom] = useState('');
   const [Poste, setPoste] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState([]); // Added missing state
   const toast = useRef(null); // For Toast notifications
 
-  // Function to show error toast
-  const showErrorToast = (message) => {
-    if (toast.current) {
-      toast.current.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: message,
-        life: 3000
-      });
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get("auth/users/");
-      setUsers(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      showErrorToast(error.response?.data?.detail || "Erreur lors du chargement des utilisateurs");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const resetSearch = () => {
     setPrenom('');
@@ -49,7 +18,7 @@ const Tableuser = (props) => {
 
   return (
     <>
-      <Toast ref={toast} /> {/* Added Toast component */}
+      <Toast ref={toast} />
       <div>
         <div className="justify-between flex">
           <div className="flex place-items-center gap-3 mb-10">
@@ -104,7 +73,7 @@ const Tableuser = (props) => {
         </div>
 
         <div className="w-350 overflow-x-auto rounded-xl border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 bg-gray-900 max-h-140 duration-200">
-          {loading ? ( // Changed from props.loading to local loading state
+          {props.loading ? (
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
             </div>
@@ -145,8 +114,8 @@ const Tableuser = (props) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-cyan-400 bg-gray-900">
-                {users.length > 0 ? ( // Changed from props.users to local users state
-                  users
+                {props.users.length > 0 ? (
+                  props.users
                     .filter(user =>
                       user.prenom?.toLowerCase().includes(prenom.toLowerCase()) &&
                       user.poste?.toLowerCase().includes(Poste.toLowerCase())
@@ -154,7 +123,7 @@ const Tableuser = (props) => {
                     .map((user) => (
                       <tr
                         key={user.matricule}
-                        className={`hover:bg-gray-800 text-xl text-center ${user.role?.id === "1" ? "hidden" : ""}`}
+                        className={`hover:bg-gray-800 text-xl text-center ${user.role == "1" ? "hidden" : ""}`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-white">
                           {user.nom || "Nom non disponible"}
@@ -221,7 +190,7 @@ const Tableuser = (props) => {
                 ) : (
                   <tr>
                     <td
-                      colSpan={5} // Fixed colspan to match number of columns
+                      colSpan={5} 
                       className="px-6 py-4 text-center text-white"
                     >
                       Aucun utilisateur trouvé
@@ -245,8 +214,10 @@ Tableuser.propTypes = {
   User: PropTypes.bool.isRequired,
   setVisibilitydelete: PropTypes.func.isRequired,
   Delete: PropTypes.bool.isRequired,
-  Mod: PropTypes.bool.isRequired, // Fixed type from array to bool
-  setMatricule: PropTypes.func.isRequired, // Fixed type from string to func
+  Mod: PropTypes.bool.isRequired,
+  setMatricule: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired,
+  loading: PropTypes.string.isRequired,
 };
 
 export default Tableuser;

@@ -8,7 +8,6 @@ import Nftgraph from '../components/NFT/Nftgraph';
 import TableNFT from '../components/NFT/TableNFT';
 import UploadNFT from '../components/NFT/UploadNft';
 import Profile from "../components/Admin/Profile"
-import axios from 'axios';
 
 const NFT = () => {
   const [testResults, setTestResults] = useState([]);
@@ -41,9 +40,8 @@ const NFT = () => {
       
       if (error.response?.status === 401) {
         try {
-          // Tentative de rafraîchissement du token
           const newToken = await authService.refreshToken();
-          // Réessayer la requête avec le nouveau token
+          api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
           const retryResponse = await api.get("wifi-nft/get-nft-results/");
           setTestResults(retryResponse.data.results || []);
         } catch (refreshError) {

@@ -95,12 +95,12 @@ function NftFilter({
               onChange={(e) => setMesure(e.target.value)}
               name="mesure"
               id="select"
-              className="w-70 max-h- text-xl text-cyan-400 p-3 outline-none "
+              className="w-70 max-h-max text-lg p-4 text-cyan-400 outline-none place-self-center flex"
               value={mesure}
             >
               <option value="">Selectionner Une Mesure</option>
               {[...new Set(testResults.map((result) => result.mesure))]
-                .filter((mesure) => mesure) // Filtrer les valeurs nulles si nécessaire
+                .filter((mesure) => mesure)
                 .map((mesureUnique, index) => (
                   <option
                     className="text-white bg-gray-800"

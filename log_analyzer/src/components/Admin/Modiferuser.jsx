@@ -20,8 +20,7 @@ function Modifieruser(props) {
     };
 
     const fetchUser = async () => {
-        const response = await GetUser(props.Matricule);
-        const data = await response.json();
+        const data = await GetUser(props.Matricule);
         setNom(data.nom);
         setPrenom(data.prenom);
         setMatricule(data.matricule);
@@ -105,7 +104,7 @@ function Modifieruser(props) {
         }
 
         props.setVisibilitymod(false)
-        fetchUser()
+        props.setAdd(true)
     };
     
         return props.trigger ? (

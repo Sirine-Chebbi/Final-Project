@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import api from "../../Services/api";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../Services/authService";
@@ -115,7 +116,7 @@ const UploadTemps = ({ onUploadSuccess }) => {
           </div>
         )}
 
-        <div className="flex gap-10 mr-5">
+        <div className="flex gap-5 mr-5">
           <label>
             <input
               multiple
@@ -124,7 +125,7 @@ const UploadTemps = ({ onUploadSuccess }) => {
               hidden
               disabled={isUploading}
             />
-            <div className={`flex w-40 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${
+            <div className={`flex w-50 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${
               isUploading ? 'bg-cyan-500' : 'bg-cyan-300'
             } rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none`}>
               {files?.length > 0 ? `${files.length} fichier(s)` : 'Choisir les fichiers'}
@@ -133,7 +134,7 @@ const UploadTemps = ({ onUploadSuccess }) => {
           <button
             onClick={handleUpload}
             disabled={isUploading || !files || files.length === 0}
-            className={`flex w-28 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${
+            className={`flex w-30 h-9 px-2 flex-col hover:text-cyan-300 hover:bg-gray-950 hover:border-2 p-5 ${
               isUploading ? 'bg-cyan-500' : 'bg-cyan-300'
             } rounded-xl mt-2 text-black font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none`}
           >
@@ -143,6 +144,9 @@ const UploadTemps = ({ onUploadSuccess }) => {
       </div>
     </div>
   );
+};
+UploadTemps.propTypes = {
+  onUploadSuccess: PropTypes.func,
 };
 
 export default UploadTemps;

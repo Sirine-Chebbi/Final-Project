@@ -43,8 +43,8 @@ function Profile(props) {
     };
 
     useEffect(() => {
-    fetchUser();
-}, []); // [] pour ne le faire qu'une seule fois
+        fetchUser();
+    }, []);
 
 
     const showToast = (severity, summary, detail) => {
@@ -76,6 +76,9 @@ function Profile(props) {
 
                 if (passwordResponse.ok) {
                     showToast('success', 'Mot de passe mis à jour avec succès');
+                    document.getElementById("pass").value = "";
+                    document.getElementById("pass1").value = "";
+                    document.getElementById("pass2").value = "";
                 } else {
                     showToast('warn', 'Attention', 'Erreur de serveur lors du changement de mot de passe');
                 }
@@ -96,6 +99,8 @@ function Profile(props) {
             setvisibleState(!visible);
         }
         document.getElementById("pass").value = "";
+        document.getElementById("pass1").value = "";
+        document.getElementById("pass2").value = "";
     }
 
     return props.trigger ? (
@@ -120,11 +125,11 @@ function Profile(props) {
                             </tr>
                             <tr>
                                 <td className='p-2'>
-                                    <input disabled required type="text" value={"Poste: "+poste} className={`m-2 border-b-2 border-cyan-400 p-2 text-cyan-400 outline-none`}
+                                    <input disabled required type="text" value={"Poste: " + poste} className={`m-2 border-b-2 border-cyan-400 p-2 text-cyan-400 outline-none`}
                                     />
                                 </td>
                                 <td className='p-2'>
-                                    <input disabled required type="text" value={"Matricule: "+matricule} className={`m-2 border-b-2 border-cyan-400 p-2 text-cyan-400 outline-none`}
+                                    <input disabled required type="text" value={"Matricule: " + matricule} className={`m-2 border-b-2 border-cyan-400 p-2 text-cyan-400 outline-none`}
                                     />
                                 </td>
                             </tr>
@@ -134,13 +139,13 @@ function Profile(props) {
                                     />
                                 </td>
                                 <td className='p-2 pt-10'>
-                                    <input onChange={(e) => { setPassword(e.target.value) }} required id="pass" type="text" placeholder='Nouvelle Mot de passe' className={`m-2 border-2 border-cyan-400 p-2 rounded-lg text-cyan-400/60 outline-none`}
+                                    <input onChange={(e) => { setPassword(e.target.value) }} required id="pass1" type="text" placeholder='Nouvelle Mot de passe' className={`m-2 border-2 border-cyan-400 p-2 rounded-lg text-cyan-400/60 outline-none`}
                                     />
                                 </td>
                             </tr>
                             <tr hidden={visible}>
                                 <td className='p-2'>
-                                    <input onChange={(e) => { setconfirmPassword(e.target.value) }} required id="pass" type="text" placeholder='Confirmer Mot de passe' className={`m-2 border-2 rounded-lg border-cyan-400 p-2 text-cyan-400 outline-none ${password !== confirmpassword ? 'border-red-500' : ''}`}
+                                    <input onChange={(e) => { setconfirmPassword(e.target.value) }} required id="pass2" type="text" placeholder='Confirmer Mot de passe' className={`m-2 border-2 rounded-lg border-cyan-400 p-2 text-cyan-400 outline-none ${password !== confirmpassword ? 'border-red-500' : ''}`}
                                     />
                                 </td>
                                 <td className='p-2'>

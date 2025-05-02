@@ -1,6 +1,8 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import api from "../../Services/api"; // Ajustez le chemin selon votre structure
 import { useNavigate } from "react-router-dom";
+import {authService} from "../../Services/authService"; 
 
 const Upload = ({ onUploadSuccess }) => {
   const [files, setFiles] = useState(null);
@@ -96,7 +98,7 @@ const Upload = ({ onUploadSuccess }) => {
     }
   };
   return (
-    <div className="flex-none justify-between bg-gray-950 w-90 hover:scale-105 duration-200 mt-15">
+    <div className="flex-none justify-between bg-gray-950 w-fithover:scale-105 duration-200 mt-15">
       <div className="py-6">
         <div className="grid border-2 border-cyan-400 p-7 rounded-lg">
         <svg
@@ -136,11 +138,11 @@ const Upload = ({ onUploadSuccess }) => {
                   disabled={isUploading}
                 />
                 <div className={`
-                  flex w-40 h-9 px-2 flex-col p-4 rounded-xl mt-2 font-semibold 
+                  flex w-45 h-9 px-2 flex-col p-4 rounded-xl mt-2 font-semibold 
                   leading-4 items-center justify-center cursor-pointer focus:outline-none
                   ${
                     isUploading 
-                      ? 'bg-cyan-600 text-gray-300' 
+                      ? 'bg-cyan-600 text-black' 
                       : 'bg-cyan-400 hover:text-cyan-400 hover:bg-gray-950 hover:border-2 border-cyan-400 text-black'
                   }
                 `}>
@@ -152,11 +154,11 @@ const Upload = ({ onUploadSuccess }) => {
                 onClick={handleUpload}
                 disabled={isUploading || !files || files.length === 0}
                 className={`
-                  flex w-28 h-9 px-2 flex-col p-4 rounded-xl mt-2 font-semibold 
+                  flex w-30 h-9 px-2 flex-col p-4 rounded-xl mt-2 font-semibold 
                   leading-4 items-center justify-center cursor-pointer focus:outline-none
                   ${
                     isUploading || !files || files.length === 0
-                      ? 'bg-cyan-600 text-gray-300 cursor-not-allowed'
+                      ? 'bg-cyan-600 text-black cursor-not-allowed'
                       : 'bg-cyan-400 hover:text-cyan-400 hover:bg-gray-950 hover:border-2 border-cyan-400 text-black'
                   }
                 `}
@@ -169,6 +171,9 @@ const Upload = ({ onUploadSuccess }) => {
       </div>
     </div>
   );
+};
+Upload.propTypes = {
+  onUploadSuccess: PropTypes.func,
 };
 
 export default Upload;

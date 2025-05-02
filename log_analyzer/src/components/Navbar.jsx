@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, } from "react";
 import { jwtDecode } from "jwt-decode";
 import { GetUser } from '../Services/Userservice';
 import PropTypes from 'prop-types';
@@ -11,10 +11,10 @@ const Navbar = (props) => {
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
   const [Drop, setdrop] = useState(true);
-
   const navigate = useNavigate();
   const toast = useRef(null);
   const token = localStorage.getItem("access_token");
+  const [datauser , setdataUser] = useState([]);
 
   const showToast = (severity, summary, detail) => {
     toast.current.show({ severity, summary, detail, life: 3000 });
@@ -31,15 +31,16 @@ const Navbar = (props) => {
   }
 
   const fetchUser = async () => {
-    const response = await GetUser(userData.matricule);
-    const data = await response.json();
+    const data = await GetUser(userData.matricule);
+    setdataUser(data);
     setNom(data.nom);
     setPrenom(data.prenom);
   };
 
+  
   useEffect(() => {
     fetchUser();
-  })
+  },[])
 
   const handleLogout = async () => {
     try {
@@ -143,7 +144,7 @@ const Navbar = (props) => {
                       Profile
                     </button>
                     <NavLink to="/Admin">
-                    <button className="flex px-4 py-2 text-md text-cyan-400 cursor-pointer group place-items-center gap-2 hover:text-cyan-400 hover:bg-gray-800 w-full">
+                    <button className={`flex px-4 py-2 text-md text-cyan-400 cursor-pointer group place-items-center gap-2 hover:text-cyan-400 hover:bg-gray-800 w-full ${datauser.role != "1" ? 'hidden' : ''} `}>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0.8} stroke="currentColor" className="size-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
                       </svg>

@@ -13,7 +13,6 @@ import PropTypes from "prop-types";
 import autoTable from "jspdf-autotable";
 import { jsPDF } from "jspdf";
 
-// Enregistrer les composants nécessaires de Chart.js
 Chart.register(
     LineController,
     LineElement,
@@ -27,12 +26,11 @@ Chart.register(
 const Graph_temps = ({ tempsResults, operation, equipe }) => {
     const chartContainerRef = useRef(null);
     const chartInstanceRef = useRef(null);
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [targetValue, setTargetValue] = useState(null);
     const [showTarget, setShowTarget] = useState(false);
 
-    // Fonction pour préparer les données pour le graphique
+
     const prepareChartData = (data, target) => {
         if (!data || data.length === 0) return null;
 
@@ -129,10 +127,9 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         chartInstanceRef.current.update();
     };
 
-    // Initialiser ou mettre à jour le graphique
     useEffect(() => {
+        
         if (!tempsResults || tempsResults.length === 0) {
-            setIsLoading(false);
             setError("Aucune donnée disponible");
             return;
         }
@@ -140,30 +137,29 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         const chartData = prepareChartData(tempsResults, showTarget ? targetValue : null);
 
         if (!chartData) {
-            setIsLoading(false);
             setError("Données insuffisantes pour générer le graphique");
             return;
         }
 
-        // Créer un élément canvas dynamiquement
+        
         const canvas = document.createElement("canvas");
         canvas.style.width = "100%";
         canvas.style.height = "100%";
 
-        // Nettoyer le conteneur précédent
         if (chartContainerRef.current) {
             chartContainerRef.current.innerHTML = "";
             chartContainerRef.current.appendChild(canvas);
         }
 
+
         try {
-            // Détruire l'instance précédente si elle existe
+            
             if (chartInstanceRef.current) {
                 chartInstanceRef.current.destroy();
             }
 
-            // Créer un nouveau graphique
             const ctx = canvas.getContext("2d");
+
             if (!ctx) {
                 throw new Error("Impossible d'obtenir le contexte 2D");
             }
@@ -242,15 +238,13 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 },
             });
 
-            setIsLoading(false);
             setError(null);
+
         } catch (err) {
             console.error("Erreur lors de la création du graphique:", err);
             setError("Erreur lors de la génération du graphique");
-            setIsLoading(false);
         }
 
-        // Nettoyage
         return () => {
             if (chartInstanceRef.current) {
                 chartInstanceRef.current.destroy();
@@ -259,7 +253,10 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 chartContainerRef.current.innerHTML = "";
             }
         };
-    }, [tempsResults,showTarget]);
+
+        
+
+    }, [tempsResults,showTarget,targetValue]);
 
 
     const stats = [
@@ -323,6 +320,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
 
         pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
         pdf.save(`${title}.pdf`);
+
     };
 
     return (
@@ -358,9 +356,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 <h2 className="text-2xl font-bold text-cyan-400 mb-4">
                     Variation du temps || {tempsResults[0]?.reference}
                 </h2>
-                {isLoading ? (
-                    <div className="text-white">Chargement du graphique...</div>
-                ) : error ? (
+                {error ? (
                     <div className="text-red-500">{error}</div>
                 ) : (
                     <div className="relative h-100 w-full" ref={chartContainerRef}></div>

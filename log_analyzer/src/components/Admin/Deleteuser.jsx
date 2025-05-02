@@ -9,8 +9,7 @@ const Deleteuser = (props) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await GetUser(props.Matricule);
-            const data = await response.json();
+            const data = await GetUser(props.Matricule);
             setUser(data);
         };
 

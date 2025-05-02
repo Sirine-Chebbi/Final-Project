@@ -14,7 +14,6 @@ const Test_Wifi = () => {
     const [testLine, setTestLine] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const [nbligne, setligne] = useState([]);
     const [showProfile, setShowProfile] = useState(false);
 
     const exportPDF = () => {

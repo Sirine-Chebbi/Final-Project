@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./delta.css";
 import PropTypes from 'prop-types';
 import api from "../../Services/api"; // Importez votre instance API configurée
-import { authService } from "../../services/authService";
+import { authService } from '../../Services/authService';
 
 export const Delta = ({ setfetchResult }) => {
     const [value, setValue] = useState(2);
@@ -66,9 +66,8 @@ export const Delta = ({ setfetchResult }) => {
                 
                 if (error.response?.status === 401) {
                     try {
-                        // Tentative de rafraîchissement du token
                         const newToken = await authService.refreshToken();
-                        // Réessayer la requête avec le nouveau token
+                        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
                         const retryResponse = await api.get("wifi-conduit/results/with-delta-desc/");
                         setTestResults(retryResponse.data.results || []);
                     } catch (refreshError) {
@@ -95,7 +94,7 @@ export const Delta = ({ setfetchResult }) => {
     return (
         <div>
             <div className='flex gap-5 justify-end'>
-                <div className="border-3 border-yellow-400 w-35 p-5 rounded-2xl text-xl font-medium text-yellow-400 h-15 outline-none text-center">
+                <div className="border-3 border-yellow-400 w-fit p-5 rounded-2xl text-xl font-medium text-yellow-400 h-15 outline-none text-center">
                     <div className="-mt-2"></div>
                     <button 
                         className="cursor-pointer text-red-500 mr-5 text-2xl font-bold" 
