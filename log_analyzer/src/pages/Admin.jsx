@@ -6,13 +6,13 @@ import Profile from '../components/Admin/Profile';
 
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import api from "../Services/api"
 import { useState, useEffect, useRef } from "react"
 import { Toast } from "primereact/toast";
 import Modifieruser from '../components/Admin/Modiferuser';
 
 
 const Admin = () => {
-
   const [User, setVisibilityuser] = useState(false);
   const [Delete, setVisibilitydelete] = useState(false);
   const [Hidden, setVisibility] = useState(false);
@@ -46,17 +46,28 @@ const Admin = () => {
 
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      navigate('/');
-    } else {
-      const decoded = jwtDecode(token);
-      if (decoded.role != "admin") {
+    const verifyAuth = async () => {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        navigate('/');
+        return;
+      }
+
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.role !== "admin") {
+          navigate('/');
+        }
+        
+        await api.get('auth/verify/');
+      } catch (error) {
+        console.error("Auth verification error:", error);
         navigate('/');
       }
-    }
-  }, [navigate]);
+    };
 
+    verifyAuth();
+  }, [navigate]);
   const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("access_token");

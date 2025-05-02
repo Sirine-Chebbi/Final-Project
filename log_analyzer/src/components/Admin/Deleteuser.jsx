@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Toast } from "primereact/toast";
 import { useRef, useEffect, useState } from "react"
-import { GetUser } from '../Services/Userservice';
+import { GetUser } from '../../Services/Userservice';
 
 const Deleteuser = (props) => {
 

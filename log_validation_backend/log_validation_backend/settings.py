@@ -60,18 +60,51 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'USER_ID_FIELD': 'matricule',  # Use matricule instead of id
+    'UPDATE_LAST_LOGIN': True,
+    
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'matricule',
     'USER_ID_CLAIM': 'matricule',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    
     'TOKEN_OBTAIN_SERIALIZER': 'auth_app.serializers.MyTokenObtainPairSerializer',
+    'TOKEN_REFRESH_SERIALIZER': 'auth_app.serializers.CookieTokenRefreshSerializer',
 }
 
+
+JWT_COOKIE_SETTINGS = {
+    'ACCESS_TOKEN_COOKIE_NAME': 'access_token',
+    'REFRESH_TOKEN_COOKIE_NAME': 'refresh_token',
+    'ACCESS_TOKEN_COOKIE_PATH': '/',
+    'REFRESH_TOKEN_COOKIE_PATH': '/',
+    'COOKIE_SECURE': not DEBUG,  # True en production (HTTPS)
+    'COOKIE_HTTPONLY': True,
+    'COOKIE_SAMESITE': 'Lax',  # ou 'Strict' pour plus de sécurité
+    'ACCESS_TOKEN_COOKIE_MAX_AGE': 60 * 15,  # 15 minutes
+    'REFRESH_TOKEN_COOKIE_MAX_AGE': 60 * 60 * 24 * 7,  # 7 jours
+}
+
+
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False  # Doit être False pour permettre l'accès via JS si nécessaire
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 
 
@@ -84,14 +117,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'auth_app.middleware.JWTCookieMiddleware',
+
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',  
-    "http://localhost:5174",
-    "http://127.0.0.1:5174",
-    "http://127.0.0.1:5173",
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'log_validation_backend.urls'
 

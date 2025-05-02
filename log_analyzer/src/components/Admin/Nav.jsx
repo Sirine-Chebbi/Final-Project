@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
+import { authService } from "../../Services/authService"
 
 const Nav = (props) => {
   const navigate = useNavigate();
@@ -13,35 +14,12 @@ const Nav = (props) => {
 
   const handleLogout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refresh_token");
-      const accessToken = localStorage.getItem("access_token");
-
-      if (!refreshToken || !accessToken) {
-        showToast('warn', 'Attention', 'Aucun token trouvé');
-        return;
-      }
-
-      const response = await fetch("http://127.0.0.1:8000/api/auth/logout/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ refresh_token: refreshToken }),
-      });
-
-      if (response.ok) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        showToast('success', 'Succès', 'Déconnexion réussie');
-        setTimeout(() => navigate("/"), 1500); // Wait for toast to show
-      } else {
-        const errorData = await response.json();
-        showToast('error', 'Erreur', errorData.detail || 'Échec de la déconnexion');
-      }
+      await authService.logout();
+      showToast('success', 'Succès', 'Déconnexion réussie');
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       console.error("Logout error:", error);
-      showToast('error', 'Erreur', 'Erreur lors de la déconnexion');
+      showToast('error', 'Erreur', 'Échec de la déconnexion');
     }
   };
 

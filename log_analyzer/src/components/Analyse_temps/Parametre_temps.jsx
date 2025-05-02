@@ -25,7 +25,6 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
     <>
       <div className="mt-20 flex justify-between gap-5">
         <div className="place-items-center gap-5">
-          {/* Champs en lecture seule */}
           <input
             type="text"
             id="input1"
@@ -45,7 +44,6 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
           />
         </div>
         <div>
-          {/* Champs modifiables */}
           <input
             type="text"
             id="equipe"
