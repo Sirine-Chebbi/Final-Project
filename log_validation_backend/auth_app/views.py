@@ -29,7 +29,6 @@ class UserListView(generics.ListAPIView):
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAdminUser]
     lookup_field = 'matricule'
 
 class RoleListView(generics.ListCreateAPIView):
