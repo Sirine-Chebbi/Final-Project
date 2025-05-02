@@ -18,6 +18,8 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAdminUser, IsAdminOrSelf
+
 
 
 
@@ -98,13 +100,18 @@ class RegisterView(generics.CreateAPIView):
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUser]
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminOrSelf]  # Changed from IsAdminUser
     lookup_field = 'matricule'
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [IsAdminUser()]
+        return super().get_permissions()
 
 class RoleListView(generics.ListCreateAPIView):
     queryset = Role.objects.all()
@@ -176,3 +183,18 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class VerifyTokenAndPermissions(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'matricule': user.matricule,
+            'role': user.role.name if hasattr(user, 'role') else None,
+            'is_admin': user.role.is_admin if hasattr(user, 'role') else False,
+            'permissions': {
+                'can_view_users': IsAdminUser().has_permission(request, self),
+                'can_edit_users': IsAdminOrSelf().has_permission(request, self)
+            }
+        })

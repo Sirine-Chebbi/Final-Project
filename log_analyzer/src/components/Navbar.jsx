@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { useRef, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { GetUser } from './Services/Userservice';
+import { GetUser } from '../Services/Userservice';
 import PropTypes from 'prop-types';
 
 const Navbar = (props) => {

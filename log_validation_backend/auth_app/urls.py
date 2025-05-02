@@ -10,7 +10,8 @@ from .views import (
     RoleDetailView,
     ChangePasswordView,
     LogoutView,
-    VerifyAuthView
+    VerifyAuthView,
+    VerifyTokenAndPermissions
 )
 
 urlpatterns = [
@@ -24,4 +25,6 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('verify/', VerifyAuthView.as_view(), name='verify-auth'),
+    path('verify-permissions/', VerifyTokenAndPermissions.as_view(), name='verify-permissions'),
+
 ]

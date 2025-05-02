@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState, useRef, useEffect } from "react";
 import { Toast } from "primereact/toast";
 import { jwtDecode } from "jwt-decode";
-import { GetUser } from '../Services/Userservice';
+import { GetUser } from '../../Services/Userservice';
 
 
 function Profile(props) {
@@ -30,17 +30,22 @@ function Profile(props) {
     }
 
     const fetchUser = async () => {
-        const response = await GetUser(userData.matricule);
-        const data = await response.json();
-        setNom(data.nom);
-        setPrenom(data.prenom);
-        setMatricule(data.matricule);
-        setPoste(data.poste);
+        try {
+            const data = await GetUser(userData.matricule);  // plus besoin de .json()
+            setNom(data.nom);
+            setPrenom(data.prenom);
+            setMatricule(data.matricule);
+            setPoste(data.poste);
+        } catch (err) {
+            console.error("Erreur lors de la récupération de l'utilisateur", err);
+            showToast('error', 'Erreur', 'Impossible de charger les données de profil.');
+        }
     };
 
     useEffect(() => {
-        fetchUser();
-    })
+    fetchUser();
+}, []); // [] pour ne le faire qu'une seule fois
+
 
     const showToast = (severity, summary, detail) => {
         toast.current.show({ severity, summary, detail, life: 3000 });

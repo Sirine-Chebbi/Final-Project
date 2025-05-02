@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useRef, useEffect } from "react";
 import { Toast } from "primereact/toast";
-import { GetUser } from '../Services/Userservice';
+import { GetUser } from '../../Services/Userservice';
 
 function Modifieruser(props) {
     const [nom, setNom] = useState('');
