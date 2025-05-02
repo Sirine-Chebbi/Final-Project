@@ -13,7 +13,8 @@ import Filters from "../components/Wifi_Conduit/Filters"
 import api from '../Services/api';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
-import { authService } from "../Services/authService"; // Importez le service d'authentification
+import { authService } from "../Services/authService";
+import Profile from "../components/Admin/Profile"
 
 function Wifi_Conduit() {
   const [selectedFrequency, setSelectedFrequency] = useState("");
@@ -26,6 +27,7 @@ function Wifi_Conduit() {
   const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [showProfile, setShowProfile] = useState(false);
 
   const fetchTestResults = async () => {
     try {
@@ -39,7 +41,6 @@ function Wifi_Conduit() {
 
       const response = await api.get("wifi-conduit/results/without-delta-desc/");
       setTestResults(response.data.results);
-      // Réinitialiser les résultats filtrés après un nouveau chargement
       setFilteredResults(response.data.results);
     } catch (error) {
       console.error("Error fetching test results", error);
@@ -66,14 +67,15 @@ function Wifi_Conduit() {
 
   // Fonction pour rafraîchir les données après un upload réussi
   const handleUploadSuccess = async () => {
-    await fetchTestResults(); // Recharge les données
+    await fetchTestResults();
   };
 
   if (loading) return <div>Loading...</div>;
 
   return (
     <>
-      <Navbar />
+      <Navbar showProfile={showProfile} setShowProfile={setShowProfile} />
+      <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile} />
       <Menu />   
       <div className="pr-30 pl-60 mb-10">
         <div className="flex justify-between mt-10">

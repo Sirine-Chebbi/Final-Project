@@ -7,6 +7,7 @@ import UploadTemps from '../components/Analyse_temps/UploadTemps';
 import Parametre_temps from '../components/Analyse_temps/Parametre_temps';
 import Table_temps from '../components/Analyse_temps/Table_temps';
 import Graph_temps from '../components/Analyse_temps/Graph_temps';
+import Profile from "../components/Admin/Profile"
 
 const Temps = () => {
     const [tempsResults, setTempsResults] = useState([]);
@@ -14,6 +15,8 @@ const Temps = () => {
     const [equipe, setEquipe] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [showProfile, setShowProfile] = useState(false);
+
 
     const fetchTestResults = async () => {
         try {
@@ -60,7 +63,8 @@ const Temps = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar showProfile={showProfile} setShowProfile={setShowProfile}></Navbar>
+            <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
             <div className="ml-40 mr-40 mt-10">
                 <UploadTemps onUploadSuccess={fetchTestResults} />
                 <Parametre_temps 

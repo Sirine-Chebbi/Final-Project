@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Toast } from 'primereact/toast';
 
-const Tablerole = (props) => {
+const Tablerole = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const toast = useRef(null);

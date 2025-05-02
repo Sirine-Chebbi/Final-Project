@@ -4,19 +4,10 @@ import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import api from "../../Services/api"
 
-const Tableuser = (props) => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const toast = useRef(null);
+const Tableuser = (props) => {  
 
-  const showErrorToast = (message) => {
-    toast.current.show({
-      severity: "error",
-      summary: "Erreur",
-      detail: message,
-      life: 4000,
-    });
-  };
+  const [prenom , setPrenom] = useState('');
+  const [Poste , setPoste] = useState('');
 
   const fetchUsers = async () => {
     try {
@@ -34,16 +25,22 @@ const Tableuser = (props) => {
   useEffect(() => {
     fetchUsers();
   }, []);
+  const resetSearch = () =>{
+    setPrenom('');
+    setPoste('');
+    document.getElementById("valuePoste").value = '';
+    document.getElementById("valuePrenom").value = '';
+  }
+
 
 
   return (
     <>
-      <Toast ref={toast} position="top-center" />
       <div>
         <div className="justify-between flex">
           <div className="flex place-items-center gap-3 mb-10">
             <h1
-              onClick={() => props.setVisibility(!props.Hidden)}
+              onClick={() => props.setVisibility(!props.Hidden) | resetSearch()}
               className="text-cyan-400 -mb-5 text-2xl font-medium place-items-center flex gap-3 hover:bg-cyan-200/20 cursor-pointer p-3 rounded-2xl h-20 duration-200"
             >
               <svg
@@ -64,14 +61,18 @@ const Tableuser = (props) => {
             </h1>
             <input
               type="text"
-              placeholder="Nom"
+              id="valuePrenom"
+              onChange={(e) => setPrenom(e.target.value)}
+              placeholder="Prenom"
               className={`${
                 props.Hidden ? "opacity-100 ml-10" : "opacity-0"
               } border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`}
             />
             <input
               type="text"
+              id="valuePoste"
               placeholder="poste"
+              onChange={(e) => setPoste(e.target.value)}
               className={`${
                 props.Hidden ? "opacity-100 ml-10" : "opacity-0"
               } border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`}
@@ -85,8 +86,8 @@ const Tableuser = (props) => {
           </button>
         </div>
 
-        <div className="w-350 overflow-x-auto rounded-xl border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 bg-gray-900 max-h-max duration-200">
-          {loading ? (
+        <div className="w-350 overflow-x-auto rounded-xl border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 bg-gray-900 max-h-140 duration-200">
+          {props.loading ? (
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
             </div>
@@ -127,35 +128,40 @@ const Tableuser = (props) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-cyan-400 bg-gray-900">
-                {users.length > 0 ? (
-                  users.map((user) => (
+                {props.users.length > 0 ? (
+                  props.users
+                  .filter(user =>
+                    user.prenom.toLowerCase().includes(prenom.toLowerCase()) &&
+                    user.poste.toLowerCase().includes(Poste.toLowerCase())
+                  )
+                  .map((user) => (
                     <tr
                       key={user.matricule}
-                      className="hover:bg-gray-800 text-xl text-center"
+                      className={`hover:bg-gray-800 text-xl text-center ${user.role.id == "1" ? "hidden" : ""}`}
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-white">
-                        {user.nom && typeof user.nom === "string"
+                        {user.nom
                           ? user.nom
                           : "Nom non disponible"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-white">
-                        {user.prenom && typeof user.prenom === "string"
+                        {user.prenom
                           ? user.prenom
                           : "Prénom non disponible"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-white">
-                        {user.matricule && typeof user.matricule === "string"
+                        {user.matricule
                           ? user.matricule
                           : "Matricule non disponible"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-white">
-                        {user.poste && typeof user.poste === "string"
+                        {user.poste
                           ? user.poste
                           : "Poste non disponible"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-white">
                         <div className="flex gap-5 justify-center">
-                          <button className="rounded-xl p-3 bg-green-900 cursor-pointer group hover:bg-green-400 duration-200">
+                          <button onClick={() => props.setVisibilitymod(!props.Mod) | props.setMatricule(user.matricule)} className="rounded-xl p-3 bg-green-900 cursor-pointer group hover:bg-green-400 duration-200">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -171,7 +177,7 @@ const Tableuser = (props) => {
                               />
                             </svg>
                           </button>
-                          <button className="p-3 bg-red-900 rounded-xl cursor-pointer group hover:bg-red-500 duration-200">
+                          <button onClick={() => props.setVisibilitydelete(!props.Delete) | props.setMatricule(user.matricule)} className="p-3 bg-red-900 rounded-xl cursor-pointer group hover:bg-red-500 duration-200">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -214,7 +220,14 @@ Tableuser.propTypes = {
   setVisibility: PropTypes.func.isRequired,
   Hidden: PropTypes.bool.isRequired,
   setVisibilityuser: PropTypes.func.isRequired,
+  setVisibilitymod: PropTypes.func.isRequired,
   User: PropTypes.bool.isRequired,
+  setVisibilitydelete: PropTypes.func.isRequired,
+  Delete: PropTypes.bool.isRequired,
+  users: PropTypes.array.isRequired,
+  Mod: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setMatricule: PropTypes.string.isRequired,
 };
 
 export default Tableuser;

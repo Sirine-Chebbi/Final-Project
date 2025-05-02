@@ -125,12 +125,15 @@ class ChangePasswordView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
+        
+        # Set is_admin context to the serializer if the user is admin
+        is_admin = self.object.role and self.object.role.is_admin
+        serializer = self.get_serializer(data=request.data, context={'is_admin': is_admin})
 
         if serializer.is_valid():
-            # Vérifier que seul un admin peut changer le mot de passe d'un autre utilisateur
+            # Handle admin changing another user's password
             if 'matricule' in request.data and request.data['matricule'] != self.object.matricule:
-                if not (self.object.role and self.object.role.is_admin):
+                if not is_admin:
                     return Response(
                         {"detail": "Seul un administrateur peut changer le mot de passe d'un autre utilisateur."},
                         status=status.HTTP_403_FORBIDDEN
@@ -143,12 +146,12 @@ class ChangePasswordView(generics.UpdateAPIView):
                         {"detail": "Utilisateur non trouvé."},
                         status=status.HTTP_404_NOT_FOUND
                     )
-                
+
                 user.set_password(serializer.validated_data['new_password'])
                 user.save()
                 return Response({"detail": "Mot de passe mis à jour avec succès."}, status=status.HTTP_200_OK)
             
-            # Vérifier l'ancien mot de passe pour les changements personnels
+            # Handle regular user changing their own password
             if not self.object.check_password(serializer.validated_data['old_password']):
                 return Response(
                     {"old_password": ["Mot de passe incorrect."]}, 
@@ -161,3 +164,15 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # Blacklist the refresh token
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

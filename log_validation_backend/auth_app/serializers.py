@@ -11,12 +11,11 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    role = RoleSerializer()
+    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
     
     class Meta:
         model = CustomUser
-        fields = ('matricule', 'nom', 'prenom', 'poste', 'role')
-
+        fields = ('matricule', 'nom', 'prenom', 'poste', 'role', 'is_active', 'is_staff')
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -67,11 +66,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         return CustomUser.objects.create_user(**validated_data)
     
 class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
-    confirm_password = serializers.CharField(required=True)
+    old_password = serializers.CharField(required=False)
+    new_password = serializers.CharField()
+    confirm_password = serializers.CharField()
 
     def validate(self, data):
-        if data['new_password'] != data['confirm_password']:
-            raise serializers.ValidationError("Les nouveaux mots de passe ne correspondent pas.")
+        # Check if new_password and confirm_password match
+        if data.get('new_password') != data.get('confirm_password'):
+            raise serializers.ValidationError({"confirm_password": "Les mots de passe ne correspondent pas."})
         return data
+
+    def validate_old_password(self, value):
+        # If it's an admin changing another user's password, skip the old_password check
+        if not self.context.get('is_admin') and not value:
+            raise serializers.ValidationError("L'ancien mot de passe est requis.")
+        return value

@@ -6,12 +6,16 @@ import Navbar from "../components/Navbar";
 import Uploadtest from "../components/Test/Uploadtest";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../Services/authService";
+import Profile from "../components/Admin/Profile"
+
 
 const Test_Wifi = () => {
     const [testResults, setTestResults] = useState([]);
     const [testLine, setTestLine] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [nbligne, setligne] = useState([]);
+    const [showProfile, setShowProfile] = useState(false);
 
     const exportPDF = () => {
         if (testResults.length === 0) {
@@ -103,7 +107,8 @@ const Test_Wifi = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar showProfile={showProfile} setShowProfile={setShowProfile}></Navbar>
+            <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
             <div className="-mt-40 h-screen grid place-items-center overflow-x-hidden">
                 <div className="flex justify-between h-fit ml-20 mr-20 mt-30 p-5">
                     <div className='mr-20'>

@@ -1,13 +1,13 @@
 import { NavLink } from "react-router-dom";
+import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { authService } from "../../Services/authService"
 
-const Nav = () => {
+const Nav = (props) => {
   const navigate = useNavigate();
   const toast = useRef(null);
-
   const showToast = (severity, summary, detail) => {
     toast.current.show({ severity, summary, detail, life: 3000 });
   };
@@ -78,7 +78,7 @@ const Nav = () => {
                 Mode
               </NavLink>
               
-              <button className="text-cyan-400 cursor-pointer group flex items-center gap-2 hover:text-cyan-300 transition-colors">
+              <button onClick={() => props.setShowProfile(!props.showProfile)} className="text-cyan-400 cursor-pointer group flex items-center gap-2 hover:text-cyan-300 transition-colors">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -102,5 +102,10 @@ const Nav = () => {
     </>
   );
 };
+
+Nav.propTypes = {
+  setShowProfile: PropTypes.func.isRequired,
+  showProfile: PropTypes.bool.isRequired
+}
 
 export default Nav;
