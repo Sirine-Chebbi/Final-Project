@@ -1,5 +1,5 @@
 from django.db import models
-from auth_app.models import CustomUser
+from django.conf import settings
 
 # Create your models here.
 
@@ -14,3 +14,13 @@ class TestCondition(models.Model):
     IQTESTER_HW_VERSION_01 = models.CharField(max_length=100, null=True)
     Tester_1_SN = models.CharField(max_length=100, null=True)
     Firmware_revision = models.CharField(max_length=100, null=True)
+
+
+    # Clé étrangère vers CustomUser
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # Cela utilise votre modèle CustomUser
+        on_delete=models.CASCADE,  # ou PROTECT / CASCADE selon le besoin
+        null=True,
+        blank=True,
+        related_name='test_conditions'
+    )

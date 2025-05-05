@@ -98,7 +98,7 @@ function NftFilter({
               className="w-70 max-h-max text-lg p-4 text-cyan-400 outline-none place-self-center flex"
               value={mesure}
             >
-              <option value="">Selectionner Une Mesure</option>
+              <option value="">Sélectionner Une Mesure</option>
               {[...new Set(testResults.map((result) => result.mesure))]
                 .filter((mesure) => mesure)
                 .map((mesureUnique, index) => (

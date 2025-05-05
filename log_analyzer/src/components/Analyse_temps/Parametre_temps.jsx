@@ -55,7 +55,7 @@ function Parametre_temps({ tempsResults, setOperation, setEquipe }) {
             type="text"
             id="operation"
             onChange={(e) => {setOp(e.target.value)}}
-            placeholder="Operation"
+            placeholder="Opération"
             className="ml-5 border-3 border-red-400 w-50 p-5 rounded-2xl text-xl font-medium text-red-400 h-15 outline-none"
           />
           <button

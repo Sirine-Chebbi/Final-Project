@@ -256,7 +256,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
         onClick={exportToPDF}
         className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400"
       >
-        Générer le Rapport Complet
+        Générer le Rapport Complet en pdf
       </button>
     </>
   );

@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+from auth_app.models import CustomUser
 from .models import NftResults
 
 def extract_measure_data(content, filename=None):
@@ -79,7 +81,13 @@ def upload_nft_results(request):
     successful_files = []
     
     # Optionnel: vider les anciennes données
-    NftResults.objects.filter(User=request.user).delete()
+    try:
+        user = request.user    
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Utilisateur non trouvé"}, status=404)
+
+    # Suppression des anciennes données pour cet utilisateur
+    NftResults.objects.filter(created_by=user).delete()
 
 
     for uploaded_file in request.FILES.getlist('nft_files'):
@@ -92,9 +100,10 @@ def upload_nft_results(request):
                 continue
                 
             objs = [
-                NftResults(**measure_data, User=request.user)
+                NftResults(**measure_data, created_by=user)
                 for measure_data in measures
             ]
+
             created = NftResults.objects.bulk_create(objs)
             total_count += len(created)
             successful_files.append(uploaded_file.name)
@@ -119,7 +128,7 @@ def upload_nft_results(request):
 
 @api_view(['GET'])
 def get_nft_results(request):
-    queryset = NftResults.objects.exclude(status=2)
+    queryset = NftResults.objects.filter(created_by=request.user).exclude(status=2)
     
     if not queryset.exists():
         return Response({"message": "Aucune donnée disponible"}, 
