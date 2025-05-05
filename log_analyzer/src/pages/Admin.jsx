@@ -1,7 +1,7 @@
 import Nav from '../components/Admin/Nav';
 import Tableuser from '../components/Admin/Tableuser';
 import Ajouteru from "../components/Admin/Ajouteru";
-import Deleteuser from '../components/Admin/deleteuser';
+import Deleteuser from '../components/Admin/Deleteuser';
 import Profile from '../components/Admin/Profile';
 
 import { useNavigate } from 'react-router-dom';

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+import os
+
 from datetime import timedelta
 
 
@@ -153,13 +155,17 @@ WSGI_APPLICATION = 'log_validation_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'log-analyzer',      # Nom de votre base de données
         'USER': 'root',              # Utilisateur par défaut de XAMPP
         'PASSWORD': '',              # Mot de passe vide pour XAMPP
-        'HOST': 'localhost',         # XAMPP tourne en local
+        'HOST': 'Localhost',         # XAMPP tourne en local
         'PORT': '3306',              # Port par défaut de MySQL dans XAMPP
         'OPTIONS': {
             'charset': 'utf8mb4',    # Support des emojis/unicode
@@ -200,6 +206,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True  # For development only
 
 
 # Static files (CSS, JavaScript, Images)

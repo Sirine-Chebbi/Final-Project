@@ -3,7 +3,7 @@ import Wifi_Conduit from "./pages/Wifi_Conduit";
 import Test_Wifi from "./pages/Test_Wifi";
 import Sign_in from "./pages/Sign_in";
 import NFT from "./pages/NFT";
-import Temps from "./pages/temps";
+import Temps from "./pages/Temps";
 import Admin from "./pages/Admin";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";

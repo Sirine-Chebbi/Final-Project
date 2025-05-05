@@ -281,12 +281,6 @@ def upload_log(request):
     if not all_test_results:
         return Response({"error": "Aucun test trouvé dans les fichiers"}, status=400)
 
-
-        # Création des objets en bulk
-    objs = [
-        ConduitResult(**all_test_results, User=request.user)
-        for all_test_results in test_results
-    ]
     ConduitResult.objects.bulk_create(all_test_results) 
     return Response({"message": f"{len(all_test_results)} tests importés avec succès"})
 

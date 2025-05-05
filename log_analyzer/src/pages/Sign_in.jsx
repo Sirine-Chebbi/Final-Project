@@ -59,13 +59,11 @@ const Sign_in = () => {
           <div className="p-10" id="upload">
             <div className="flex h-16 items-center justify-between">
               <div className="md:flex ml-5">
-                <a className="block" href="/wifi">
                   <img
                     className="h-40"
                     alt="sagemcom"
                     src="../src/assets/logo.png"
                   />
-                </a>
               </div>
             </div>
           </div>
