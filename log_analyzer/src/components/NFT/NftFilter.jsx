@@ -114,12 +114,14 @@ function NftFilter({
           </div>
           <input
             type="text"
+            disabled
             id="input1"
             placeholder="Limite Min"
             className="border-3 border-green-400 w-40 rounded-2xl text-xl p-3 h-14 font-medium text-green-400 outline-none"
           />
           <input
             type="text"
+            disabled
             id="input2"
             placeholder="Limite Max"
             className="border-3 border-orange-500 w-40 rounded-2xl text-xl p-3 h-14 font-medium text-orange-500 outline-none"
