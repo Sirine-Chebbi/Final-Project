@@ -3,7 +3,6 @@ from django.conf import settings
 
 
 class NftResults(models.Model):
-    User = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     mesure = models.CharField(max_length=50)
     status = models.IntegerField()  # 0: OK, 1: KO, 2: Non fait (à exclure)
     valeur = models.FloatField(null=True, blank=True)
