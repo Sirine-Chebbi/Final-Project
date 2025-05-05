@@ -69,7 +69,7 @@ def upload_test_time_results(request):
     successful_files = []
 
     # Optionnel: vider les anciennes données
-    TempsTest.objects.all().delete()
+    TempsTest.objects.filter(User=request.user).delete()
 
     # Gestion des noms de champs différents
     files = request.FILES.getlist('files')
@@ -86,7 +86,7 @@ def upload_test_time_results(request):
 
             # Création des objets en bulk
             objs = [
-                TempsTest(**data)
+                TempsTest(**data, User=request.user)
                 for data in time_data
             ]
             created = TempsTest.objects.bulk_create(objs)

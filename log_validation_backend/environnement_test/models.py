@@ -1,8 +1,10 @@
 from django.db import models
+from auth_app.models import CustomUser
 
 # Create your models here.
 
 class TestCondition(models.Model):
+    User = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     APPLICATION_VERSION = models.CharField(max_length=100, null=True)
     IQFACT = models.CharField(max_length=100, null=True)
     BOOTFS1 = models.CharField(max_length=100, null=True)

@@ -10,7 +10,8 @@ from .models import TestCondition
 
 @api_view(['POST'])
 def upload_test_condition(request):
-    TestCondition.objects.all().delete()
+    TestCondition.objects.filter(User=request.user).delete()
+
 
     if 'file' not in request.FILES:
         return Response({"error": "Aucun fichier trouvé"}, status=400)
@@ -55,6 +56,7 @@ def upload_test_condition(request):
                 1).strip() if tester_sn_match else None,
             Firmware_revision=firmware_match.group(
                 1).strip() if firmware_match else None,
+            User=request.user
         )
 
     return Response({"status": "success", "message": "Données extraites et sauvegardées avec succès"})

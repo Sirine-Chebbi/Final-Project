@@ -59,7 +59,7 @@ def extract_measure_data(content, filename=None):
             'antenne': antenne,
             'duree': duree,
             'unite': unite if unite != '0' else None,
-            'source_file': filename
+            'source_file': filename,
         })
     
     return measures
@@ -79,7 +79,7 @@ def upload_nft_results(request):
     successful_files = []
     
     # Optionnel: vider les anciennes données
-    NftResults.objects.all().delete()
+    NftResults.objects.filter(User=request.user).delete()
 
 
     for uploaded_file in request.FILES.getlist('nft_files'):
@@ -92,7 +92,7 @@ def upload_nft_results(request):
                 continue
                 
             objs = [
-                NftResults(**measure_data)
+                NftResults(**measure_data, User=request.user)
                 for measure_data in measures
             ]
             created = NftResults.objects.bulk_create(objs)

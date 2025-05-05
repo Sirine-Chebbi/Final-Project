@@ -1,7 +1,9 @@
 from django.db import models
+from auth_app.models import CustomUser
 
 # Create your models here.
 class ConduitResult(models.Model):
+    User = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     nom_fichier = models.CharField(max_length=150, null=True)     
     nbrfile = models.FloatField()
     code = models.CharField(max_length=50, null=True)  # Code du log

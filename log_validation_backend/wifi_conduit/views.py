@@ -10,7 +10,9 @@ from .models import ConduitResult
 
 @api_view(['POST'])
 def upload_log(request):
-    ConduitResult.objects.all().delete()
+
+    ConduitResult.objects.filter(User=request.user).delete()
+
 
     if 'file' not in request.FILES:
         return Response({"error": "Aucun fichier trouvé"}, status=400)
@@ -265,7 +267,7 @@ def upload_log(request):
                             rssi_min=rssi_min,
                             rssi_max=rssi_max,
                             evm_min=evm_min,
-                            evm_max=evm_max
+                            evm_max=evm_max,
                         ))
 
         if test_results:
@@ -274,6 +276,12 @@ def upload_log(request):
     if not all_test_results:
         return Response({"error": "Aucun test trouvé dans les fichiers"}, status=400)
 
+
+        # Création des objets en bulk
+    objs = [
+        ConduitResult(**all_test_results, User=request.user)
+        for all_test_results in test_results
+    ]
     ConduitResult.objects.bulk_create(all_test_results) 
     return Response({"message": f"{len(all_test_results)} tests importés avec succès"})
 

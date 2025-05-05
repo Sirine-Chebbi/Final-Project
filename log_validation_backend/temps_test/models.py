@@ -1,6 +1,8 @@
 from django.db import models
+from auth_app.models import CustomUser
 
 class TempsTest(models.Model):
+    User = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     reference = models.IntegerField()
     nom = models.CharField(max_length=300)
     mesure = models.CharField(max_length=50)

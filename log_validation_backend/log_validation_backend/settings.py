@@ -211,3 +211,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
+
+DATA_UPLOAD_MAX_NUMBER_FILES = None
