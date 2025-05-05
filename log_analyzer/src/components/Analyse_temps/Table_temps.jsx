@@ -35,7 +35,7 @@ const Table_temps = ({ tempsResults }) => {
                 scope="col"
                 className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap"
               >
-                Referance
+                Référance
               </th>
               <th
                 scope="col"
@@ -59,7 +59,7 @@ const Table_temps = ({ tempsResults }) => {
                 scope="col"
                 className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap"
               >
-                Unite
+                Unité
               </th>
               <th
                 scope="col"

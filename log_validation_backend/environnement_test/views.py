@@ -5,12 +5,20 @@ from django.core.files.storage import default_storage
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from auth_app.models import CustomUser
+
 from .models import TestCondition
 
 
 @api_view(['POST'])
 def upload_test_condition(request):
-    TestCondition.objects.all().delete()
+    try:
+        user = request.user    
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Utilisateur non trouvé"}, status=404)
+
+    # Suppression des anciennes données pour cet utilisateur
+    TestCondition.objects.filter(created_by=user).delete()
 
     if 'file' not in request.FILES:
         return Response({"error": "Aucun fichier trouvé"}, status=400)
@@ -55,6 +63,7 @@ def upload_test_condition(request):
                 1).strip() if tester_sn_match else None,
             Firmware_revision=firmware_match.group(
                 1).strip() if firmware_match else None,
+            created_by=user
         )
 
     return Response({"status": "success", "message": "Données extraites et sauvegardées avec succès"})
@@ -62,7 +71,7 @@ def upload_test_condition(request):
 
 @api_view(['GET'])
 def get_test_condition(request):
-    versions = TestCondition.objects.all()
+    versions = TestCondition.objects.filter(created_by=request.user)
 
     if not versions.exists():
         return Response({"message": "Aucune donnée disponible"}, status=404)

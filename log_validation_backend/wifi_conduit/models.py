@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+
 
 # Create your models here.
 class ConduitResult(models.Model):
@@ -35,6 +37,16 @@ class ConduitResult(models.Model):
     rssi_max = models.FloatField(null=True)
     evm_min = models.FloatField(null=True)
     evm_max = models.FloatField(null=True)
+
+        # Clé étrangère vers CustomUser
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # Cela utilise votre modèle CustomUser
+        on_delete=models.CASCADE,  # ou PROTECT / CASCADE selon le besoin
+        null=True,
+        blank=True,
+        related_name='wifi_conduit'
+    )
+
 
     def __str__(self):
         return f"{self.code} - {self.type_gega} - {self.frequence}MHz - ANT{self.ant}"

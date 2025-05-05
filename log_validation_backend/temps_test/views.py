@@ -3,26 +3,25 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+from auth_app.models import CustomUser
 from .models import TempsTest
 
 
 def extract_test_time_data(content, filename=None):
-    # Pattern pour détecter la référence et le nom
     cie_pattern = re.compile(
         r'<CIE>\s*Nom\s*:\s*(?P<nom>[^\n]+)\s*\n\s*<CIE>\s*R\S*f\S*rence\s*:\s*(?P<reference>\d+)',
         re.IGNORECASE
     )
 
-    # Pattern optimisé pour extraire juste l'heure (premier nombre du timestamp)
     time_pattern = re.compile(
-        r'\[(?P<heure>\d{2}):\d{2}:\d{2}:\d{3}\].*?'  # Capture juste l'heure (HH)
+        r'\[(?P<heure>\d{2}):\d{2}:\d{2}:\d{3}\].*?'
         r'Mesure\s*<(?P<mesure>MES_\w+_Temps_Test)>\s*:[^\n]*Status\s*(?P<status>\d+).*?\n'
-        r'(?:.*?\n)+?'  # Skip any lines in between
+        r'(?:.*?\n)+?'
         r'\s*(?P<valeur>-?\d+\.\d+)\s*(?P<unite>[a-zA-Z/%°]+)?\s*(?:\n|$)',
         re.DOTALL
     )
 
-    # Extraction des infos CIE
     cie_match = cie_pattern.search(content)
     if not cie_match:
         return []
@@ -30,17 +29,16 @@ def extract_test_time_data(content, filename=None):
     reference = int(cie_match.group('reference'))
     nom = cie_match.group('nom').strip()
 
-    # Extraction des données avec l'heure
     results = []
     for match in time_pattern.finditer(content):
         try:
             full_time = match.group('heure')
-            hour_only = full_time.split(':')[0]  # On prend juste le premier nombre (12)
-            
+            hour_only = full_time.split(':')[0]
+
             results.append({
                 'reference': reference,
                 'nom': nom,
-                'heure': hour_only,  
+                'heure': hour_only,
                 'mesure': match.group('mesure'),
                 'status': int(match.group('status')),
                 'valeur': float(match.group('valeur')),
@@ -59,7 +57,6 @@ def upload_test_time_results(request):
         return Response({'status': 'error', 'message': 'Méthode non autorisée'},
                         status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    # Vérification plus robuste des fichiers
     if 'files' not in request.FILES:
         return Response({'status': 'error', 'message': 'Aucun fichier fourni'},
                         status=status.HTTP_400_BAD_REQUEST)
@@ -68,10 +65,11 @@ def upload_test_time_results(request):
     errors = []
     successful_files = []
 
-    # Optionnel: vider les anciennes données
-    TempsTest.objects.all().delete()
+    user = request.user
 
-    # Gestion des noms de champs différents
+    # Supprimer les anciennes données de l'utilisateur connecté
+    TempsTest.objects.filter(created_by=user).delete()
+
     files = request.FILES.getlist('files')
 
     for uploaded_file in files:
@@ -80,15 +78,14 @@ def upload_test_time_results(request):
             time_data = extract_test_time_data(content, uploaded_file.name)
 
             if not time_data:
-                errors.append(
-                    f"Fichier {uploaded_file.name}: aucune mesure de temps valide trouvée")
+                errors.append(f"Fichier {uploaded_file.name}: aucune mesure de temps valide trouvée")
                 continue
 
-            # Création des objets en bulk
-            objs = [
-                TempsTest(**data)
-                for data in time_data
-            ]
+            # Ajouter created_by=user à chaque élément
+            for item in time_data:
+                item['created_by'] = user
+
+            objs = [TempsTest(**data) for data in time_data]
             created = TempsTest.objects.bulk_create(objs)
             total_count += len(created)
             successful_files.append(uploaded_file.name)
@@ -114,15 +111,15 @@ def upload_test_time_results(request):
 
 @api_view(['GET'])
 def get_test_time_results(request):
-    queryset = TempsTest.objects.exclude(status=2)
+    user = request.user
+    queryset = TempsTest.objects.filter(created_by=user).exclude(status=2)
 
     if not queryset.exists():
         return Response({"message": "Aucune donnée disponible"},
                         status=status.HTTP_404_NOT_FOUND)
 
-    results = []
-    for result in queryset:
-        res = {
+    results = [
+        {
             "reference": result.reference,
             "nom": result.nom,
             "mesure": result.mesure,
@@ -132,7 +129,8 @@ def get_test_time_results(request):
             "unite": result.unite,
             "source_file": result.source_file,
         }
-        results.append(res)
+        for result in queryset
+    ]
 
     return Response({
         'count': len(results),

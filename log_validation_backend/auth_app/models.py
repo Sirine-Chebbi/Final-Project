@@ -59,7 +59,7 @@ class CustomUserManager(BaseUserManager):
             **extra_fields
         )
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    matricule = models.CharField(max_length=50, primary_key=True)
+    matricule = models.CharField(max_length=50, primary_key=True    )
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     poste = models.CharField(max_length=100)

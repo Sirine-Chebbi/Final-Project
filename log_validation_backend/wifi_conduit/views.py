@@ -1,7 +1,6 @@
 import os
 import re
-import numpy as np
-
+from auth_app.models import CustomUser
 from django.core.files.storage import default_storage
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -10,7 +9,13 @@ from .models import ConduitResult
 
 @api_view(['POST'])
 def upload_log(request):
-    ConduitResult.objects.all().delete()
+    try:
+        user = request.user    
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Utilisateur non trouvé"}, status=404)
+
+    # Suppression des anciennes données pour cet utilisateur
+    ConduitResult.objects.filter(created_by=user).delete()
 
     if 'file' not in request.FILES:
         return Response({"error": "Aucun fichier trouvé"}, status=400)
@@ -107,7 +112,8 @@ def upload_log(request):
                 rssi_min=None,
                 rssi_max=None,
                 evm_min=None,
-                evm_max=None
+                evm_max=None,
+                created_by=user,
             ))
         # ==================================================
         # FIN SECTION: Extraction des deltas
@@ -265,7 +271,8 @@ def upload_log(request):
                             rssi_min=rssi_min,
                             rssi_max=rssi_max,
                             evm_min=evm_min,
-                            evm_max=evm_max
+                            evm_max=evm_max,
+                            created_by=user
                         ))
 
         if test_results:
@@ -284,7 +291,9 @@ def results_without_delta_desc(request):
     fields = [f.name for f in ConduitResult._meta.get_fields() 
              if f.name not in exclude_fields and not f.is_relation]
     
-    queryset = ConduitResult.objects.filter(delta__isnull=True, description__isnull=True)
+    # Filtrer par utilisateur connecté
+    user = request.user
+    queryset = ConduitResult.objects.filter(delta__isnull=True, description__isnull=True, created_by=user)
     results = list(queryset.values(*fields))
     
     return Response({
@@ -299,13 +308,16 @@ def results_with_delta_desc(request):
             if not f.is_relation and f.concrete
         ]
         
+        # Filtrer par utilisateur connecté
+        user = request.user
         queryset = ConduitResult.objects.exclude(
             delta__isnull=True
         ).exclude(
             description__isnull=True
         ).filter(
             delta__isnull=False, 
-            description__isnull=False
+            description__isnull=False,
+            created_by=user  # Filtrage pour l'utilisateur connecté
         )
         
         results = list(queryset.values(*fields))
