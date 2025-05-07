@@ -30,15 +30,13 @@ const Nav = (props) => {
         <div className="p-10" id="upload">
           <div className="flex h-16 items-center justify-between">
             <div className="md:flex ml-5">
-              <a className="block" href="/wifi">
                 <img
                   className="h-40"
                   alt="sagemcom"
                   src="../src/assets/logo.png"
                 />
-              </a>
             </div>
-            <div className="bg-black/40 rounded-3xl w-120 h-20 mr-15 flex items-center justify-between p-10">
+            <div className="bg-cyan-800/10 rounded-3xl w-120 h-20 mr-15 flex items-center justify-between p-10">
               <button
                 onClick={handleLogout}
                 className="text-cyan-400 cursor-pointer group flex items-center gap-2 hover:text-cyan-300 transition-colors"

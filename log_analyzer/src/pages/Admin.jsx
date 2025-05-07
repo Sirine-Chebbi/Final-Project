@@ -111,13 +111,13 @@ const Admin = () => {
   return (
     <>
       <Toast ref={toast} position="top-center" />
-      <div className="bg-linear-to-br from-gray-950 to-sky-600 pb-30 h-screen min-h-fit">
+      <div className="bg-[url(../src/assets/Dashboard.jpg)] bg-cover pb-30 h-screen min-h-fit">
         <Nav showProfile={showProfile} setShowProfile={setShowProfile}></Nav>
         <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
         <Modifieruser setAdd={setAdd} Matricule={Matricule} trigger={Mod} setVisibilitymod={setVisibilitymod}></Modifieruser>
         <Ajouteru setAdd={setAdd} trigger={User} setVisibilityuser={setVisibilityuser}></Ajouteru>
         <Deleteuser setAdd={setAdd} Matricule={Matricule} trigger={Delete} setVisibilitydelete={setVisibilitydelete}></Deleteuser>
-        <div className="mt-20 flex justify-center">
+        <div className="mt-15 flex justify-center">
           <Tableuser Mod={Mod} setVisibilitymod={setVisibilitymod} setMatricule={setMatricule} users={users} loading={loading} Delete={Delete} setVisibilitydelete={setVisibilitydelete}  User={User} setVisibilityuser={setVisibilityuser} Hidden={Hidden} setVisibility={setVisibility}></Tableuser>
         </div>
         {/*<div className="mt-10 flex justify-center">

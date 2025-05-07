@@ -22,7 +22,7 @@ const Sign_in = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     if (!matricule.trim()) {
       showErrorToast("Veuillez entrer votre matricule");
       setLoading(false);
@@ -51,26 +51,33 @@ const Sign_in = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="h-screen grid place-items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
+      </div>
+    );
+  }
+
   return (
     <>
       <Toast ref={toastBL} position="top-center" />
-      <div className="bg-gradient-to-br from-gray-950 to-sky-600 h-screen">
-        <header>
-          <div className="p-10" id="upload">
-            <div className="flex h-16 items-center justify-between">
-              <div className="md:flex ml-5">
-                  <img
-                    className="h-40"
-                    alt="sagemcom"
-                    src="../src/assets/logo.png"
-                  />
-              </div>
+      <header>
+        <div className="p-10 fixed" id="upload">
+          <div className="flex h-16 items-center justify-between">
+            <div className="md:flex ml-5">
+              <img
+                className="h-40"
+                alt="sagemcom"
+                src="../src/assets/logo.png"
+              />
             </div>
           </div>
-        </header>
-
-        <form onSubmit={handleLogin}>
-          <div className="bg-black/60 backdrop-blur-sm rounded-2xl border-2 border-cyan-400 w-190 h-150 m-auto grid justify-items-center p-10">
+        </div>
+      </header>
+      <div className="bg-[url(../src/assets/bg-signin.jpg)] bg-cover h-screen flex justify-center place-items-center">
+        <form onSubmit={handleLogin} className="mt-15">
+          <div className="bg-black/60 backdrop-blur-sm rounded-2xl border-2 border-cyan-400 w-240 h-150 m-auto grid justify-items-center p-10">
             <h2 className="text-cyan-400 mt-5 text-5xl font-medium">
               Bienvenue
             </h2>

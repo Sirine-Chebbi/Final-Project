@@ -162,18 +162,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'log-analyzer',      # Nom de votre base de données
-        'USER': 'root',              # Utilisateur par défaut de XAMPP
-        'PASSWORD': '',              # Mot de passe vide pour XAMPP
-        'HOST': 'Localhost',         # XAMPP tourne en local
-        'PORT': '3306',              # Port par défaut de MySQL dans XAMPP
+        'NAME': os.getenv('MYSQL_DATABASE', 'log-analyzer'),
+        'USER': os.getenv('MYSQL_USER', 'root'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', ''),
+        'HOST': os.getenv('MYSQL_HOST', 'Localhost'),
+        'PORT': os.getenv('MYSQL_PORT', '3306'),
         'OPTIONS': {
-            'charset': 'utf8mb4',    # Support des emojis/unicode
-            'sql_mode': 'STRICT_TRANS_TABLES',  # Mode strict pour éviter les erreurs silencieuses
-            'init_command': "SET foreign_key_checks = 0;",  # Désactive temporairement les vérifications de clés étrangères
+            'charset': 'utf8mb4',
+            'sql_mode': 'STRICT_TRANS_TABLES',
+            'init_command': "SET foreign_key_checks = 0;",
         },
     }
 }
+
 
 AUTH_USER_MODEL = 'auth_app.CustomUser'
 
