@@ -33,7 +33,7 @@ const Nav = (props) => {
                 <img
                   className="h-40"
                   alt="sagemcom"
-                  src="../src/assets/logo.png"
+                  src="/assets/logo.png"
                 />
             </div>
             <div className="bg-cyan-800/10 rounded-3xl w-120 h-20 mr-15 flex items-center justify-between p-10">

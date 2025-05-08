@@ -69,13 +69,13 @@ const Sign_in = () => {
               <img
                 className="h-40"
                 alt="sagemcom"
-                src="../src/assets/logo.png"
+                src="/assets/logo.png"
               />
             </div>
           </div>
         </div>
       </header>
-      <div className="bg-[url(../src/assets/bg-signin.jpg)] bg-cover h-screen flex justify-center place-items-center">
+      <div className="bg-[url(/assets/bg-signin.jpg)] bg-cover h-screen flex justify-center place-items-center">
         <form onSubmit={handleLogin} className="mt-15">
           <div className="bg-black/60 backdrop-blur-sm rounded-2xl border-2 border-cyan-400 w-240 h-150 m-auto grid justify-items-center p-10">
             <h2 className="text-cyan-400 mt-5 text-5xl font-medium">

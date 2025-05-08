@@ -30,7 +30,7 @@ services:
       - DJANGO_AUTO_MIGRATE=1
     command: >
       sh -c "
-      /wait-for-db.sh db 3306 &&
+      /wait-for-db.sh &&
       if [ $$DJANGO_AUTO_MIGRATE -eq 1 ]; then
         python manage.py migrate;
       fi &&

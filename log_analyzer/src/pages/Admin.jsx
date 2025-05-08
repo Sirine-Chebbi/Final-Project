@@ -111,7 +111,7 @@ const Admin = () => {
   return (
     <>
       <Toast ref={toast} position="top-center" />
-      <div className="bg-[url(../src/assets/Dashboard.jpg)] bg-cover pb-30 h-screen min-h-fit">
+      <div className="bg-[url(/assets/Dashboard.jpg)] bg-cover pb-30 h-screen min-h-fit">
         <Nav showProfile={showProfile} setShowProfile={setShowProfile}></Nav>
         <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
         <Modifieruser setAdd={setAdd} Matricule={Matricule} trigger={Mod} setVisibilitymod={setVisibilitymod}></Modifieruser>
