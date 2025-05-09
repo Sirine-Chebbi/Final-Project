@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 
 import {
   Chart as ChartJS,
+  BarController,
   BarElement,
   CategoryScale,
   LinearScale,
@@ -16,6 +17,7 @@ import PropTypes from "prop-types";
 
 // Enregistrement complet des composants ChartJS nécessaires
 ChartJS.register(
+  BarController,
   BarElement,
   CategoryScale,
   LinearScale,

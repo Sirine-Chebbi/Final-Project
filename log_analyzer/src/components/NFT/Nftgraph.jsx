@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { GetUser } from 'log_analyzer/src/Services/Userservice';
 import {
   Chart as ChartJS,
+  BarController,
   BarElement,
   CategoryScale,
   LinearScale,
@@ -18,6 +19,7 @@ import { Chart } from "react-chartjs-2";
 import PropTypes from "prop-types";
 
 ChartJS.register(
+  BarController,
   BarElement,
   CategoryScale,
   LinearScale,
@@ -181,7 +183,7 @@ const prepareChartData = () => {
           x: parseFloat(x),
           y: y * scaleFactor,
         })),
-        backgroundColor: "rgba(239, 68, 68, 0.7)", // Using rgba color
+        backgroundColor: "rgba(239, 68, 68, 0.7)",
         yAxisID: "y1",
         barPercentage: 1.0,
         categoryPercentage: 1.0,
