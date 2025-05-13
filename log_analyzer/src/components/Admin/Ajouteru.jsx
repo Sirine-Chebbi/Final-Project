@@ -9,7 +9,7 @@ function Ajouteru(props) {
     const [prenom, setPrenom] = useState('');
     const [matricule, setMatricule] = useState('');
     const [motdpass, setMotdpass] = useState('');
-    const [role, setRole] = useState('0');
+    const [role, setRole] = useState(2);
     const [poste, setPoste] = useState('');
     const toast = useRef(null);
 
@@ -22,8 +22,8 @@ function Ajouteru(props) {
         "nom": nom,
         "prenom": prenom,
         "poste": poste,
-        "role": role,
-        "password": motdpass
+        "role_id": role,
+        "password": motdpass,
     }
 
     const AddUser = async () => {
@@ -33,8 +33,7 @@ function Ajouteru(props) {
                 showToast("Token d'authentification manquant");
                 return;
             }
-
-            const response = await fetch("http://127.0.0.1:8000/api/auth/register/", {
+            const response = await fetch("http://localhost:8000/api/auth/register/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,8 +85,8 @@ function Ajouteru(props) {
                             <input onChange={(e) => setMotdpass(e.target.value)} required type="text" placeholder='Mot de passe' className='m-2 border-2 border-cyan-400 rounded-lg p-2 text-cyan-400 outline-none' /><br />
                             <div className='m-2 border-2 border-cyan-400 p-2 w-fit rounded-lg '>
                                 <select id="" required onChange={(e) => setRole(e.target.value)} className='text-cyan-400 outline-none w-50'>
-                                    <option onClick={(e) => setRole(e.target.value)} value="2" className='text-black'>Utilisateur</option>
-                                    <option onClick={(e) => setRole(e.target.value)} value="1" className='text-black'>Admin</option>
+                                    <option onClick={(e) => setRole(Number(e.target.value))} value="2" className='text-black'>Utilisateur</option>
+                                    <option onClick={(e) => setRole(Number(e.target.value))} value="1" className='text-black'>Admin</option>
                                 </select>
                             </div>
                         </div>

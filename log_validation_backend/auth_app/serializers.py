@@ -17,6 +17,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('matricule', 'nom', 'prenom', 'poste', 'role', 'is_active', 'is_staff')
 
+    def update(self, instance, validated_data):
+        role = validated_data.get('role', instance.role)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.is_staff = role.is_admin
+        instance.save()
+        return instance
+    
+    
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -52,9 +61,7 @@ class CookieTokenRefreshSerializer(TokenRefreshSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     role_id = serializers.PrimaryKeyRelatedField(
-        queryset=Role.objects.all(),
-        source='role',
-        required=False
+        queryset=Role.objects.all()
     )
     
     class Meta:

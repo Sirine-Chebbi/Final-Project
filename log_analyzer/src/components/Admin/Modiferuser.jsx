@@ -64,7 +64,7 @@ function Modifieruser(props) {
         }
     
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/auth/users/${mat}/`, {
+            const response = await fetch(`http://localhost:8000/api/auth/users/${mat}/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

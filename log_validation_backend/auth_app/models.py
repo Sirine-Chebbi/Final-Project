@@ -13,18 +13,27 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, matricule, nom, prenom, poste, role_id=None, password=None, **extra_fields):
         if not matricule:
             raise ValueError('Le matricule est obligatoire')
-        
-        # Get or create default role if not provided
-        if role_id is None:
-            role, _ = Role.objects.get_or_create(
-                name='user',
-                defaults={'description': 'Regular user', 'is_admin': False}
-            )
-        else:
+
+        # 💡 Ensure the default 'user' role exists before anything else
+        default_role, _ = Role.objects.get_or_create(
+            name='user',
+            defaults={'description': 'Simple Utilisateur', 'is_admin': False}
+        )
+
+        # Determine the role to assign
+        if isinstance(role_id, Role):
+            role = role_id
+        elif isinstance(role_id, int):
             try:
-                role = Role.objects.get(id=role_id)
+                role = Role.objects.get(pk=role_id)
             except Role.DoesNotExist:
-                raise ValueError('Ce rôle n\'existe pas')
+                role = default_role
+        else:
+            role = default_role
+
+        # If the role is admin, mark is_staff
+        if role.is_admin:
+            extra_fields.setdefault('is_staff', True)
 
         user = self.model(
             matricule=matricule,
@@ -37,6 +46,7 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
 
     def create_superuser(self, matricule, nom, prenom, poste, password=None, **extra_fields):
         # Get or create admin role
@@ -54,7 +64,7 @@ class CustomUserManager(BaseUserManager):
             nom=nom,
             prenom=prenom,
             poste=poste,
-            role_id=role.id,
+            role_id=role,
             password=password,
             **extra_fields
         )

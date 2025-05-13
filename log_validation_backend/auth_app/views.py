@@ -105,7 +105,7 @@ class UserListView(generics.ListAPIView):
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsAdminOrSelf]  # Changed from IsAdminUser
+    permission_classes = [IsAdminOrSelf]
     lookup_field = 'matricule'
 
     def get_permissions(self):
