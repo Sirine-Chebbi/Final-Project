@@ -2,7 +2,6 @@ import Nav from '../components/Admin/Nav';
 import Tableuser from '../components/Admin/Tableuser';
 import Ajouteru from "../components/Admin/Ajouteru";
 import Deleteuser from '../components/Admin/Deleteuser';
-import Profile from '../components/Admin/Profile';
 
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
@@ -10,6 +9,7 @@ import api from "../Services/api"
 import { useState, useEffect, useRef } from "react"
 import { Toast } from "primereact/toast";
 import Modifieruser from '../components/Admin/Modiferuser';
+import Adminprofile from '../components/Admin/Adminprofile';
 
 
 const Admin = () => {
@@ -113,7 +113,7 @@ const Admin = () => {
       <Toast ref={toast} position="top-center" />
       <div className="bg-[url(/assets/Dashboard.jpg)] bg-cover pb-30 h-screen min-h-fit">
         <Nav showProfile={showProfile} setShowProfile={setShowProfile}></Nav>
-        <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
+        <Adminprofile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Adminprofile>
         <Modifieruser setAdd={setAdd} Matricule={Matricule} trigger={Mod} setVisibilitymod={setVisibilitymod}></Modifieruser>
         <Ajouteru setAdd={setAdd} trigger={User} setVisibilityuser={setVisibilityuser}></Ajouteru>
         <Deleteuser setAdd={setAdd} Matricule={Matricule} trigger={Delete} setVisibilitydelete={setVisibilitydelete}></Deleteuser>
