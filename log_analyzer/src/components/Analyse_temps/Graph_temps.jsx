@@ -30,7 +30,6 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
     const [targetValue, setTargetValue] = useState(null);
     const [showTarget, setShowTarget] = useState(false);
     const [groupBy, setGroupBy] = useState('hour'); // 'hour', 'day' ou 'month'
-    const [timeRange, setTimeRange] = useState('day'); // 'day' ou 'month'
 
     const prepareHourlyData = (data, target) => {
         const hourlyData = {};
@@ -107,7 +106,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
 
         data.forEach((item) => {
             if (!item.date) return;
-            
+
             const date = item.date.split('T')[0]; // Format YYYY-MM-DD
             if (!dailyData[date]) {
                 dailyData[date] = {
@@ -177,10 +176,10 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
 
         data.forEach((item) => {
             if (!item.date) return;
-            
+
             const date = new Date(item.date);
             const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-            
+
             if (!monthlyData[monthKey]) {
                 monthlyData[monthKey] = {
                     total: 0,
@@ -359,8 +358,8 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                         x: {
                             title: {
                                 display: true,
-                                text: groupBy === 'hour' ? "Plages horaires" : 
-                                      groupBy === 'day' ? "Dates" : "Mois",
+                                text: groupBy === 'hour' ? "Plages horaires" :
+                                    groupBy === 'day' ? "Dates" : "Mois",
                                 color: "rgb(34, 211, 238)",
                                 font: {
                                     size: 14,
@@ -502,16 +501,17 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 </div>
 
                 <div className="flex gap-3 items-center">
-                    <label className="text-cyan-400 font-medium">Affichage:</label>
-                    <select 
-                        value={groupBy}
-                        onChange={(e) => setGroupBy(e.target.value)}
-                        className="bg-gray-800 text-cyan-400 p-2 rounded border border-cyan-400"
-                    >
-                        <option value="hour">Par heure</option>
-                        <option value="day">Par jour</option>
-                        <option value="month">Par mois</option>
-                    </select>
+                    <div className="border-2 border-cyan-400 rounded-xl text-lg p-2 text-cyan-400">
+                        <select
+                            value={groupBy}
+                            onChange={(e) => setGroupBy(e.target.value)}
+                            className=" p-2 outline-none"
+                        >
+                            <option value="hour" className="text-black">Par heure</option>
+                            <option value="day" className="text-black">Par jour</option>
+                            <option value="month" className="text-black">Par mois</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 

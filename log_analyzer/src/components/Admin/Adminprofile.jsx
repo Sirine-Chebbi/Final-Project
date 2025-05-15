@@ -182,7 +182,7 @@ function Adminprofile(props) {
                         <table>
                             <tr>
                                 <td className='p-2'>
-                                    <input onChange={(e) => { setNom(e.target.value); if (user.nom !== e.target.value) { setMod(false) } else { check() }; }} required type="text" value={nom} placeholder='nom' className={`m-2 border-b-2 border-cyan-400 p-2 w-50 text-cyan-400 outline-none ${user.nom !== nom ? 'border-red-500' : ''}`} />
+                                    <input onChange={(e) => { setNom(e.target.value); if (user.nom !== e.target.value) { setMod(false) } else { check() }; }} required type="text" value={nom} placeholder='nom' className={`m-2 border-b-2 border-cyan-400 p-2  text-cyan-400 outline-none ${user.nom !== nom ? 'border-red-500' : ''}`} />
                                 </td>
                                 <td className='p-2'>
                                     <input onChange={(e) => { setPrenom(e.target.value); if (user.prenom !== e.target.value) { setMod(false) } else { check() }; }} required type="text" value={prenom} placeholder='prenom' className={`m-2 border-b-2 border-cyan-400 p-2 text-cyan-400 outline-none ${user.prenom !== prenom ? 'border-red-500' : ''}`} />
@@ -194,7 +194,7 @@ function Adminprofile(props) {
                                     />
                                 </td>
                                 <td className='p-2'>
-                                    <input onChange={(e) => { setMatricule(e.target.value); if (user.matricule !== e.target.value) { setMod(false) } else { check() }; }} required type="text" value={matricule} placeholder='matricule' className={`m-2 border-b-2 border-cyan-400 p-2 text-cyan-400 outline-none ${user.matricule !== matricule ? 'border-red-500' : ''}`}
+                                    <input onChange={(e) => { setMatricule(e.target.value); if (user.matricule !== e.target.value) { setMod(false) } else { check() }; }} disabled required type="text" value={'Matricule: ' + matricule} placeholder='matricule' className={`m-2 border-b-2 border-cyan-600 p-2 text-cyan-600 outline-none ${user.matricule !== matricule ? 'border-red-500' : ''}`}
                                     />
                                 </td>
                             </tr>
