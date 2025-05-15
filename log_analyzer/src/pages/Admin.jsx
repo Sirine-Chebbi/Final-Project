@@ -113,7 +113,7 @@ const Admin = () => {
       <Toast ref={toast} position="top-center" />
       <div className="bg-[url(/assets/Dashboard.jpg)] bg-cover pb-30 h-screen min-h-fit">
         <Nav showProfile={showProfile} setShowProfile={setShowProfile}></Nav>
-        <Adminprofile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Adminprofile>
+        <Adminprofile setAdd={setAdd} trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Adminprofile>
         <Modifieruser setAdd={setAdd} Matricule={Matricule} trigger={Mod} setVisibilitymod={setVisibilitymod}></Modifieruser>
         <Ajouteru setAdd={setAdd} trigger={User} setVisibilityuser={setVisibilityuser}></Ajouteru>
         <Deleteuser setAdd={setAdd} Matricule={Matricule} trigger={Delete} setVisibilitydelete={setVisibilitydelete}></Deleteuser>
