@@ -13,7 +13,4 @@ class TempsTestAdmin(admin.ModelAdmin):
         'unite',
         'source_file',
     )
-    search_fields = (
-        'mesure',
-    )
-    readonly_fields = ('source_file',) 
+    

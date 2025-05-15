@@ -146,7 +146,7 @@ export const Delta = ({ setfetchResult }) => {
                         <tbody className="divide-y divide-yellow-400 text-lg">
                             {filteredResults.map((result, index) => (
                                 <tr key={index}>
-                                    <td className="py-2">{result.type_gega}</td>
+                                    <td className="py-2">{result.bande}</td>
                                     <td>{result.description}</td>
                                     <td>{result.ant}</td>
                                     <td>{result.delta}</td>

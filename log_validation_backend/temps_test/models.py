@@ -11,18 +11,13 @@ class TempsTest(models.Model):
     heure = models.IntegerField(null=True)
     unite = models.CharField(max_length=10, null=True, blank=True)  
     source_file = models.CharField(max_length=100, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
 
         # Clé étrangère vers CustomUser
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,  # Cela utilise votre modèle CustomUser
-        on_delete=models.CASCADE,  # ou PROTECT / CASCADE selon le besoin
+        on_delete=models.CASCADE,  
         null=True,
         blank=True,
         related_name='temps_test'
     )
-
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['mesure']),
-        ]

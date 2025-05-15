@@ -42,7 +42,7 @@ def upload_log(request):
             return Response({"error": f"Code introuvable dans le fichier {file.name}"}, status=400)
 
         test_results = []
-        current_type_gega = None
+        current_bande = None
         ressource = None  # Variable pour stocker la ressource
 
         # ==================================================
@@ -72,7 +72,7 @@ def upload_log(request):
                 delta_match = re.search(r"=>\s*a(\d+)_gainerror_.*?=>\s*a\1_delta=\s*(-?\d+)", line)
                 if delta_match and current_band and current_description:
                     delta_entries.append({
-                        'type_gega': current_band,
+                        'bande': current_band,
                         'description': current_description,
                         'ant': int(delta_match.group(1)),
                         'delta': int(delta_match.group(2))
@@ -84,7 +84,7 @@ def upload_log(request):
                 nom_fichier=file.name,
                 nbrfile=file_count,
                 code=code,
-                type_gega=entry['type_gega'],
+                bande=entry['bande'],
                 description=entry['description'],
                 ant=entry['ant'],
                 delta=entry['delta'],
@@ -184,7 +184,7 @@ def upload_log(request):
             if "TEST wifi" in line:
                 match = re.search(r"TEST wifi (\d+)Ghz", line)
                 if match:
-                    current_type_gega = f"{match.group(1)}G"
+                    current_bande = f"{match.group(1)}G"
 
             if "TX_VERIFY" in line:
                 match = re.search(r"TX_VERIFY .*? (\d+) .*? ANT(\d+)", line)
@@ -244,7 +244,7 @@ def upload_log(request):
                             nom_fichier=file.name,
                             nbrfile=file_count,
                             code=code,
-                            type_gega=current_type_gega,
+                            bande=current_bande,
                             description=None,  # Pas de description pour les tests normaux
                             frequence=frequence,
                             ant=ant,
@@ -280,6 +280,10 @@ def upload_log(request):
 
     if not all_test_results:
         return Response({"error": "Aucun test trouvé dans les fichiers"}, status=400)
+    
+    for result in all_test_results:
+        result.User_id = request.user  # ou un autre utilisateur si applicable
+
 
     ConduitResult.objects.bulk_create(all_test_results) 
     return Response({"message": f"{len(all_test_results)} tests importés avec succès"})

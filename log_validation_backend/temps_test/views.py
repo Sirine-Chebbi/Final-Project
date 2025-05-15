@@ -22,12 +22,22 @@ def extract_test_time_data(content, filename=None):
         re.DOTALL
     )
 
+    # Pattern pour extraire la date du nom de fichier (format JJ_MM_AA)
+    date_pattern = re.compile(r'.*SLOT1_(\d{2})_(\d{2})_(\d{2})_.*')
+
     cie_match = cie_pattern.search(content)
     if not cie_match:
         return []
 
     reference = int(cie_match.group('reference'))
     nom = cie_match.group('nom').strip()
+
+    date = None
+    if filename:
+        date_match = date_pattern.match(filename)
+        if date_match:
+            day, month, year = date_match.groups()
+            date = f"20{year}-{month}-{day}"  
 
     results = []
     for match in time_pattern.finditer(content):
@@ -43,13 +53,13 @@ def extract_test_time_data(content, filename=None):
                 'status': int(match.group('status')),
                 'valeur': float(match.group('valeur')),
                 'unite': match.group('unite') if match.group('unite') else None,
-                'source_file': filename
+                'source_file': filename,
+                'date': date 
             })
         except (ValueError, AttributeError):
             continue
 
     return results
-
 
 @api_view(['POST'])
 def upload_test_time_results(request):
@@ -112,27 +122,41 @@ def upload_test_time_results(request):
 @api_view(['GET'])
 def get_test_time_results(request):
     user = request.user
+    group_by = request.GET.get('group_by', 'hour')  # Par défaut: regroupement par heure
+    
     queryset = TempsTest.objects.filter(created_by=user).exclude(status=2)
 
     if not queryset.exists():
         return Response({"message": "Aucune donnée disponible"},
                         status=status.HTTP_404_NOT_FOUND)
 
-    results = [
-        {
-            "reference": result.reference,
-            "nom": result.nom,
-            "mesure": result.mesure,
-            "status": result.status,
-            "valeur": result.valeur,
-            "heure": result.heure,
-            "unite": result.unite,
-            "source_file": result.source_file,
-        }
-        for result in queryset
-    ]
+    if group_by == 'day':
+        # Regroupement par jour
+        results = []
+        # Implémentez la logique de regroupement par jour ici
+    elif group_by == 'month':
+        # Regroupement par mois
+        results = []
+        # Implémentez la logique de regroupement par mois ici
+    else:
+        # Par défaut: regroupement par heure (comportement actuel)
+        results = [
+            {
+                "reference": result.reference,
+                "nom": result.nom,
+                "mesure": result.mesure,
+                "status": result.status,
+                "valeur": result.valeur,
+                "heure": result.heure,
+                "unite": result.unite,
+                "source_file": result.source_file,
+                "date": result.date.strftime("%Y-%m-%d") if result.date else None
+            }
+            for result in queryset
+        ]
 
     return Response({
         'count': len(results),
-        'results': results
+        'results': results,
+        'group_by': group_by
     }, status=status.HTTP_200_OK)

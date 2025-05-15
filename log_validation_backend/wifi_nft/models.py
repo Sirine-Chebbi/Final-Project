@@ -23,10 +23,3 @@ class NftResults(models.Model):
         related_name='wifi_nft'
     )
 
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['mesure']),
-            models.Index(fields=['bande']),
-            models.Index(fields=['antenne']),
-        ]

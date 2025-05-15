@@ -15,9 +15,3 @@ class NftResultsAdmin(admin.ModelAdmin):
         'unite',
         'source_file'
     )
-    search_fields = (
-        'mesure',
-        'bande',
-        'source_file',
-    )
-    readonly_fields = ('source_file',) 

@@ -29,11 +29,10 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
     const [error, setError] = useState(null);
     const [targetValue, setTargetValue] = useState(null);
     const [showTarget, setShowTarget] = useState(false);
+    const [groupBy, setGroupBy] = useState('hour'); // 'hour', 'day' ou 'month'
+    const [timeRange, setTimeRange] = useState('day'); // 'day' ou 'month'
 
-
-    const prepareChartData = (data, target) => {
-        if (!data || data.length === 0) return null;
-
+    const prepareHourlyData = (data, target) => {
         const hourlyData = {};
 
         data.forEach((item) => {
@@ -58,8 +57,6 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
             const avg = hourlyData[heure].total / hourlyData[heure].count;
             return Number(avg.toFixed(2));
         });
-        
-        
 
         const datasets = [
             {
@@ -77,16 +74,14 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 pointBorderWidth: 2,
                 segment: {
                     borderColor: ctx => {
-                        if (target !== null && !isNaN(target)) {;
+                        if (target !== null && !isNaN(target)) {
                             return ctx.p1.parsed.y >= target ? "rgb(239, 68, 68)" : "rgb(74, 222, 128)";
                         }
                         return "rgb(74, 222, 128)";
                     }
                 }
-
             },
         ];
-
 
         if (target !== null && !isNaN(target)) {
             datasets.push({
@@ -107,6 +102,165 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         };
     };
 
+    const prepareDailyData = (data, target) => {
+        const dailyData = {};
+
+        data.forEach((item) => {
+            if (!item.date) return;
+            
+            const date = item.date.split('T')[0]; // Format YYYY-MM-DD
+            if (!dailyData[date]) {
+                dailyData[date] = {
+                    total: 0,
+                    count: 0,
+                    values: []
+                };
+            }
+
+            dailyData[date].total += item.valeur;
+            dailyData[date].count++;
+            dailyData[date].values.push(item.valeur);
+        });
+
+        const dates = Object.keys(dailyData).sort();
+        const moyennes = dates.map(date => {
+            const avg = dailyData[date].total / dailyData[date].count;
+            return Number(avg.toFixed(2));
+        });
+
+        const datasets = [
+            {
+                label: `Durée moyenne des tests (${tempsResults[0]?.unite}) par jour`,
+                data: moyennes,
+                borderColor: "rgb(74, 222, 128)",
+                backgroundColor: "rgba(74, 222, 128, 0.2)",
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: "rgb(74, 222, 128)",
+                pointBorderColor: "#fff",
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgb(74, 222, 128)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                segment: {
+                    borderColor: ctx => {
+                        if (target !== null && !isNaN(target)) {
+                            return ctx.p1.parsed.y >= target ? "rgb(239, 68, 68)" : "rgb(74, 222, 128)";
+                        }
+                        return "rgb(74, 222, 128)";
+                    }
+                }
+            },
+        ];
+
+        if (target !== null && !isNaN(target)) {
+            datasets.push({
+                label: "Objectif",
+                data: Array(dates.length).fill(target),
+                borderColor: "yellow",
+                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false,
+            });
+        }
+
+        return {
+            labels: dates,
+            datasets,
+        };
+    };
+
+    const prepareMonthlyData = (data, target) => {
+        const monthlyData = {};
+
+        data.forEach((item) => {
+            if (!item.date) return;
+            
+            const date = new Date(item.date);
+            const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            
+            if (!monthlyData[monthKey]) {
+                monthlyData[monthKey] = {
+                    total: 0,
+                    count: 0,
+                    values: []
+                };
+            }
+
+            monthlyData[monthKey].total += item.valeur;
+            monthlyData[monthKey].count++;
+            monthlyData[monthKey].values.push(item.valeur);
+        });
+
+        const months = Object.keys(monthlyData).sort();
+        const moyennes = months.map(month => {
+            const avg = monthlyData[month].total / monthlyData[month].count;
+            return Number(avg.toFixed(2));
+        });
+
+        const datasets = [
+            {
+                label: `Durée moyenne des tests (${tempsResults[0]?.unite}) par mois`,
+                data: moyennes,
+                borderColor: "rgb(74, 222, 128)",
+                backgroundColor: "rgba(74, 222, 128, 0.2)",
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: "rgb(74, 222, 128)",
+                pointBorderColor: "#fff",
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgb(74, 222, 128)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                segment: {
+                    borderColor: ctx => {
+                        if (target !== null && !isNaN(target)) {
+                            return ctx.p1.parsed.y >= target ? "rgb(239, 68, 68)" : "rgb(74, 222, 128)";
+                        }
+                        return "rgb(74, 222, 128)";
+                    }
+                }
+            },
+        ];
+
+        if (target !== null && !isNaN(target)) {
+            datasets.push({
+                label: "Objectif",
+                data: Array(months.length).fill(target),
+                borderColor: "yellow",
+                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false,
+            });
+        }
+
+        return {
+            labels: months.map(m => {
+                const [year, month] = m.split('-');
+                return `${month}/${year}`;
+            }),
+            datasets,
+        };
+    };
+
+    const prepareChartData = (data, target) => {
+        if (!data || data.length === 0) return null;
+
+        switch (groupBy) {
+            case 'day':
+                return prepareDailyData(data, target);
+            case 'month':
+                return prepareMonthlyData(data, target);
+            case 'hour':
+            default:
+                return prepareHourlyData(data, target);
+        }
+    };
+
     const handleTargetSubmit = () => {
         setShowTarget(true);
         setTargetValue(document.getElementById("targetInput").value);
@@ -117,18 +271,16 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         setTargetValue(null);
         setShowTarget(false);
         document.getElementById("targetInput").value = "";
-    }
+    };
 
     const updateChart = () => {
         if (!chartInstanceRef.current || !tempsResults) return;
-
         const chartData = prepareChartData(tempsResults, showTarget ? targetValue : null);
         chartInstanceRef.current.data = chartData;
         chartInstanceRef.current.update();
     };
 
     useEffect(() => {
-        
         if (!tempsResults || tempsResults.length === 0) {
             setError("Aucune donnée disponible");
             return;
@@ -141,7 +293,6 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
             return;
         }
 
-        
         const canvas = document.createElement("canvas");
         canvas.style.width = "100%";
         canvas.style.height = "100%";
@@ -151,9 +302,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
             chartContainerRef.current.appendChild(canvas);
         }
 
-
         try {
-            
             if (chartInstanceRef.current) {
                 chartInstanceRef.current.destroy();
             }
@@ -189,7 +338,15 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                                         return `Objectif: ${context.raw} ${tempsResults[0]?.unite}`;
                                     }
                                 },
-                                title: (context) => `Plage horaire: ${context[0].label}`,
+                                title: (context) => {
+                                    if (groupBy === 'hour') {
+                                        return `Plage horaire: ${context[0].label}`;
+                                    } else if (groupBy === 'day') {
+                                        return `Date: ${context[0].label}`;
+                                    } else {
+                                        return `Mois: ${context[0].label}`;
+                                    }
+                                },
                             },
                             backgroundColor: "rgb(0, 0, 0, 0.7)",
                             titleColor: "rgb(34, 211, 238)",
@@ -202,7 +359,8 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                         x: {
                             title: {
                                 display: true,
-                                text: "Plages horaires",
+                                text: groupBy === 'hour' ? "Plages horaires" : 
+                                      groupBy === 'day' ? "Dates" : "Mois",
                                 color: "rgb(34, 211, 238)",
                                 font: {
                                     size: 14,
@@ -239,7 +397,6 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
             });
 
             setError(null);
-
         } catch (err) {
             console.error("Erreur lors de la création du graphique:", err);
             setError("Erreur lors de la génération du graphique");
@@ -253,18 +410,10 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 chartContainerRef.current.innerHTML = "";
             }
         };
-
-        
-
-    }, [tempsResults,showTarget,targetValue]);
-
-
-    const stats = [
-        targetValue
-    ];
+    }, [tempsResults, showTarget, targetValue, groupBy]);
 
     const exportPDF = () => {
-        if (!stats || !chartContainerRef.current) return;
+        if (!chartContainerRef.current) return;
 
         const pdf = new jsPDF("landscape");
         const canvas = chartContainerRef.current.querySelector("canvas");
@@ -301,6 +450,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
         const data = [
             ["Equipe", equipe],
             ["Operation", operation],
+            ["Affichage", groupBy === 'hour' ? "Par heure" : groupBy === 'day' ? "Par jour" : "Par mois"],
         ];
 
         pdf.setFontSize(13);
@@ -320,7 +470,6 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
 
         pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
         pdf.save(`${title}.pdf`);
-
     };
 
     return (
@@ -329,8 +478,8 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                 Courbe Du temps
             </h1>
 
-            <div className="flex gap-5">
-                <div className="flex gap-3 ">
+            <div className="flex flex-wrap gap-5 items-center mb-4">
+                <div className="flex gap-3">
                     <input
                         id="targetInput"
                         type="number"
@@ -351,7 +500,21 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                         Masquer
                     </button>
                 </div>
+
+                <div className="flex gap-3 items-center">
+                    <label className="text-cyan-400 font-medium">Affichage:</label>
+                    <select 
+                        value={groupBy}
+                        onChange={(e) => setGroupBy(e.target.value)}
+                        className="bg-gray-800 text-cyan-400 p-2 rounded border border-cyan-400"
+                    >
+                        <option value="hour">Par heure</option>
+                        <option value="day">Par jour</option>
+                        <option value="month">Par mois</option>
+                    </select>
+                </div>
             </div>
+
             <div className="mb-10 flex-auto overflow-x-auto rounded-xl h-fit border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 mt-10 bg-gray-900 hover:scale-102 duration-200">
                 <h2 className="text-2xl font-bold text-cyan-400 mb-4">
                     Variation du temps || {tempsResults[0]?.reference}
@@ -362,13 +525,12 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
                     <div className="relative h-100 w-full" ref={chartContainerRef}></div>
                 )}
                 <button
-                    className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2  font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400"
+                    className="bg-cyan-400 rounded-xl pr-4 pl-4 pt-2 pb-2 font-bold cursor-pointer hover:bg-gray-900 hover:text-cyan-400 duration-200 border-2 border-cyan-400 mt-4"
                     onClick={exportPDF}
                 >
                     Exporter en PDF
                 </button>
             </div>
-
         </>
     );
 };
@@ -378,6 +540,5 @@ Graph_temps.propTypes = {
     operation: PropTypes.string.isRequired,
     equipe: PropTypes.string.isRequired,
 };
-
 
 export default Graph_temps;

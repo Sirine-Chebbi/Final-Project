@@ -182,7 +182,7 @@ return (
           {filteredResults.map((result, index) => (
             <tr key={index}>
               <td className="px-4 py-2">{result.nom_fichier}</td>
-              <td className="px-4 py-2">{result.type_gega}</td>
+              <td className="px-4 py-2">{result.bande}</td>
               <td className="px-4 py-2">{result.frequence}</td>
               <td className="px-4 py-2">{result.ant}</td>
               <td className="px-4 py-2">{result.ressource}</td>
