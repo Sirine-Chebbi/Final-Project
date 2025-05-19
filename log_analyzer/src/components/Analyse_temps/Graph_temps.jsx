@@ -516,7 +516,7 @@ const Graph_temps = ({ tempsResults, operation, equipe }) => {
             </div>
 
             <div className="mb-10 flex-auto overflow-x-auto rounded-xl h-fit border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 mt-10 bg-gray-900 hover:scale-102 duration-200">
-                <Tooltipinf position="left" titre="Courbe du temps" text="une courbe qui affiche la variation de la moyenne du temps écoulé pour les tests, donnée par heure, jour ou mois.">
+                <Tooltipinf position="left" titre="Courbe du temps" text="une courbe qui affiche la variation de la moyenne du temps des tests donnée par heure, jour ou mois.">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                     </svg>

@@ -110,7 +110,7 @@ const Test_Wifi = () => {
             <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
             <div className="-mt-40 h-screen grid place-items-center overflow-x-hidden">
                 <div className="flex justify-between h-fit ml-20 mr-20 mt-30 p-5">
-                    <div className=''>
+                    <div className='mr-5'>
                         <Uploadtest onUploadSuccess={handleUploadSuccess} /><br />
                         <input 
                             value={testLine}
