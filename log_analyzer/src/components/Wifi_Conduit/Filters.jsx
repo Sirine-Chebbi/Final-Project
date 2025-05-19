@@ -94,12 +94,12 @@ const Filters = ({
       </div>
 
       <div className="flex gap-4 -mb-20">
-        <div className="border-cyan-500 border-3 h-15 rounded-2xl font-bold w-40">
+        <div className="border-cyan-500 border-3 h-15 rounded-2xl font-bold w-40 place-items-center grid">
           <select
             onChange={(e) => setFrequence(e.target.value)}
             name="frequence"
             id="select"
-            className="text-xl text-cyan-400 p-3 outline-none "
+            className="text-xl text-cyan-400 outline-none "
             value={frequence}
           >
             <option value="">Fréquence</option>
@@ -116,12 +116,12 @@ const Filters = ({
               ))}
           </select>
         </div>
-        <div className="border-cyan-500 border-3 h-15 rounded-2xl font-bold w-40">
+        <div className="border-cyan-500 border-3 h-15 rounded-2xl font-bold w-40 place-items-center grid">
           <select
             onChange={(a) => setAntenne(a.target.value)}
             name="antenne"
             id="select"
-            className="text-xl text-cyan-400 p-3 pl-5 outline-none "
+            className="text-xl text-cyan-400 p-3 outline-none "
             value={antenne}
           >
             <option value="">Antenne</option>

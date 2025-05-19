@@ -1,4 +1,4 @@
-
+import Tooltipinf from "../../Tooltipinf";
 import { forwardRef } from "react";
 import {
   Chart as ChartJS,
@@ -40,7 +40,7 @@ const Evmgraph = ({ filteredResults, selectedCaisson }, ref) => {
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
     const stdDev = Math.sqrt(
       powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
-        powerValues.length
+      powerValues.length
     );
     const dataMin = parseFloat(Math.min(...powerValues));
     const dataMax = parseFloat(Math.max(...powerValues));
@@ -168,20 +168,20 @@ const Evmgraph = ({ filteredResults, selectedCaisson }, ref) => {
   const ppk =
     stats?.stdDev > 0
       ? Math.min(
-          (stats.limMax - stats.mean) / (3 * stats.stdDev),
-          (stats.mean - stats.limMin) / (3 * stats.stdDev)
-        )
+        (stats.limMax - stats.mean) / (3 * stats.stdDev),
+        (stats.mean - stats.limMin) / (3 * stats.stdDev)
+      )
       : 0;
 
   // Indices court terme (Cp/Cpk)
   const stdDevShortTerm = stats?.powerValues
     ? Math.sqrt(
-        stats.powerValues.reduce(
-          (sum, value) => sum + Math.pow(value - stats.mean, 2),
-          0
-        ) /
-          (stats.powerValues.length - 1)
-      )
+      stats.powerValues.reduce(
+        (sum, value) => sum + Math.pow(value - stats.mean, 2),
+        0
+      ) /
+      (stats.powerValues.length - 1)
+    )
     : 0;
 
   const cp =
@@ -192,9 +192,9 @@ const Evmgraph = ({ filteredResults, selectedCaisson }, ref) => {
   const cpk =
     stdDevShortTerm > 0
       ? Math.min(
-          (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
-          (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
-        )
+        (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
+        (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
+      )
       : 0;
 
   const chartData = prepareChartData();
@@ -294,18 +294,39 @@ const Evmgraph = ({ filteredResults, selectedCaisson }, ref) => {
             </div>
             <div className="grid grid-cols-4 gap-4 mt-6">
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Cp (Indice de Capabilité du Processus)" text="est un indicateur statistique utilisé pour mesurer la capacité d’un processus à produire des pièces ou des résultats conformes aux spécifications (tolérances)." className="flex justify-self-end">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Cp</h3>
                 <p className="text-white text-xl">{cp.toFixed(2)}</p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Cpk (Indice de Capabilité Centré du Processus)" text="est un indicateur statistique qui mesure la capacité réelle d’un processus à produire dans les tolérances en tenant compte de son centrage (décalage par rapport à la cible).
+                                Il montre à quel point le processus est proche des limites de spécifications." className="flex justify-self-end">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Cpk</h3>
                 <p className="text-white text-xl">{cpk.toFixed(2)}</p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Pp (Indice de Performance du Processus)" text="est un indicateur statistique utilisé pour mesurer la performance globale d’un processus sur une période donnée, en prenant en compte toutes les données collectées (y compris les dérives ou anomalies).">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Pp</h3>
                 <p className="text-white text-xl">{pp.toFixed(2)}</p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Ppk (Indice de Performance Centré du Processus)" text="est un indicateur statistique qui mesure la performance réelle d’un processus, en prenant en compte à la fois la variabilité et le décalage par rapport à la cible sur une période réelle.">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Ppk</h3>
                 <p className="text-white text-xl">{ppk.toFixed(2)}</p>
               </div>

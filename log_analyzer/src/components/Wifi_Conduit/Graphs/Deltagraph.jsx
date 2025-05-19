@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-
+import Tooltipinf from "../../Tooltipinf";
 import {
   Chart as ChartJS,
   BarController,
@@ -293,20 +293,41 @@ const Deltagraph = ({ Results , selectedCaisson }, ref) => {
                 }}
               />
             </div>
-            <div className="grid grid-cols-4 gap-4 mt-6">
+                        <div className="grid grid-cols-4 gap-4 mt-6">
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Cp (Indice de Capabilité du Processus)" text="est un indicateur statistique utilisé pour mesurer la capacité d’un processus à produire des pièces ou des résultats conformes aux spécifications (tolérances)." className="flex justify-self-end">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Cp</h3>
                 <p className="text-white text-xl">{cp.toFixed(2)}</p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Cpk (Indice de Capabilité Centré du Processus)" text="est un indicateur statistique qui mesure la capacité réelle d’un processus à produire dans les tolérances en tenant compte de son centrage (décalage par rapport à la cible).
+                    Il montre à quel point le processus est proche des limites de spécifications." className="flex justify-self-end">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Cpk</h3>
                 <p className="text-white text-xl">{cpk.toFixed(2)}</p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Pp (Indice de Performance du Processus)" text="est un indicateur statistique utilisé pour mesurer la performance globale d’un processus sur une période donnée, en prenant en compte toutes les données collectées (y compris les dérives ou anomalies).">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Pp</h3>
                 <p className="text-white text-xl">{pp.toFixed(2)}</p>
               </div>
               <div className="bg-gray-700 p-4 rounded-lg">
+                <Tooltipinf titre="Ppk (Indice de Performance Centré du Processus)" text="est un indicateur statistique qui mesure la performance réelle d’un processus, en prenant en compte à la fois la variabilité et le décalage par rapport à la cible sur une période réelle.">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </Tooltipinf>
                 <h3 className="text-cyan-400">Ppk</h3>
                 <p className="text-white text-xl">{ppk.toFixed(2)}</p>
               </div>
