@@ -212,6 +212,12 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
                 {filteredResults[0]?.ant} || Caisson: {selectedCaisson}
               </h2>
               <div className="flex gap-5">
+                <div className="border-2 border-yellow-400 px-4 flex w-fit text-yellow-400 place-items-center rounded-xl h-9 cursor-pointer bg-gray-900">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                  <p className="ml-2 text-sm">AI</p>
+                </div>
                 <Tooltipinf position="bottom" titre="TX Power (puissance d’émission)" text="indique la force avec laquelle un appareil envoie un signal radio. Plus elle est élevée, plus le signal peut aller loin. Elle est souvent exprimée en dBm ou en watts.">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />

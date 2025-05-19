@@ -9,7 +9,7 @@ const Tooltipinf = ({ children, text, titre, position = "top" }) => {
   };
 
   return (
-    <div className="relative w-fit justify-self-end -mt-2">
+    <div className="relative w-fit justify-self-end -mt-1">
       <div className="group inline-block">
         {children}
         <div className={`absolute ${positionClasses[position]} 

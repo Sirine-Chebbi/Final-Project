@@ -13,4 +13,3 @@ package-lock.json
 # Django
 *.sqlite3
 /uploads/
-.env
