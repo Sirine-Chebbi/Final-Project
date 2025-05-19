@@ -40,7 +40,7 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
     const mean = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
     const stdDev = Math.sqrt(
       powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
-        powerValues.length
+      powerValues.length
     );
     const dataMin = parseFloat(data[0].rssi_min);
     const dataMax = parseFloat(data[0].rssi_max);
@@ -168,20 +168,20 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
   const ppk =
     stats?.stdDev > 0
       ? Math.min(
-          (stats.limMax - stats.mean) / (3 * stats.stdDev),
-          (stats.mean - stats.limMin) / (3 * stats.stdDev)
-        )
+        (stats.limMax - stats.mean) / (3 * stats.stdDev),
+        (stats.mean - stats.limMin) / (3 * stats.stdDev)
+      )
       : 0;
 
   // Indices court terme (Cp/Cpk)
   const stdDevShortTerm = stats?.powerValues
     ? Math.sqrt(
-        stats.powerValues.reduce(
-          (sum, value) => sum + Math.pow(value - stats.mean, 2),
-          0
-        ) /
-          (stats.powerValues.length - 1)
-      )
+      stats.powerValues.reduce(
+        (sum, value) => sum + Math.pow(value - stats.mean, 2),
+        0
+      ) /
+      (stats.powerValues.length - 1)
+    )
     : 0;
 
   const cp =
@@ -192,9 +192,9 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
   const cpk =
     stdDevShortTerm > 0
       ? Math.min(
-          (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
-          (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
-        )
+        (stats?.limMax - stats?.mean) / (3 * stdDevShortTerm),
+        (stats?.mean - stats?.limMin) / (3 * stdDevShortTerm)
+      )
       : 0;
 
   const chartData = prepareChartData();
@@ -204,11 +204,15 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
       <div ref={ref} id="rssi-graph">
         {filteredResults.length > 0 ? (
           <div className="p-6 bg-gray-800 rounded-lg mt-30 hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20">
+            <Tooltipinf position="bottom" titre="RSSI (Received Signal Strength Indicator)" text="mesure la puissance du signal reçu. Elle permet d’évaluer si le signal capté est fort ou faible. Plus la valeur est proche de 0 dBm (moins négative), meilleur est le signal.">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+              </svg>
+            </Tooltipinf>
             <h2 className="text-2xl text-cyan-400 mb-4">
               Rssi - {filteredResults[0]?.frequence}Hz - Antenne{" "}
               {filteredResults[0]?.ant} || Caisson: {selectedCaisson}
             </h2>
-
             <div className="grid grid-cols-4 gap-4 mb-6">
               <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-cyan-400">Moyenne</h3>
@@ -292,7 +296,7 @@ const Rssigraph = ({ filteredResults, selectedCaisson }, ref) => {
                 }}
               />
             </div>
-                        <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="grid grid-cols-4 gap-4 mt-6">
               <div className="bg-gray-700 p-4 rounded-lg">
                 <Tooltipinf titre="Cp (Indice de Capabilité du Processus)" text="est un indicateur statistique utilisé pour mesurer la capacité d’un processus à produire des pièces ou des résultats conformes aux spécifications (tolérances)." className="flex justify-self-end">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
