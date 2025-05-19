@@ -218,6 +218,7 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
                   </svg>
                 </Tooltipinf>
               </div>
+
             </div>
             <div className="grid grid-cols-4 gap-4 mb-6">
               <div className="bg-gray-700 p-4 rounded-lg">
