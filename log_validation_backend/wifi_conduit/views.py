@@ -10,7 +10,7 @@ from .models import ConduitResult
 @api_view(['POST'])
 def upload_log(request):
     try:
-        user = request.user    
+        user = request.user
     except CustomUser.DoesNotExist:
         return Response({"error": "Utilisateur non trouvé"}, status=404)
 
@@ -23,7 +23,7 @@ def upload_log(request):
     files = request.FILES.getlist('file')
     file_count = len(files)
 
-    all_test_results = [] 
+    all_test_results = []
 
     for file in files:
         content = file.read().decode('latin-1').splitlines()
@@ -43,33 +43,29 @@ def upload_log(request):
 
         test_results = []
         current_bande = None
-        ressource = None  # Variable pour stocker la ressource
+        ressource = None
 
-        # ==================================================
         # SECTION: Extraction des deltas
-        # ==================================================
-        delta_entries = []  # Pour stocker les entrées de delta
-        
+        delta_entries = []
         in_cal_section = False
         current_band = None
         current_description = None
-        
+
         for line in content:
-            # Détection section CAL_RESULT
             if "CAL_RESULT" in line:
                 in_cal_section = True
                 continue
-                
+
             if in_cal_section:
-                # Détection bande (ex: [5G Low])
-                band_match = re.search(r"\[\s*(\w+G)\s+(\w+(?:\s\w+)?)\s*\]", line)
+                band_match = re.search(
+                    r"\[\s*(\w+G)\s+(\w+(?:\s\w+)?)\s*\]", line)
                 if band_match:
-                    current_band = band_match.group(1)  # "5G"
-                    current_description = band_match.group(2).strip()  # "Low", "Mid", etc.
+                    current_band = band_match.group(1)
+                    current_description = band_match.group(2).strip()
                     continue
-                
-                # Extraction delta
-                delta_match = re.search(r"=>\s*a(\d+)_gainerror_.*?=>\s*a\1_delta=\s*(-?\d+)", line)
+
+                delta_match = re.search(
+                    r"=>\s*a(\d+)_gainerror_.*?=>\s*a\1_delta=\s*(-?\d+)", line)
                 if delta_match and current_band and current_description:
                     delta_entries.append({
                         'bande': current_band,
@@ -77,8 +73,8 @@ def upload_log(request):
                         'ant': int(delta_match.group(1)),
                         'delta': int(delta_match.group(2))
                     })
-        
-        # Création des entrées delta dans la base
+
+        # Création des entrées delta
         for entry in delta_entries:
             test_results.append(ConduitResult(
                 nom_fichier=file.name,
@@ -88,7 +84,7 @@ def upload_log(request):
                 description=entry['description'],
                 ant=entry['ant'],
                 delta=entry['delta'],
-                ressource=ressource,  # Ajout de la ressource
+                ressource=ressource,
                 # Tous les autres champs à None
                 frequence=None,
                 evm=None,
@@ -113,13 +109,45 @@ def upload_log(request):
                 rssi_max=None,
                 evm_min=None,
                 evm_max=None,
+                freq_error_avg=None,
+                lo_leakage_dbc=None,
+                lo_leakage_margin=None,
+                margin_db_lo_a=None,
+                margin_db_lo_b=None,
+                margin_db_up_a=None,
+                margin_db_up_b=None,
+                obw_mhz=None,
+                violation_percentage=None,
+                number_of_avg=None,
+                spatial_stream=None,
+                amp_err_db=None,
+                cable_loss_db=None,
+                data_rate=None,
+                evm_avg_db=None,
+                evm_db_avg=None,
+                evm_db_max=None,
+                evm_db_min=None,
+                freq_at_margin_lo_a=None,
+                freq_at_margin_lo_b=None,
+                freq_at_margin_up_a=None,
+                freq_at_margin_up_b=None,
+                freq_error_max=None,
+                freq_error_min=None,
+                lo_leakage=None,
+                obw_freq_start=None,
+                obw_freq_stop=None,
+                obw_percentage_11ac=None,
+                obw_percentage_lower=None,
+                obw_percentage_upper=None,
+                obw_percentage=None,
+                phase_err=None,
+                phase_noise_rms=None,
+                symbol_clk_err=None,
+                tx_power_dbm=None,
                 created_by=user,
             ))
-        # ==================================================
-        # FIN SECTION: Extraction des deltas
-        # ==================================================
 
-        # SECTION: Extraction des autres valeurs (code existant)
+        # SECTION: Extraction des autres valeurs
         regex_patterns = {
             "POWER_RMS_AVG_VSA1": r"POWER_RMS_AVG_VSA1\s*:\s*(-?\d+\.\d+)",
             "POWER_RMS_MAX_VSA1": r"POWER_RMS_MAX_VSA1\s*:\s*(-?\d+\.\d+)",
@@ -140,6 +168,42 @@ def upload_log(request):
             "RSSI_RX": r"(RSSI_RX\d+)\s*:\s*(-?\d+\.\d+)\s*dBm\s*\(\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\)",
             "LIMITS_EVM": r"(PK_EVM_DB_AVG_S1)\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.\d*)?\s*,\s*(-?\d+\.\d*)\s*\)",
             "RESSOURCE": r"Ressource:\s*([A-Za-z0-9_\-]+)\.",
+            # Nouveaux patterns
+            "FREQ_ERROR_AVG": r"FREQ_ERROR_AVG\s*:\s*(-?\d+\.\d+)\s*ppm\s*\(\s*(-?\d+)\s*,\s*(-?\d+)\s*\)",
+            "LO_LEAKAGE_DBC": r"LO_LEAKAGE_DBC_VSA1\s*:\s*(-?\d+\.\d+)\s*dBc\s*\(\s*,\s*(-?\d+\.?\d*)\s*\)",
+            "LO_LEAKAGE_MARGIN": r"LO_LEAKAGE_MARGIN_VSA1\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.?\d*)\s*,\s*\)",
+            "MARGIN_DB_LO_A": r"MARGIN_DB_LO_A_VSA1\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.?\d*)\s*,\s*\)",
+            "MARGIN_DB_LO_B": r"MARGIN_DB_LO_B_VSA1\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.?\d*)\s*,\s*\)",
+            "MARGIN_DB_UP_A": r"MARGIN_DB_UP_A_VSA1\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.?\d*)\s*,\s*\)",
+            "MARGIN_DB_UP_B": r"MARGIN_DB_UP_B_VSA1\s*:\s*(-?\d+\.\d+)\s*dB\s*\(\s*(-?\d+\.?\d*)\s*,\s*\)",
+            "OBW_MHZ": r"OBW_MHZ_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz\s*\(\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\)",
+            "VIOLATION_PERCENTAGE": r"VIOLATION_PERCENTAGE_VSA1\s*:\s*(-?\d+\.\d+)\s*%\s*\(\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\)",
+            "NUMBER_OF_AVG": r"NUMBER_OF_AVG\s*:\s*(\d+)",
+            "SPATIAL_STREAM": r"SPATIAL_STREAM\s*:\s*(\d+)",
+            "AMP_ERR_DB": r"AMP_ERR_DB_VSA1\s*:\s*(-?\d+\.\d+)\s*dB",
+            "CABLE_LOSS_DB": r"CABLE_LOSS_DB_RET1\s*:\s*(-?\d+\.\d+)\s*dB",
+            "DATA_RATE": r"DATA_RATE\s*:\s*(-?\d+\.\d+)\s*Mbps",
+            "EVM_AVG_DB": r"EVM_AVG_DB\s*:\s*(-?\d+\.\d+)\s*dB",
+            "EVM_DB_AVG": r"EVM_DB_AVG_S1\s*:\s*(-?\d+\.\d+)\s*dB",
+            "EVM_DB_MAX": r"EVM_DB_MAX_S1\s*:\s*(-?\d+\.\d+)\s*dB",
+            "EVM_DB_MIN": r"EVM_DB_MIN_S1\s*:\s*(-?\d+\.\d+)\s*dB",
+            "FREQ_AT_MARGIN_LO_A": r"FREQ_AT_MARGIN_LO_A_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz",
+            "FREQ_AT_MARGIN_LO_B": r"FREQ_AT_MARGIN_LO_B_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz",
+            "FREQ_AT_MARGIN_UP_A": r"FREQ_AT_MARGIN_UP_A_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz",
+            "FREQ_AT_MARGIN_UP_B": r"FREQ_AT_MARGIN_UP_B_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz",
+            "FREQ_ERROR_MAX": r"FREQ_ERROR_MAX\s*:\s*(-?\d+\.\d+)\s*ppm",
+            "FREQ_ERROR_MIN": r"FREQ_ERROR_MIN\s*:\s*(-?\d+\.\d+)\s*ppm",
+            "LO_LEAKAGE": r"LO_LEAKAGE_VSA1\s*:\s*(-?\d+\.\d+)\s*dB",
+            "OBW_FREQ_START": r"OBW_FREQ_START_MHZ_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz",
+            "OBW_FREQ_STOP": r"OBW_FREQ_STOP_MHZ_VSA1\s*:\s*(-?\d+\.\d+)\s*MHz",
+            "OBW_PERCENTAGE_11AC": r"OBW_PERCENTAGE_11AC\s*:\s*(-?\d+\.\d+)\s*%",
+            "OBW_PERCENTAGE_LOWER": r"OBW_PERCENTAGE_LOWER_VSA1\s*:\s*(-?\d+\.\d+)\s*%",
+            "OBW_PERCENTAGE_UPPER": r"OBW_PERCENTAGE_UPPER_VSA1\s*:\s*(-?\d+\.\d+)\s*%",
+            "OBW_PERCENTAGE": r"OBW_PERCENTAGE_VSA1\s*:\s*(-?\d+\.\d+)\s*%",
+            "PHASE_ERR": r"PHASE_ERR_VSA1\s*:\s*(-?\d+\.\d+)\s*Degree",
+            "PHASE_NOISE_RMS": r"PHASE_NOISE_RMS_ALL_VSA1\s*:\s*(-?\d+\.\d+)\s*Degree",
+            "SYMBOL_CLK_ERR": r"SYMBOL_CLK_ERR_ALL\s*:\s*(-?\d+\.\d+)\s*ppm",
+            "TX_POWER_DBM": r"TX_POWER_DBM\s*:\s*(-?\d+\.\d+)\s*dBm",
         }
 
         in_rssi_section = False
@@ -154,7 +218,29 @@ def upload_log(request):
                 ressource = match.group(1)
                 break
 
-        for i, line in enumerate(content):         
+        # Initialisation des nouvelles variables
+        freq_error_avg = None
+        lo_leakage_dbc = None
+        lo_leakage_margin = None
+        margin_db_lo_a = None
+        margin_db_lo_b = None
+        margin_db_up_a = None
+        margin_db_up_b = None
+        obw_mhz = None
+        violation_percentage = None
+        number_of_avg = spatial_stream = None
+        amp_err_db = cable_loss_db = data_rate = None
+        evm_avg_db = evm_db_avg = evm_db_max = evm_db_min = None
+        freq_at_margin_lo_a = freq_at_margin_lo_b = None
+        freq_at_margin_up_a = freq_at_margin_up_b = None
+        freq_error_max = freq_error_min = None
+        lo_leakage = None
+        obw_freq_start = obw_freq_stop = None
+        obw_percentage_11ac = obw_percentage_lower = obw_percentage_upper = obw_percentage = None
+        phase_err = phase_noise_rms = None
+        symbol_clk_err = tx_power_dbm = None
+
+        for i, line in enumerate(content):
             if "Verify_RSSI" in line:
                 in_rssi_section = True
 
@@ -162,10 +248,10 @@ def upload_log(request):
                 in_rssi_section = False
 
             if in_rssi_section:
-                match = re.search(regex_patterns["BSS_FREQ_MHZ_PRIMARY"], line) 
+                match = re.search(regex_patterns["BSS_FREQ_MHZ_PRIMARY"], line)
                 if match:
                     rssi_freq = int(match.group(1))
-            
+
                 match = re.search(regex_patterns["RSSI_RX"], line)
                 if match:
                     rssi_ant = match.group(1)
@@ -197,11 +283,30 @@ def upload_log(request):
                         rssi_min = rssi_values[rssi_key]['min']
                         rssi_max = rssi_values[rssi_key]['max']
 
-                    # Initialisation des valeurs
+                    # Réinitialisation des valeurs pour chaque nouveau test
                     values = {key: None for key in regex_patterns}
                     values["ERROR_MESSAGE"] = ""
                     limit_min, limit_max = None, None
                     evm, evm_min, evm_max = None, None, None
+                    freq_error_avg = None
+                    lo_leakage_dbc = None
+                    lo_leakage_margin = None
+                    margin_db_lo_a = None
+                    margin_db_lo_b = None
+                    margin_db_up_a = None
+                    margin_db_up_b = None
+                    obw_mhz = None
+                    violation_percentage = None
+                    number_of_avg = spatial_stream = None
+                    amp_err_db = cable_loss_db = data_rate = None
+                    evm_avg_db = evm_db_avg = evm_db_max = evm_db_min = None
+                    freq_at_margin_lo_a = freq_at_margin_lo_b = None
+                    freq_at_margin_up_a = freq_at_margin_up_b = None
+                    lo_leakage = None
+                    obw_freq_start = obw_freq_stop = None
+                    obw_percentage_11ac = obw_percentage_lower = obw_percentage_upper = obw_percentage = None
+                    phase_err = phase_noise_rms = None
+                    symbol_clk_err = tx_power_dbm = None
 
                     for j in range(i + 1, len(content)):
                         for key, pattern in regex_patterns.items():
@@ -210,46 +315,188 @@ def upload_log(request):
                                 if key == "LIMITS":
                                     limit_min = float(match.group(2))
                                     limit_max = float(match.group(3))
-                                    
-                                if key == "LIMITS_EVM":
+
+                                elif key == "LIMITS_EVM":
                                     evm = match.group(2)
                                     evm_min = match.group(3)
                                     evm_max = match.group(4)
 
                                     if evm is not None:
                                         evm = float(evm)
-                                    else: evm = None
                                     if evm_min is not None:
                                         evm_min = float(evm_min)
-                                    else: evm_min = None
                                     if evm_max is not None:
                                         evm_max = float(evm_max)
-                                    else: evm_max = None
 
-                                if key != "ERROR_MESSAGE":
+                                elif key == "FREQ_ERROR_AVG":
+                                    freq_error_avg = float(match.group(1))
+                                    
+                                    print(
+                                        f"Found : {freq_error_avg}")
+
+                                elif key == "LO_LEAKAGE_DBC":
+                                    lo_leakage_dbc = float(match.group(1))
+                                    
+                                    print(f"Found 1: {lo_leakage_dbc}")
+
+                                elif key == "LO_LEAKAGE_MARGIN":
+                                    lo_leakage_margin = float(match.group(1))
+                                    
+                                    print( f"Found 2: {lo_leakage_margin}")
+
+                                elif key == "MARGIN_DB_LO_A":
+                                    margin_db_lo_a = float(match.group(1))
+                                    print(f"Found 3: {margin_db_lo_a}")
+
+
+                                elif key == "MARGIN_DB_LO_B":
+                                    margin_db_lo_b = float(match.group(1))
+                                    print(f"Found 4: {margin_db_lo_b}")
+
+                                elif key == "MARGIN_DB_UP_A":
+                                    margin_db_up_a = float(match.group(1))
+                                    print(f"Found 5: {margin_db_up_a}")
+
+                                elif key == "MARGIN_DB_UP_B":
+                                    margin_db_up_b = float(match.group(1))
+                                    print(f"Found 6: {margin_db_up_b}")
+
+                                elif key == "OBW_MHZ":
+                                    obw_mhz = float(match.group(1))
+                                    print(f"Found 7: {obw_mhz}")
+
+                                elif key == "VIOLATION_PERCENTAGE":
+                                    violation_percentage = float(match.group(1))
+                                    print(f"Found 8: {violation_percentage}")
+
+                                elif key == "NUMBER_OF_AVG":
+                                    number_of_avg = int(match.group(1))
+                                    print(f"Found 9: {number_of_avg}")
+
+                                elif key == "SPATIAL_STREAM":
+                                    spatial_stream = int(match.group(1))
+                                    print(f"Found 10: {spatial_stream}")
+
+                                elif key == "AMP_ERR_DB":
+                                    amp_err_db = float(match.group(1))
+                                    print(f"Found 11: {amp_err_db}")
+
+                                elif key == "CABLE_LOSS_DB":
+                                    cable_loss_db = float(match.group(1))
+                                    print(f"Found 12: {cable_loss_db}")
+
+                                elif key == "DATA_RATE":
+                                    data_rate = float(match.group(1))
+                                    print(f"Found 13: {data_rate}")
+
+                                elif key == "EVM_AVG_DB":
+                                    evm_avg_db = float(match.group(1))
+                                    print(f"Found 14: {evm_avg_db}")
+
+                                elif key == "EVM_DB_AVG":
+                                    evm_db_avg = float(match.group(1))
+                                    print(f"Found 15: {evm_db_avg}")
+
+                                elif key == "EVM_DB_MAX":
+                                    evm_db_max = float(match.group(1))
+                                    print(f"Found 16: {evm_db_max}")
+
+                                elif key == "EVM_DB_MIN":
+                                    evm_db_min = float(match.group(1))
+                                    print(f"Found 17: {evm_db_min}")
+
+                                elif key == "FREQ_AT_MARGIN_LO_A":
+                                    freq_at_margin_lo_a = float(match.group(1))
+                                    print(f"Found 18: {freq_at_margin_lo_a}")
+
+                                elif key == "FREQ_AT_MARGIN_LO_B":
+                                    freq_at_margin_lo_b = float(match.group(1))
+                                    print(f"Found 19: {freq_at_margin_lo_b}")
+
+                                elif key == "FREQ_AT_MARGIN_UP_A":
+                                    freq_at_margin_up_a = float(match.group(1))
+                                    print(f"Found 20: {freq_at_margin_up_a}")
+
+                                elif key == "FREQ_AT_MARGIN_UP_B":
+                                    freq_at_margin_up_b = float(match.group(1))
+                                    print(f"Found 21: {freq_at_margin_up_b}")
+
+                                elif key == "FREQ_ERROR_MAX":
+                                    freq_error_max = float(match.group(1))
+                                    print(f"Found 22: {freq_error_max}")
+
+                                elif key == "FREQ_ERROR_MIN":
+                                    freq_error_min = float(match.group(1))
+                                    print(f"Found 23: {freq_error_min}")
+
+                                elif key == "LO_LEAKAGE":
+                                    lo_leakage = float(match.group(1))
+                                    print(f"Found 24: {lo_leakage}")
+
+                                elif key == "OBW_FREQ_START":
+                                    obw_freq_start = float(match.group(1))
+                                    print(f"Found 25: {obw_freq_start}")
+
+                                elif key == "OBW_FREQ_STOP":
+                                    obw_freq_stop = float(match.group(1))
+                                    print(f"Found 26: {obw_freq_stop}")
+
+                                elif key == "OBW_PERCENTAGE_11AC":
+                                    obw_percentage_11ac = float(match.group(1))
+                                    print(f"Found 27: {obw_percentage_11ac}")
+
+                                elif key == "OBW_PERCENTAGE_LOWER":
+                                    obw_percentage_lower = float(match.group(1))
+                                    print(f"Found 28: {obw_percentage_lower}")
+
+                                elif key == "OBW_PERCENTAGE_UPPER":
+                                    obw_percentage_upper = float(match.group(1))
+                                    print(f"Found 29: {obw_percentage_upper}")
+
+                                elif key == "OBW_PERCENTAGE":
+                                    obw_percentage = float(match.group(1))
+                                    print(f"Found 30: {obw_percentage}")
+
+                                elif key == "PHASE_ERR":
+                                    phase_err = float(match.group(1))
+                                    print(f"Found 31: {phase_err}")
+
+                                elif key == "PHASE_NOISE_RMS":
+                                    phase_noise_rms = float(match.group(1))
+                                    print(f"Found 32: {phase_noise_rms}")
+
+                                elif key == "SYMBOL_CLK_ERR":
+                                    symbol_clk_err = float(match.group(1))
+                                    print(f"Found 33: {symbol_clk_err}")
+
+                                elif key == "TX_POWER_DBM":
+                                    tx_power_dbm = float(match.group(1))
+                                    print(f"Found 34: {tx_power_dbm}")
+
+                                elif key != "ERROR_MESSAGE":
                                     try:
                                         values[key] = float(match.group(1))
                                     except ValueError:
                                         values[key] = match.group(1)
                                 else:
-                                    values[key] = match.group(1).strip()                               
+                                    values[key] = match.group(1).strip()
 
                         if "TX_VERIFY" in content[j]:
                             break
 
                     # Vérification que les valeurs requises sont présentes
                     required_fields = [k for k in regex_patterns if k not in ["ERROR_MESSAGE", "LIMITS", "RSSI_RX", "LIMITS_EVM", "RESSOURCE"]]
-                    if all(values[key] is not None for key in required_fields):
+                    if any(values.get(key) is not None for key in required_fields):
                         test_results.append(ConduitResult(
                             nom_fichier=file.name,
                             nbrfile=file_count,
                             code=code,
                             bande=current_bande,
-                            description=None,  # Pas de description pour les tests normaux
+                            description=None,
                             frequence=frequence,
                             ant=ant,
-                            ressource=ressource,  # Ajout de la ressource
-                            delta=None,  # Pas de delta pour les tests normaux
+                            ressource=ressource,
+                            delta=None,
                             evm=evm,
                             power_rms_avg=values["POWER_RMS_AVG_VSA1"],
                             power_rms_max=values["POWER_RMS_MAX_VSA1"],
@@ -272,6 +519,41 @@ def upload_log(request):
                             rssi_max=rssi_max,
                             evm_min=evm_min,
                             evm_max=evm_max,
+                            freq_error_avg=freq_error_avg,
+                            freq_error_min = freq_error_min,
+                            freq_error_max = freq_error_max,
+                            lo_leakage_dbc=lo_leakage_dbc,
+                            lo_leakage_margin=lo_leakage_margin,
+                            margin_db_lo_a=margin_db_lo_a,
+                            margin_db_lo_b=margin_db_lo_b,
+                            margin_db_up_a=margin_db_up_a,
+                            margin_db_up_b=margin_db_up_b,
+                            obw_mhz=obw_mhz,
+                            violation_percentage=violation_percentage,
+                            number_of_avg=number_of_avg,
+                            spatial_stream=spatial_stream,
+                            amp_err_db=amp_err_db,
+                            cable_loss_db=cable_loss_db,
+                            data_rate=data_rate,
+                            evm_avg_db=evm_avg_db,
+                            evm_db_avg=evm_db_avg,
+                            evm_db_max=evm_db_max,
+                            evm_db_min=evm_db_min,
+                            freq_at_margin_lo_a=freq_at_margin_lo_a,
+                            freq_at_margin_lo_b=freq_at_margin_lo_b,
+                            freq_at_margin_up_a=freq_at_margin_up_a,
+                            freq_at_margin_up_b=freq_at_margin_up_b,
+                            lo_leakage=lo_leakage,
+                            obw_freq_start=obw_freq_start,
+                            obw_freq_stop=obw_freq_stop,
+                            obw_percentage_11ac=obw_percentage_11ac,
+                            obw_percentage_lower=obw_percentage_lower,
+                            obw_percentage_upper=obw_percentage_upper,
+                            obw_percentage=obw_percentage,
+                            phase_err=phase_err,
+                            phase_noise_rms=phase_noise_rms,
+                            symbol_clk_err=symbol_clk_err,
+                            tx_power_dbm=tx_power_dbm,
                             created_by=user
                         ))
 
@@ -282,8 +564,7 @@ def upload_log(request):
         return Response({"error": "Aucun test trouvé dans les fichiers"}, status=400)
     
     for result in all_test_results:
-        result.User_id = request.user  # ou un autre utilisateur si applicable
-
+        result.User_id = request.user
 
     ConduitResult.objects.bulk_create(all_test_results) 
     return Response({"message": f"{len(all_test_results)} tests importés avec succès"})
