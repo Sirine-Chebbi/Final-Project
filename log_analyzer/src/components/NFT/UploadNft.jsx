@@ -55,13 +55,13 @@ const UploadNFT = ({ onUploadSuccess }) => {
       setMessage(response.data.message || "Fichiers envoyés avec succès");
       
       if (onUploadSuccess) {
-        await onUploadSuccess(); // Rafraîchit les données parentes
+        await onUploadSuccess(); 
       }
 
       // Réinitialiser la sélection de fichiers après un délai
       setTimeout(() => {
         setFiles(null);
-      }, 2000);
+      }, 20000);
 
     } catch (error) {
       console.error("Erreur lors de l'envoi:", error);

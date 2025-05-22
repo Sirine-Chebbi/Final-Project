@@ -70,6 +70,8 @@ const Powergraph = ({ filteredResults, selectedCaisson, setShowAi, setStatData }
       powerValues.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) /
       powerValues.length
     );
+    
+    
     const dataMin = parseFloat(data[0].limit_min);
     const dataMax = parseFloat(data[0].limit_max);
 
@@ -319,7 +321,6 @@ const Powergraph = ({ filteredResults, selectedCaisson, setShowAi, setStatData }
                   scales: {
                     x: {
                       type: "linear",
-                      position: "bottom",
                       title: {
                         display: true,
                         text: "Power",

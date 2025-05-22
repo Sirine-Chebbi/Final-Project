@@ -8,6 +8,7 @@ import Rssigraph from "../components/Wifi_Conduit/Graphs/Rssigraph"
 import Powergraph from "../components/Wifi_Conduit/Graphs/Powergraph"
 import Evmgraph from "../components/Wifi_Conduit/Graphs/Evmgraph"
 import Deltagraph from "../components/Wifi_Conduit/Graphs/Deltagraph"
+import MeasureGraph from "../components/Wifi_Conduit/Graphs/MeasureGraph"
 import Delta from "../components/Wifi_Conduit/Delta"
 import Filters from "../components/Wifi_Conduit/Filters"
 import api from '../Services/api';
@@ -109,6 +110,7 @@ function Wifi_Conduit() {
           selectedCaisson={selectedCaisson}
           Results={Results}
         />
+        <MeasureGraph filteredResults={filteredResults} selectedCaisson={selectedCaisson} />
         <p id="pwr"></p>
         <Powergraph setStatData={setStatData} filteredResults={filteredResults} selectedCaisson={selectedCaisson} setShowAi={setShowAi}/>
         <p id="evm"></p>
