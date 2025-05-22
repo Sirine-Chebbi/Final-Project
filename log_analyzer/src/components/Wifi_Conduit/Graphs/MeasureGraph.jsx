@@ -401,7 +401,7 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
               ))}
             </select>
           </div>
-
+          <br />
           {/* Section de saisie manuelle des limites avec bouton Annuler (toujours affiché) */}
           <div className="flex items-center gap-4">
             <label htmlFor="minLimit" className="text-white">
@@ -431,7 +431,7 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
               onClick={handleCancelLimits}
               className="bg-red-600 hover:bg-red-700 text-white p-2 rounded transition duration-200"
             >
-              Annuler Limites
+              Annuler
             </button>
           </div>
         </div>
