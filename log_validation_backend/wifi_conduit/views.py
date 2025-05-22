@@ -27,7 +27,6 @@ def upload_log(request):
 
     for file in files:
         content = file.read().decode('latin-1').splitlines()
-        print(f"File read with {len(content)} lines.")
 
         # Extraction du code
         code = None
@@ -331,147 +330,109 @@ def upload_log(request):
                                 elif key == "FREQ_ERROR_AVG":
                                     freq_error_avg = float(match.group(1))
                                     
-                                    print(
-                                        f"Found : {freq_error_avg}")
 
                                 elif key == "LO_LEAKAGE_DBC":
                                     lo_leakage_dbc = float(match.group(1))
                                     
-                                    print(f"Found 1: {lo_leakage_dbc}")
 
                                 elif key == "LO_LEAKAGE_MARGIN":
                                     lo_leakage_margin = float(match.group(1))
                                     
-                                    print( f"Found 2: {lo_leakage_margin}")
 
                                 elif key == "MARGIN_DB_LO_A":
                                     margin_db_lo_a = float(match.group(1))
-                                    print(f"Found 3: {margin_db_lo_a}")
-
 
                                 elif key == "MARGIN_DB_LO_B":
                                     margin_db_lo_b = float(match.group(1))
-                                    print(f"Found 4: {margin_db_lo_b}")
 
                                 elif key == "MARGIN_DB_UP_A":
                                     margin_db_up_a = float(match.group(1))
-                                    print(f"Found 5: {margin_db_up_a}")
 
                                 elif key == "MARGIN_DB_UP_B":
                                     margin_db_up_b = float(match.group(1))
-                                    print(f"Found 6: {margin_db_up_b}")
 
                                 elif key == "OBW_MHZ":
                                     obw_mhz = float(match.group(1))
-                                    print(f"Found 7: {obw_mhz}")
 
                                 elif key == "VIOLATION_PERCENTAGE":
                                     violation_percentage = float(match.group(1))
-                                    print(f"Found 8: {violation_percentage}")
 
                                 elif key == "NUMBER_OF_AVG":
                                     number_of_avg = int(match.group(1))
-                                    print(f"Found 9: {number_of_avg}")
 
                                 elif key == "SPATIAL_STREAM":
                                     spatial_stream = int(match.group(1))
-                                    print(f"Found 10: {spatial_stream}")
 
                                 elif key == "AMP_ERR_DB":
                                     amp_err_db = float(match.group(1))
-                                    print(f"Found 11: {amp_err_db}")
 
                                 elif key == "CABLE_LOSS_DB":
                                     cable_loss_db = float(match.group(1))
-                                    print(f"Found 12: {cable_loss_db}")
 
                                 elif key == "DATA_RATE":
                                     data_rate = float(match.group(1))
-                                    print(f"Found 13: {data_rate}")
 
                                 elif key == "EVM_AVG_DB":
                                     evm_avg_db = float(match.group(1))
-                                    print(f"Found 14: {evm_avg_db}")
 
                                 elif key == "EVM_DB_AVG":
                                     evm_db_avg = float(match.group(1))
-                                    print(f"Found 15: {evm_db_avg}")
 
                                 elif key == "EVM_DB_MAX":
                                     evm_db_max = float(match.group(1))
-                                    print(f"Found 16: {evm_db_max}")
 
                                 elif key == "EVM_DB_MIN":
                                     evm_db_min = float(match.group(1))
-                                    print(f"Found 17: {evm_db_min}")
 
                                 elif key == "FREQ_AT_MARGIN_LO_A":
                                     freq_at_margin_lo_a = float(match.group(1))
-                                    print(f"Found 18: {freq_at_margin_lo_a}")
 
                                 elif key == "FREQ_AT_MARGIN_LO_B":
                                     freq_at_margin_lo_b = float(match.group(1))
-                                    print(f"Found 19: {freq_at_margin_lo_b}")
 
                                 elif key == "FREQ_AT_MARGIN_UP_A":
                                     freq_at_margin_up_a = float(match.group(1))
-                                    print(f"Found 20: {freq_at_margin_up_a}")
 
                                 elif key == "FREQ_AT_MARGIN_UP_B":
                                     freq_at_margin_up_b = float(match.group(1))
-                                    print(f"Found 21: {freq_at_margin_up_b}")
 
                                 elif key == "FREQ_ERROR_MAX":
                                     freq_error_max = float(match.group(1))
-                                    print(f"Found 22: {freq_error_max}")
-
                                 elif key == "FREQ_ERROR_MIN":
                                     freq_error_min = float(match.group(1))
-                                    print(f"Found 23: {freq_error_min}")
 
                                 elif key == "LO_LEAKAGE":
                                     lo_leakage = float(match.group(1))
-                                    print(f"Found 24: {lo_leakage}")
 
                                 elif key == "OBW_FREQ_START":
                                     obw_freq_start = float(match.group(1))
-                                    print(f"Found 25: {obw_freq_start}")
 
                                 elif key == "OBW_FREQ_STOP":
                                     obw_freq_stop = float(match.group(1))
-                                    print(f"Found 26: {obw_freq_stop}")
 
                                 elif key == "OBW_PERCENTAGE_11AC":
                                     obw_percentage_11ac = float(match.group(1))
-                                    print(f"Found 27: {obw_percentage_11ac}")
 
                                 elif key == "OBW_PERCENTAGE_LOWER":
                                     obw_percentage_lower = float(match.group(1))
-                                    print(f"Found 28: {obw_percentage_lower}")
 
                                 elif key == "OBW_PERCENTAGE_UPPER":
                                     obw_percentage_upper = float(match.group(1))
-                                    print(f"Found 29: {obw_percentage_upper}")
 
                                 elif key == "OBW_PERCENTAGE":
                                     obw_percentage = float(match.group(1))
-                                    print(f"Found 30: {obw_percentage}")
 
                                 elif key == "PHASE_ERR":
                                     phase_err = float(match.group(1))
-                                    print(f"Found 31: {phase_err}")
 
                                 elif key == "PHASE_NOISE_RMS":
                                     phase_noise_rms = float(match.group(1))
-                                    print(f"Found 32: {phase_noise_rms}")
-
+ 
                                 elif key == "SYMBOL_CLK_ERR":
                                     symbol_clk_err = float(match.group(1))
-                                    print(f"Found 33: {symbol_clk_err}")
 
                                 elif key == "TX_POWER_DBM":
                                     tx_power_dbm = float(match.group(1))
-                                    print(f"Found 34: {tx_power_dbm}")
 
                                 elif key != "ERROR_MESSAGE":
                                     try:

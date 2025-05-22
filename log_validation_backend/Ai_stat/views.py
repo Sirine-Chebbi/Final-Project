@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import httpx
 import os
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -13,8 +14,14 @@ from openai import OpenAI
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("OPENROUTER_API_KEY"),
+    http_client=httpx.Client(  # Explicit HTTP client configuration
+        headers={
+            "HTTP-Referer": "http://localhost:8000",  # Optional
+            "X-Title": "My QA App",  # Optional
+        }
+    )
 )
-print(os.getenv("OPENROUTER_API_KEY"))
+
 
 @api_view(['POST'])
 def analyze_data(request):
@@ -31,14 +38,10 @@ def analyze_data(request):
 
     try:
         response = client.chat.completions.create(
-            model="meta-llama/llama-3.3-8b-instruct:free", 
+            model="meta-llama/llama-4-maverick:free", 
             messages=[
                 {"role": "user", "content": prompt}
-            ],
-            extra_headers={  # optional
-                "HTTP-Referer": "http://localhost:8000",  
-                "X-Title": "My QA App"
-            }
+            ]
         )
         ai_reply = response.choices[0].message.content
         return Response({"ai_decision": ai_reply}, status=status.HTTP_200_OK)

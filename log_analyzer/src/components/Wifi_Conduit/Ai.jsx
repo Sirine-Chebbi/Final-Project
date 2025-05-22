@@ -21,7 +21,6 @@ function Ai(props) {
             });
 
             const result = await response.json();
-            console.log("ai_response", result);
 
             if (result.error) {
                 console.error("Error from AI backend:", result.error);
