@@ -1,5 +1,8 @@
 import { forwardRef } from "react";
 import Tooltipinf from "../../Tooltipinf";
+import { jwtDecode } from "jwt-decode";
+import { GetUser } from 'log_analyzer/src/Services/Userservice';
+import { useEffect, useState } from "react";
 
 import {
   Chart as ChartJS,
@@ -29,7 +32,31 @@ ChartJS.register(
   Title
 );
 
-const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
+const Powergraph = ({ filteredResults, selectedCaisson, setShowAi, setStatData }, ref) => {
+  const [datauser, setdataUser] = useState([]);
+  const token = localStorage.getItem("access_token");
+
+  let userData = null;
+
+  if (token) {
+    try {
+      userData = jwtDecode(token);
+    } catch (error) {
+      console.error("Invalid token", error);
+    }
+  }
+
+  const fetchUser = async () => {
+    const data = await GetUser(userData.matricule);
+    setdataUser(data);
+  };
+
+
+  useEffect(() => {
+    fetchUser();
+  }, [])
+
+
   const calculateStats = (data) => {
     if (!data || data.length === 0) return null;
 
@@ -122,10 +149,11 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
             x: parseFloat(x),
             y: y * scaleFactor,
           })),
-          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          backgroundColor: "rgba(255, 206, 100, 0.7)",
           yAxisID: "y1",
           barPercentage: 1.0,
           categoryPercentage: 1.0,
+          order:1,
         },
         {
           type: "line",
@@ -137,11 +165,12 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "rgba(255, 206, 86, 1)",
-          borderWidth: 2,
+          borderColor: "rgba(255, 0, 0, 50)",
+          borderWidth: 3,
           borderDash: [5, 5],
           pointRadius: 0,
           yAxisID: "y",
+          order:0,
         },
         {
           type: "line",
@@ -153,11 +182,12 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "rgba(255, 206, 86, 1)",
-          borderWidth: 2,
+          borderColor: "rgba(255, 0, 0, 50)",
+          borderWidth: 3,
           borderDash: [5, 5],
           pointRadius: 0,
           yAxisID: "y",
+          order:0,
         },
       ],
     };
@@ -199,8 +229,32 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
       : 0;
 
   const chartData = prepareChartData();
+  let statData = {};
 
-
+  try {
+    statData = {
+      cp: cp,
+      cpk: cpk,
+      pp: pp,
+      ppk: ppk,
+      mean: stats?.mean,
+      stdDev: stats?.stdDev,
+      min: stats?.min,
+      max: stats?.max,
+      limMin: stats?.limMin,
+      limMax: stats?.limMax,
+      gaussianCurve: stats?.gaussianCurve,
+      powerValues: stats?.powerValues,
+      histogram: chartData.datasets[2].data,
+      histogramMax: Math.max(...chartData.datasets[2].data.map((d) => d.y)),
+      histogramMin: Math.min(...chartData.datasets[2].data.map((d) => d.y)),
+      histogramMean: stats?.mean,
+      histogramStdDev: stats?.stdDev,
+      histogramBinSize: 0.1,
+    }
+  } catch {
+    statData = {}
+  }
   return (
     <>
       <div ref={ref} id="power-graph">
@@ -211,7 +265,12 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
                 Power - {filteredResults[0]?.frequence}Hz - Antenne{" "}
                 {filteredResults[0]?.ant} || Caisson: {selectedCaisson}
               </h2>
-              <div className="flex gap-5">
+              <div className={`flex gap-5`}>
+                <div onClick={() => setShowAi(true) | setStatData(statData)} className={`hover:bg-gray-700 duration-200 border-2 border-yellow-400 rounded-xl p-1 text-yellow-400 px-5 h-10 place-items-center cursor-pointer flex ${datauser.role != "1" ? 'hidden' : ''}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />
+                  </svg>
+                  <p className="ml-2">AI</p></div>
                 <Tooltipinf position="bottom" titre="TX Power (puissance d’émission)" text="indique la force avec laquelle un appareil envoie un signal radio. Plus elle est élevée, plus le signal peut aller loin. Elle est souvent exprimée en dBm ou en watts.">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#111827" viewBox="0 0 24 24" strokeWidth={1.5} stroke="oklch(85.2% 0.199 91.936)" className="size-9 flex justify-self-end -mb-6 ">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
@@ -354,6 +413,8 @@ const Powergraph = ({ filteredResults, selectedCaisson }, ref) => {
 Powergraph.propTypes = {
   filteredResults: PropTypes.array.isRequired,
   selectedCaisson: PropTypes.string.isRequired,
+  setShowAi: PropTypes.func.isRequired,
+  setStatData: PropTypes.func.isRequired,
 };
 
 export default forwardRef(Powergraph);

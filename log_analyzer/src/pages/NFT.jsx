@@ -8,6 +8,7 @@ import Nftgraph from '../components/NFT/Nftgraph';
 import TableNFT from '../components/NFT/TableNFT';
 import UploadNFT from '../components/NFT/UploadNft';
 import Profile from "../components/Admin/Profile"
+import Ai from '../components/Wifi_Conduit/Ai';
 
 const NFT = () => {
   const [testResults, setTestResults] = useState([]);
@@ -21,6 +22,9 @@ const NFT = () => {
   const navigate = useNavigate();
   const [selectedPosition, setSelectedPosition] = useState(""); 
   const [showProfile, setShowProfile] = useState(false);
+  const [showAi, setShowAi] = useState(false);
+  const [statData, setStatData] = useState({});
+  
 
 
   const fetchTestResults = async () => {
@@ -70,6 +74,7 @@ const NFT = () => {
     <>
       <Navbar showProfile={showProfile} setShowProfile={setShowProfile}></Navbar>
       <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
+      <Ai statData={statData} trigger={showAi} showAi={showAi} setShowAi={setShowAi}></Ai>
       <div className="ml-40 mr-40 mt-10">
         <UploadNFT onUploadSuccess={fetchTestResults} />
         <NftFilter
@@ -96,6 +101,8 @@ const NFT = () => {
           min={min} 
           max={max} 
           selectedPosition={selectedPosition}
+          setStatData={setStatData} 
+          setShowAi={setShowAi}
         />
       </div>
     </>

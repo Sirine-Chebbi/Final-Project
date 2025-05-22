@@ -44,6 +44,7 @@ const UploadNFT = ({ onUploadSuccess }) => {
             "Content-Type": "multipart/form-data",
             "Authorization": `Bearer ${token}`
           },
+          timeout: 0,
           onUploadProgress: progress => {
             const percentCompleted = Math.round((progress.loaded / progress.total) * 100);
             setMessage(`Envoi... ${percentCompleted}%`);

@@ -27,7 +27,7 @@ COPY . .
 
 # Copy wait script and make it executable
 COPY wait-for-db.sh /wait-for-db.sh
-RUN chmod +x /wait-for-db.sh
+RUN sed -i 's/\r$//' /wait-for-db.sh && chmod +x /wait-for-db.sh
 
 # Collect static files (only for production, optional in dev)
 RUN python manage.py collectstatic --noinput

@@ -15,6 +15,7 @@ import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
 import { authService } from "../Services/authService";
 import Profile from "../components/Admin/Profile"
+import Ai from '../components/Wifi_Conduit/Ai';
 
 function Wifi_Conduit() {
   const [selectedFrequency, setSelectedFrequency] = useState("");
@@ -28,6 +29,9 @@ function Wifi_Conduit() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
+  const [showAi, setShowAi] = useState(false);
+  const [statData, setStatData] = useState({});
+
 
   const fetchTestResults = async () => {
     try {
@@ -76,6 +80,7 @@ function Wifi_Conduit() {
     <>
       <Navbar showProfile={showProfile} setShowProfile={setShowProfile} />
       <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile} />
+      <Ai statData={statData} trigger={showAi} showAi={showAi} setShowAi={setShowAi}></Ai>
       <Menu />   
       <div className="pr-30 pl-60 mb-10">
         <div className="flex justify-between mt-10">
@@ -105,13 +110,13 @@ function Wifi_Conduit() {
           Results={Results}
         />
         <p id="pwr"></p>
-        <Powergraph filteredResults={filteredResults} selectedCaisson={selectedCaisson} />
+        <Powergraph setStatData={setStatData} filteredResults={filteredResults} selectedCaisson={selectedCaisson} setShowAi={setShowAi}/>
         <p id="evm"></p>
-        <Evmgraph filteredResults={filteredResults} selectedCaisson={selectedCaisson} />
+        <Evmgraph setStatData={setStatData} setShowAi={setShowAi} filteredResults={filteredResults} selectedCaisson={selectedCaisson} />
         <p id="rssi"></p>
-        <Rssigraph filteredResults={filteredResults} selectedCaisson={selectedCaisson} />
+        <Rssigraph setStatData={setStatData} setShowAi={setShowAi} filteredResults={filteredResults} selectedCaisson={selectedCaisson} />
         <p id="deltagraph"></p>
-        <Deltagraph Results={Results} selectedCaisson={selectedCaisson} />
+        <Deltagraph setStatData={setStatData} setShowAi={setShowAi} Results={Results} selectedCaisson={selectedCaisson} />
       </div> 
     </>
   );

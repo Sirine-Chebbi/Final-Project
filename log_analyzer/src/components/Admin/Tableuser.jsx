@@ -51,7 +51,7 @@ const Tableuser = (props) => {
               onChange={(e) => setPrenom(e.target.value)}
               placeholder="Prenom"
               className={`${
-                props.Hidden ? "opacity-100 ml-10" : "opacity-0"
+                props.Hidden ? "opacity-100 ml-10" : "opacity-0 pointer-events-none"
               } border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`}
             />
             <input
@@ -60,7 +60,7 @@ const Tableuser = (props) => {
               placeholder="poste"
               onChange={(e) => setPoste(e.target.value)}
               className={`${
-                props.Hidden ? "opacity-100 ml-10" : "opacity-0"
+                props.Hidden ? "opacity-100 ml-10" : "opacity-0 pointer-events-none"
               } border-cyan-400 border-b-2 p-3 text-xl text-cyan-400 outline-none w-80 duration-200 -ml-10`}
             />
           </div>

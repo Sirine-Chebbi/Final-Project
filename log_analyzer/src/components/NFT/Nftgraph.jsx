@@ -31,7 +31,7 @@ ChartJS.register(
   Title
 );
 
-const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
+const Nftgraph = ({ filteredResults, min, max, selectedPosition, setShowAi, setStatData  }) => {
   const [selectedMin, setSelectedMin] = useState(NaN);
   const [selectedMax, setSelectedMax] = useState(NaN);
   const token = localStorage.getItem("access_token");
@@ -184,10 +184,11 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
             x: parseFloat(x),
             y: y * scaleFactor,
           })),
-          backgroundColor: "rgba(239, 68, 68, 0.7)",
+          backgroundColor: "rgba(255, 206, 100, 0.7)",
           yAxisID: "y1",
           barPercentage: 1.0,
           categoryPercentage: 1.0,
+          order: 1,
         },
         {
           type: "line",
@@ -199,11 +200,12 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#f59e0b", // Using hex color
-          borderWidth: 2,
+          borderColor: "rgba(255, 0, 0, 50)", // Using hex color
+          borderWidth: 3,
           borderDash: [5, 5],
           pointRadius: 0,
           yAxisID: "y",
+          order: 0,
         },
         {
           type: "line",
@@ -215,11 +217,12 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
               y: Math.max(...stats.gaussianCurve.map((p) => p.y)),
             },
           ],
-          borderColor: "#f59e0b", // Using hex color
-          borderWidth: 2,
+          borderColor: "rgba(255, 0, 0, 50)",
+          borderWidth: 3,
           borderDash: [5, 5],
           pointRadius: 0,
           yAxisID: "y",
+          order: 0,
         },
       ],
     };
@@ -350,6 +353,33 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
     pdf.save(`${title}.pdf`);
   };
 
+  let statData = {};
+
+  try {
+    statData = {
+      cp: cp,
+      cpk: cpk,
+      pp: pp,
+      ppk: ppk,
+      mean: stats?.mean,
+      stdDev: stats?.stdDev,
+      min: stats?.min,
+      max: stats?.max,
+      limMin: stats?.limMin,
+      limMax: stats?.limMax,
+      gaussianCurve: stats?.gaussianCurve,
+      powerValues: stats?.powerValues,
+      histogram: chartData.datasets[2].data,
+      histogramMax: Math.max(...chartData.datasets[2].data.map((d) => d.y)),
+      histogramMin: Math.min(...chartData.datasets[2].data.map((d) => d.y)),
+      histogramMean: stats?.mean,
+      histogramStdDev: stats?.stdDev,
+      histogramBinSize: 0.1,
+    }
+  } catch {
+    statData = {}
+  }
+
   return (
     <>
       <h1 className="text-3xl text-cyan-400 font-bold mb-10 mt-20">
@@ -396,9 +426,18 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition }) => {
           ref={chartRef}
           className="p-6 bg-gray-800 rounded-lg hover:scale-102 duration-200 hover:shadow-cyan-400 shadow-2xl mb-20"
         >
-          <h2 className="text-2xl text-cyan-400 mb-4">
-            {filteredResults[0]?.mesure}  || Position: {selectedPosition}
-          </h2>
+          <div className="flex justify-between mb-4">
+            <h2 className="text-2xl text-cyan-400 mb-4">
+              {filteredResults[0]?.mesure}  || Position: {selectedPosition}
+            </h2>
+            <div className={`flex gap-5  ${datauser.role != "1" ? 'hidden' : ''} `}>
+              <div onClick={() => setShowAi(true) | setStatData(statData)} className="hover:bg-gray-700 duration-200 border-2 border-yellow-400 rounded-xl p-1 text-yellow-400 px-5 h-10 place-items-center cursor-pointer flex">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />
+                </svg>
+                <p className="ml-2">AI</p></div>
+            </div>
+          </div>
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-700 p-4 rounded-lg">
               <h3 className="text-cyan-400">Cible</h3>
@@ -551,6 +590,8 @@ Nftgraph.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   selectedPosition: PropTypes.string.isRequired,
+    setShowAi: PropTypes.func.isRequired,
+    setStatData: PropTypes.func.isRequired,
 };
 
 export default Nftgraph;
