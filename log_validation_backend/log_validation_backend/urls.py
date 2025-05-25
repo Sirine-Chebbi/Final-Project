@@ -8,5 +8,6 @@ urlpatterns = [
     path('api/wifi-nft/', include('wifi_nft.urls')),
     path('api/environnement-test/', include('environnement_test.urls')),
     path('api/temps-test/', include('temps_test.urls')),
-    path('api/ai-stat/', include('Ai_stat.urls'))
+    path('api/ai-stat/', include('Ai_stat.urls')),
+    path('api/track/', include('rapports_activite.urls'))
 ]

@@ -64,6 +64,11 @@ function Ai(props) {
                                 <div className='text-left font-mono text-lg'><pre className='text-white whitespace-pre-wrap break-words'>{result}</pre></div>
                             </div>
                         }
+                        { props.type === "power" ? props.setPower(result) : "" }
+                        { props.type === "evm" ? props.setEvm(result) : "" }
+                        { props.type === "rssi" ? props.setRssi(result) : "" }
+                        { props.type === "rx" ? props.setRx(result) : "" }
+                        {props.type === "NFT" ? props.setResp(result) : "" }
                     </div>
                 </div>
             </div>
@@ -76,6 +81,12 @@ Ai.propTypes = {
     setShowAi: PropTypes.func.isRequired,
     showAi: PropTypes.bool.isRequired,
     statData: PropTypes.object.isRequired,
+    setPower: PropTypes.func.isRequired,
+    setEvm: PropTypes.func.isRequired,
+    setRssi: PropTypes.func.isRequired,
+    setRx: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
+    setResp: PropTypes.func.isRequired,
 };
 
 

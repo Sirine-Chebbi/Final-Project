@@ -1,11 +1,13 @@
 import os
 import re
+from django.utils import timezone
+from django.db import transaction
 from auth_app.models import CustomUser
 from django.core.files.storage import default_storage
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import ConduitResult
-
+from rapports_activite.models import Rapports_activite
 
 @api_view(['POST'])
 def upload_log(request):
@@ -20,6 +22,7 @@ def upload_log(request):
     if 'file' not in request.FILES:
         return Response({"error": "Aucun fichier trouvé"}, status=400)
 
+    total_logs_for_this_test_in_upload = 0
     files = request.FILES.getlist('file')
     file_count = len(files)
 
@@ -75,6 +78,7 @@ def upload_log(request):
 
         # Création des entrées delta
         for entry in delta_entries:
+
             test_results.append(ConduitResult(
                 nom_fichier=file.name,
                 nbrfile=file_count,
@@ -528,7 +532,31 @@ def upload_log(request):
         result.User_id = request.user
 
     ConduitResult.objects.bulk_create(all_test_results) 
+    today_date = timezone.localdate()
+
+    try:
+        with transaction.atomic():
+            rapport_quotidien, created = Rapports_activite.objects.get_or_create(
+                utilisateur=user,
+                date_rapport=today_date,
+                defaults={
+                    'nombre_logs_Conduit' : 0,
+                    'nombre_logs_Divers'  : 0,
+                    'nombre_logs_Temps' : 0,
+                    'nombre_logs_Env' : 0,
+                }
+            )
+
+            # Mettre à jour SEULEMENT le compteur du Test 1
+            rapport_quotidien.nombre_logs_Conduit += file_count
+            rapport_quotidien.save()
+
+    except Exception as e:
+        print(f"Erreur lors de la mise à jour du rapport quotidien: {e}")
+
     return Response({"message": f"{len(all_test_results)} tests importés avec succès"})
+
+    
 
 
 @api_view(['GET'])

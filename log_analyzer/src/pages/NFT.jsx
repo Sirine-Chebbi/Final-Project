@@ -25,6 +25,8 @@ const NFT = () => {
   const [showAi, setShowAi] = useState(false);
   const [statData, setStatData] = useState({});
   
+  const [resp, setResp] = useState("");
+  const type = "NFT"
 
 
   const fetchTestResults = async () => {
@@ -74,7 +76,7 @@ const NFT = () => {
     <>
       <Navbar showProfile={showProfile} setShowProfile={setShowProfile}></Navbar>
       <Profile trigger={showProfile} showProfile={showProfile} setShowProfile={setShowProfile}></Profile>
-      <Ai statData={statData} trigger={showAi} showAi={showAi} setShowAi={setShowAi}></Ai>
+      <Ai statData={statData} trigger={showAi} showAi={showAi} setShowAi={setShowAi} setResp={setResp} type={type}></Ai>
       <div className="ml-40 mr-40 mt-10">
         <UploadNFT onUploadSuccess={fetchTestResults} />
         <NftFilter
@@ -103,6 +105,7 @@ const NFT = () => {
           selectedPosition={selectedPosition}
           setStatData={setStatData} 
           setShowAi={setShowAi}
+          resp={resp}
         />
       </div>
     </>

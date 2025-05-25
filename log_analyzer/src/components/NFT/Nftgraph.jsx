@@ -31,7 +31,7 @@ ChartJS.register(
   Title
 );
 
-const Nftgraph = ({ filteredResults, min, max, selectedPosition, setShowAi, setStatData  }) => {
+const Nftgraph = ({ filteredResults, min, max, selectedPosition, setShowAi, setStatData, resp  }) => {
   const [selectedMin, setSelectedMin] = useState(NaN);
   const [selectedMax, setSelectedMax] = useState(NaN);
   const token = localStorage.getItem("access_token");
@@ -350,6 +350,33 @@ const Nftgraph = ({ filteredResults, min, max, selectedPosition, setShowAi, setS
     });
 
     pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
+
+
+    pdf.addPage('landscape');
+        pdf.setFontSize(16);
+        pdf.setTextColor(0, 0, 0);
+        pdf.text('Les décisions de l’IA', 15, 15);
+    
+        // Example table data for "AI decisions"
+        const decisions = [
+          { type: 'Divers testeurs', decision: resp }
+        ];
+    
+        // Convert decisions into body array
+        const decisionTableBody = decisions.map(row => [row.type, row.decision]);
+    
+        autoTable(pdf, {
+          startY: 25,
+          head: [['Type de Graphe', 'Decision']],
+          body: decisionTableBody,
+          styles: { fontSize: 12, cellPadding: 3, halign: 'left' },
+          columnStyles: {
+            0: { cellWidth: 60 }
+          },
+          theme: 'grid'
+        });
+
+
     pdf.save(`${title}.pdf`);
   };
 
@@ -590,8 +617,9 @@ Nftgraph.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   selectedPosition: PropTypes.string.isRequired,
-    setShowAi: PropTypes.func.isRequired,
-    setStatData: PropTypes.func.isRequired,
+  setShowAi: PropTypes.func.isRequired,
+  setStatData: PropTypes.func.isRequired,
+  resp: PropTypes.string.isRequired,
 };
 
 export default Nftgraph;

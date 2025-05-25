@@ -3,7 +3,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+from rapports_activite.models import Rapports_activite
+from django.utils import timezone
+from django.db import transaction
 from auth_app.models import CustomUser
 from .models import TempsTest
 
@@ -109,6 +111,28 @@ def upload_test_time_results(request):
             'message': 'Aucun fichier valide traité',
             'errors': errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
+    today_date = timezone.localdate()
+
+    try:
+        with transaction.atomic():
+            rapport_quotidien, created = Rapports_activite.objects.get_or_create(
+                utilisateur=user,
+                date_rapport=today_date,
+                defaults={
+                    'nombre_logs_Conduit' : 0,
+                    'nombre_logs_Divers'  : 0,
+                    'nombre_logs_Temps' : 0,
+                    'nombre_logs_Env' : 0,
+                }
+            )
+
+            # Mettre à jour SEULEMENT le compteur du Test 1
+            rapport_quotidien.nombre_logs_Temps += total_count
+            rapport_quotidien.save()
+
+    except Exception as e:
+        print(f"Erreur lors de la mise à jour du rapport quotidien: {e}")
 
     return Response({
         'status': 'success',

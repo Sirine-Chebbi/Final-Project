@@ -102,6 +102,7 @@ class UserListView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAdminUser]
 
+
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer

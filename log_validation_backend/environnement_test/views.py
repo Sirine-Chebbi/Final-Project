@@ -8,7 +8,9 @@ from rest_framework.decorators import api_view
 from auth_app.models import CustomUser
 
 from .models import TestCondition
-
+from django.utils import timezone
+from django.db import transaction
+from rapports_activite.models import Rapports_activite
 
 @api_view(['POST'])
 def upload_test_condition(request):
@@ -24,6 +26,7 @@ def upload_test_condition(request):
         return Response({"error": "Aucun fichier trouvé"}, status=400)
 
     files = request.FILES.getlist('file')
+    file_count = len(files)
 
     for file in files:
         content = file.read().decode('latin-1')
@@ -65,6 +68,28 @@ def upload_test_condition(request):
                 1).strip() if firmware_match else None,
             created_by=user
         )
+
+        today_date = timezone.localdate()
+
+        try:
+            with transaction.atomic():
+                rapport_quotidien, created = Rapports_activite.objects.get_or_create(
+                    utilisateur=user,
+                    date_rapport=today_date,
+                    defaults={
+                        'nombre_logs_Conduit' : 0,
+                        'nombre_logs_Divers'  : 0,
+                        'nombre_logs_Temps' : 0,
+                        'nombre_logs_Env' : 0,
+                    }
+                )
+
+                # Mettre à jour SEULEMENT le compteur du Test 1
+                rapport_quotidien.nombre_logs_Env += file_count
+                rapport_quotidien.save()
+
+        except Exception as e:
+            print(f"Erreur lors de la mise à jour du rapport quotidien: {e}")
 
     return Response({"status": "success", "message": "Données extraites et sauvegardées avec succès"})
 

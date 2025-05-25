@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef } from "react";
 import Tooltipinf from "../../Tooltipinf";
 import {
   Chart as ChartJS,
@@ -27,7 +27,17 @@ ChartJS.register(
   Title
 );
 
-const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
+const MeasureGraph = ({
+    filteredResults, 
+    selectedCaisson, 
+    selectedMeasure,
+    onMeasureChange,
+    minLimit,      
+    maxLimit,      
+    onMinLimitChange, 
+    onMaxLimitChange, 
+    onCancelLimits,  
+  }, ref) => {
   const MEASURES = [
     { value: "freq_error_avg", label: "Freq Error Avg (ppm)" },
     { value: "lo_leakage_dbc", label: "LO Leakage DBC VSA1 (dBc)" },
@@ -89,16 +99,6 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
     { value: "power_pre_max", label: "Power PRE Max" },
     { value: "power_pre_min", label: "Power PRE Min" },
   ];
-
-  const [selectedMeasure, setSelectedMeasure] = useState(MEASURES[0].value);
-  const [minLimit, setMinLimit] = useState("");
-  const [maxLimit, setMaxLimit] = useState("");
-
-  // Fonction pour annuler les limites
-  const handleCancelLimits = () => {
-    setMinLimit("");
-    setMaxLimit("");
-  };
 
   const calculateStats = (data, measure) => {
     if (!data || data.length === 0) return null;
@@ -317,6 +317,8 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
     scales: {
       x: {
         type: "linear",
+        suggestedMin: minLimit ? parseFloat(minLimit) : undefined,
+        suggestedMax: maxLimit ? parseFloat(maxLimit) : undefined, 
         title: {
           display: true,
           text: `${currentMeasure?.label.split("(")[0].trim()} (${unit})`,
@@ -364,8 +366,6 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
               label += ": ";
             }
             if (context.dataset.type === "bar") {
-              // Pour l'histogramme, affiche la valeur du bin et le compte
-              // S'assure que chartData.datasets[0].data[1]?.y est géré en cas de données vides ou stdDev=0
               const maxGaussianY = chartData.datasets[0]?.data[1]?.y || 1;
               label += `Valeur: ${context.parsed.x.toFixed(2)}, Fréquence: ${
                 context.parsed.y / maxGaussianY
@@ -390,12 +390,11 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
               {filteredResults[0]?.frequence ? filteredResults[0]?.frequence + "Hz" : "N/A"} - Antenne{" "}
               {filteredResults[0]?.ant || "N/A"} || Caisson: {selectedCaisson}
             </h2>
-
-            {/* Sélecteur de mesure */}
+          
             <select
               value={selectedMeasure}
-              onChange={(e) => setSelectedMeasure(e.target.value)}
-              className="bg-gray-700 text-white p-2 rounded"
+              onChange={(e) => onMeasureChange(e.target.value)}
+              className="bg-gray-700 text-white p-2 rounded outline-none"
             >
               {MEASURES.map((measure) => (
                 <option key={measure.value} value={measure.value}>
@@ -405,7 +404,7 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
             </select>
           </div>
           <br />
-          {/* Section de saisie manuelle des limites avec bouton Annuler (toujours affiché) */}
+          
           <div className="flex items-center gap-4">
             <label htmlFor="minLimit" className="text-white">
               Limite Min:
@@ -414,8 +413,8 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
               type="number"
               id="minLimit"
               value={minLimit}
-              onChange={(e) => setMinLimit(e.target.value)}
-              className="bg-gray-700 text-white p-2 rounded w-24"
+              onChange={(e) => onMinLimitChange(e.target.value)}
+              className="bg-gray-700 text-white p-2 rounded w-24 outline-none"
               placeholder="Ex: -10"
             />
             <label htmlFor="maxLimit" className="text-white">
@@ -425,14 +424,14 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
               type="number"
               id="maxLimit"
               value={maxLimit}
-              onChange={(e) => setMaxLimit(e.target.value)}
-              className="bg-gray-700 text-white p-2 rounded w-24"
+              onChange={(e) => onMaxLimitChange(e.target.value)}
+              className="bg-gray-700 text-white p-2 rounded w-24 outline-none"
               placeholder="Ex: 10"
             />
             {/* Bouton Annuler toujours visible */}
             <button
-              onClick={handleCancelLimits}
-              className="bg-red-600 hover:bg-red-700 text-white p-2 rounded transition duration-200"
+              onClick={onCancelLimits}
+              className="bg-red-500 hover:bg-gray-800 outline-none hover:text-red-500 border-2 border-red-500 cursor-pointer font-medium  p-2 rounded-lg transition duration-200"
             >
               Annuler
             </button>
@@ -452,7 +451,7 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
         )}
         {stats && stats.stdDev === 0 && (
           <div className="bg-yellow-700 text-white p-3 rounded-lg mb-4 text-center">
-            L'écart-type pour la mesure sélectionnée est de 0. Le graphique
+            L&apos;écart-type pour la mesure sélectionnée est de 0. Le graphique
             affiche une distribution à valeur unique. Les indices de capabilité
             ne sont pas pertinents.
           </div>
@@ -608,6 +607,13 @@ const MeasureGraph = ({ filteredResults, selectedCaisson }, ref) => {
 MeasureGraph.propTypes = {
   filteredResults: PropTypes.array.isRequired,
   selectedCaisson: PropTypes.string.isRequired,
+   selectedMeasure: PropTypes.string.isRequired,
+  onMeasureChange: PropTypes.func.isRequired,
+  minLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  maxLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  onMinLimitChange: PropTypes.func.isRequired,
+  onMaxLimitChange: PropTypes.func.isRequired,
+  onCancelLimits: PropTypes.func.isRequired,
 };
 
 export default forwardRef(MeasureGraph);

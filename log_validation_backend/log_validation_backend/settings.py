@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'rapports_activite',
     'wifi_conduit',
     'wifi_nft',
     'environnement_test',

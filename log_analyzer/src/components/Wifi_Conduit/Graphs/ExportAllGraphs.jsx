@@ -6,6 +6,7 @@ import Evmgraph from './Evmgraph';
 import Rssigraph from './Rssigraph';
 import Deltagraph from './Deltagraph';
 import PropTypes from 'prop-types';
+import MeasureGraph from './MeasureGraph';
 
 const GraphWithRef = ({ Component, ...props }, ref) => (
   <div ref={ref}>
@@ -17,17 +18,18 @@ GraphWithRef.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
 
-const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
+const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results, currentSelectedMeasureForExport, minLimitForExport, maxLimitForExport, power, evm, rx, rssi }) => {
 
   const nbr = filteredResults.length;
   const nbrdelta = Results.length;
-  let nombre=0;
+  let nombre = 0;
 
   const chartRefs = {
     power: useRef(),
     evm: useRef(),
     rssi: useRef(),
-    delta: useRef()
+    delta: useRef(),
+    mesure: useRef()
   };
 
   const charts = [
@@ -54,6 +56,21 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
       ref: chartRefs.delta,
       Component: Deltagraph,
       props: { Results, selectedCaisson }
+    },
+    {
+      name: 'Mesuregraph',
+      ref: chartRefs.mesure,
+      Component: MeasureGraph,
+      props: {
+        filteredResults, selectedCaisson,
+        selectedMeasure: currentSelectedMeasureForExport,
+        onMeasureChange: () => { },
+        minLimit: minLimitForExport,
+        maxLimit: maxLimitForExport,
+        onMinLimitChange: () => { },
+        onMaxLimitChange: () => { },
+        onCancelLimits: () => { },
+      }
     }
   ];
 
@@ -89,15 +106,15 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
     // Updated function with conditional capability extraction
     const captureGraphData = async (chart, title, extractCapability = true) => {
-      const ref = chart.ref; // fixed this line
-    
+      const ref = chart.ref;
+
       if (!ref?.current) return null;
-    
+
       const canvas = ref.current.querySelector('canvas');
       if (!canvas) return null;
-    
+
       const imgData = canvas.toDataURL('image/png', 1.0);
-    
+
       const stats = {};
       const statsContainer = ref.current.querySelector('.grid.grid-cols-4');
       if (statsContainer) {
@@ -107,9 +124,19 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
           if (label && value) stats[label] = value;
         });
       }
-    
+
+      if (title === 'Analyse Mesure') {
+        const minInput = ref.current.querySelector('#minLimit');
+        const maxInput = ref.current.querySelector('#maxLimit');
+
+        if (minInput && maxInput) {
+          stats["minLimit"] = minInput.value || '';
+          stats["maxLimit"] = maxInput.value || '';
+        }
+      }
+
       const capabilityIndices = extractCapability ? extractCapabilityIndices(ref) : {};
-    
+
       return {
         imgData,
         title,
@@ -118,8 +145,8 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
       };
     };
 
-    // Capturer les données des 4 graphiques
     const graphData = await Promise.all([
+      captureGraphData(charts[4], 'Analyse Mesure'),
       captureGraphData(charts[0], 'Analyse Power'),
       captureGraphData(charts[1], 'Analyse EVM'),
       captureGraphData(charts[2], 'Analyse RSSI'),
@@ -128,6 +155,8 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
     // Génération des pages PDF
     graphData.forEach((data, index) => {
+
+      console.log(data);
 
       if (index > 0) {
         pdf.addPage('landscape');
@@ -141,11 +170,16 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
       if (data.title == "Analyse Rx GainError") {
         pdf.text(`${Results[0]?.type_gega}Hz - Antenne ${Results[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
-        nombre=nbrdelta;
+        nombre = nbrdelta;
+      }
+
+      else if (data.title == "Analyse Mesure") {
+        pdf.text(` ${currentSelectedMeasureForExport} ${Results[0]?.type_gega}Hz - Antenne ${Results[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
+        nombre = nbrdelta;
       }
       else {
         pdf.text(`${filteredResults[0]?.frequence}Hz - Antenne ${filteredResults[0]?.ant} || Caisson: ${selectedCaisson}`, margin, margin + 10);
-        nombre=nbr;
+        nombre = nbr;
       }
 
       pdf.addImage(data.imgData, 'PNG', margin, margin + 40, imgWidth, imgHeight);
@@ -156,7 +190,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
       pdf.setFontSize(13);
       pdf.setFont("helvetica", "bold");
-      pdf.text("Caractéristiques du procédé", tableX, tableY+10);
+      pdf.text("Caractéristiques du procédé", tableX, tableY + 10);
       tableY += 5;
 
       autoTable(pdf, {
@@ -167,8 +201,9 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
           ["Nombre d'échantillon", nombre],
           ['Moyenne', data.stats['Moyenne']],
           ['Écart-type', data.stats['Écart-type']],
-          ['LSI', data.stats['Minimum'] ],
-          ['LSS', data.stats['Maximum'] ]
+          ['LSI', data.stats['Minimum'] || data.stats['minLimit']],
+          ['LSS', data.stats['Maximum'] || data.stats['maxLimit']],
+
         ],
         styles: {
           fontSize: 11,
@@ -181,7 +216,7 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
       // Tableau des indicateurs de capabilité
       tableY = pdf.lastAutoTable.finalY + 10;
-      pdf.text("Capabilité globale", tableX, tableY+10);
+      pdf.text("Capabilité globale", tableX, tableY + 10);
       tableY += 5;
 
       autoTable(pdf, {
@@ -218,6 +253,33 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
 
     });
 
+    pdf.addPage('landscape');
+    pdf.setFontSize(16);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Les décisions de l’IA', margin, margin);
+
+    // Example table data for "AI decisions"
+    const decisions = [
+      { type: 'Analyse Power', decision: power },
+      { type: 'Analyse EVM', decision: evm },
+      { type: 'Analyse RSSI', decision: rssi },
+      { type: 'Analyse Rx GainError', decision: rx },
+    ];
+
+    // Convert decisions into body array
+    const decisionTableBody = decisions.map(row => [row.type, row.decision]);
+
+    autoTable(pdf, {
+      startY: margin + 10,
+      head: [['Type de Graphe', 'Decision']],
+      body: decisionTableBody,
+      styles: { fontSize: 12, cellPadding: 3, halign: 'left' },
+      columnStyles: {
+        0: { cellWidth: 60 }
+      },
+      theme: 'grid'
+    });
+
 
     pdf.save(`rapport_complet_${selectedCaisson}_${new Date().toISOString().slice(0, 10)}.pdf`);
   };
@@ -250,6 +312,19 @@ const ExportAllGraphs = ({ filteredResults, selectedCaisson, Results }) => {
           Results={Results}
           selectedCaisson={selectedCaisson}
         />
+        <GraphWithRef
+          ref={chartRefs.mesure}
+          Component={MeasureGraph}
+          filteredResults={filteredResults}
+          selectedCaisson={selectedCaisson}
+          selectedMeasure={currentSelectedMeasureForExport}
+          onMeasureChange={() => { }}
+          minLimit={minLimitForExport}
+          maxLimit={maxLimitForExport}
+          onMinLimitChange={() => { }}
+          onMaxLimitChange={() => { }}
+          onCancelLimits={() => { }}
+        />
       </div>
 
       <button
@@ -266,6 +341,14 @@ ExportAllGraphs.propTypes = {
   filteredResults: PropTypes.array.isRequired,
   selectedCaisson: PropTypes.string.isRequired,
   Results: PropTypes.array.isRequired,
+  currentSelectedMeasureForExport: PropTypes.string.isRequired,
+  minLimitForExport: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  maxLimitForExport: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  power: PropTypes.string,
+  evm: PropTypes.string,
+  rx: PropTypes.string,
+  rssi: PropTypes.string
+
 };
 
 export default ExportAllGraphs;
