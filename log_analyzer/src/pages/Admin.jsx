@@ -2,7 +2,7 @@ import Nav from '../components/Admin/Nav';
 import Tableuser from '../components/Admin/Tableuser';
 import Ajouteru from "../components/Admin/Ajouteru";
 import Deleteuser from '../components/Admin/Deleteuser';
-
+import Track from '../components/Admin/Track';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import api from "../Services/api"
@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from "react"
 import { Toast } from "primereact/toast";
 import Modifieruser from '../components/Admin/Modiferuser';
 import Adminprofile from '../components/Admin/Adminprofile';
-import Track from '../components/Admin/track';
+
 
 
 const Admin = () => {
