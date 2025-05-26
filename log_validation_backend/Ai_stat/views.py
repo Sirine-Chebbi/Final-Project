@@ -38,7 +38,7 @@ def analyze_data(request):
 
     try:
         response = client.chat.completions.create(
-            model="meta-llama/llama-4-maverick:free", 
+            model="deepseek/deepseek-r1:free", 
             messages=[
                 {"role": "user", "content": prompt}
             ]
