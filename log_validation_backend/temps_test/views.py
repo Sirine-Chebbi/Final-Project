@@ -3,9 +3,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rapports_activite.models import Rapports_activite
 from django.utils import timezone
 from django.db import transaction
+from rapports_activite.models import Rapports_activite
 from auth_app.models import CustomUser
 from .models import TempsTest
 
@@ -15,26 +15,29 @@ def extract_test_time_data(content, filename=None):
         re.IGNORECASE
     )
 
-    # Pattern pour le temps de test principal
+    # Pattern for the primary test time (e.g., MES_XXX_Temps_Test)
     time_pattern = re.compile(
         r'\[(?P<heure>\d{2}):\d{2}:\d{2}:\d{3}\].*?'
-        r'Mesure\s*<(?P<mesure>MES_\w+_Temps_Test)>\s*:[^\n]Status\s(?P<status>\d+).*?\n'
+        r'Mesure\s*<(?P<mesure>MES_\w+_Temps_Test)>\s*:[^\n]+?Status\s(?P<status>\d+).*?\n'
         r'(?:.*?\n)+?'
         r'\s*(?P<valeur>-?\d+\.\d+)\s*(?P<unite>[a-zA-Z/%°]+)?\s*(?:\n|$)',
         re.DOTALL
     )
 
-    # Pattern pour la durée de test alternative (BTX)
+    # Pattern for the alternative test duration (MES_BTX_DUREE_TEST)
     duree_pattern = re.compile(
         r'\[(?P<heure>\d{2}):\d{2}:\d{2}:\d{3}\].*?'
-        r'Mesure\s*<MES_BTX_DUREE_TEST>\s*:[^\n]Status\s(?P<status>\d+).*?\n'
+        r'Mesure\s*<(?P<mesure>MES_BTX_DUREE_TEST)>\s*:[^\n]+?Status\s(?P<status>\d+).*?\n'
         r'(?:.*?\n)+?'
         r'\s*(?P<valeur>-?\d+\.\d+)\s*s\s*(?:\n|$)',
         re.DOTALL
     )
 
-    # Pattern pour extraire la date du nom de fichier (format JJ_MM_AA)
-    date_pattern = re.compile(r'.SLOT1_(\d{2})(\d{2})(\d{2})_.')
+    # --- MODIFICATION HERE ---
+    # Pattern to extract the date from the filename (format DD_MM_YY)
+    # Changed to .*?SLOT1_ to match any characters non-greedily before SLOT1_
+    date_pattern = re.compile(r'.*?SLOT\d+(\d{2})(\d{2})(\d{2})_') 
+    # --- END MODIFICATION ---
 
     cie_match = cie_pattern.search(content)
     if not cie_match:
@@ -45,38 +48,20 @@ def extract_test_time_data(content, filename=None):
 
     date = None
     if filename:
-        date_match = date_pattern.match(filename)
+        # --- MODIFICATION HERE ---
+        date_match = date_pattern.search(filename) # Use .search() instead of .match()
+        # --- END MODIFICATION ---
         if date_match:
             day, month, year = date_match.groups()
-            date = f"20{year}-{month}-{day}"  
+            date = f"20{year}-{month}-{day}"
 
     results = []
     
-    # D'abord chercher les mesures de temps de test principales
+    # First, look for primary test time measures
     time_matches = list(time_pattern.finditer(content))
     
-    # Si aucune mesure principale trouvée, chercher les mesures de durée alternative
-    if not time_matches:
-        for match in duree_pattern.finditer(content):
-            try:
-                full_time = match.group('heure')
-                hour_only = full_time.split(':')[0]
-
-                results.append({
-                    'reference': reference,
-                    'nom': nom,
-                    'heure': hour_only,
-                    'mesure': 'MES_BTX_DUREE_TEST',  # Nom de mesure fixe
-                    'status': int(match.group('status')),
-                    'valeur': float(match.group('valeur')),
-                    'unite': 's',  # Unité fixe pour cette mesure
-                    'source_file': filename,
-                    'date': date 
-                })
-            except (ValueError, AttributeError):
-                continue
-    else:
-        # Traiter les mesures principales comme avant
+    if time_matches:
+        # Process primary measures if found
         for match in time_matches:
             try:
                 full_time = match.group('heure')
@@ -91,9 +76,31 @@ def extract_test_time_data(content, filename=None):
                     'valeur': float(match.group('valeur')),
                     'unite': match.group('unite') if match.group('unite') else None,
                     'source_file': filename,
-                    'date': date 
+                    'date': date
                 })
-            except (ValueError, AttributeError):
+            except (ValueError, AttributeError) as e:
+                print(f"Error processing primary time match: {e} - Match: {match.groups()}")
+                continue
+    else:
+        # If no primary measures are found, look for alternative duration measures
+        for match in duree_pattern.finditer(content):
+            try:
+                full_time = match.group('heure')
+                hour_only = full_time.split(':')[0]
+
+                results.append({
+                    'reference': reference,
+                    'nom': nom,
+                    'heure': hour_only,
+                    'mesure': match.group('mesure'),
+                    'status': int(match.group('status')),
+                    'valeur': float(match.group('valeur')),
+                    'unite': 's',
+                    'source_file': filename,
+                    'date': date
+                })
+            except (ValueError, AttributeError) as e:
+                print(f"Error processing BTX duration match: {e} - Match: {match.groups()}")
                 continue
 
     return results
@@ -114,7 +121,7 @@ def upload_test_time_results(request):
 
     user = request.user
 
-    # Supprimer les anciennes données de l'utilisateur connecté
+    # Delete old data from the connected user
     TempsTest.objects.filter(created_by=user).delete()
 
     files = request.FILES.getlist('files')
@@ -128,7 +135,7 @@ def upload_test_time_results(request):
                 errors.append(f"Fichier {uploaded_file.name}: aucune mesure de temps valide trouvée")
                 continue
 
-            # Ajouter created_by=user à chaque élément
+            # Add created_by=user to each item
             for item in time_data:
                 item['created_by'] = user
 
@@ -146,6 +153,29 @@ def upload_test_time_results(request):
             'message': 'Aucun fichier valide traité',
             'errors': errors
         }, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    today_date = timezone.localdate()
+
+    try:
+        with transaction.atomic():
+            rapport_quotidien, created = Rapports_activite.objects.get_or_create(
+                utilisateur=user,
+                date_rapport=today_date,
+                defaults={
+                    'nombre_logs_Conduit' : 0,
+                    'nombre_logs_Divers'  : 0,
+                    'nombre_logs_Temps' : 0,
+                    'nombre_logs_Env' : 0,
+                }
+            )
+
+            # Mettre à jour SEULEMENT le compteur du Test 1
+            rapport_quotidien.nombre_logs_Temps += len(successful_files)
+            rapport_quotidien.save()
+
+    except Exception as e:
+        print(f"Erreur lors de la mise à jour du rapport quotidien: {e}")
 
     return Response({
         'status': 'success',
@@ -159,7 +189,7 @@ def upload_test_time_results(request):
 @api_view(['GET'])
 def get_test_time_results(request):
     user = request.user
-    group_by = request.GET.get('group_by', 'hour')  # Par défaut: regroupement par heure
+    group_by = request.GET.get('group_by', 'hour')
     
     queryset = TempsTest.objects.filter(created_by=user).exclude(status=2)
 
@@ -168,15 +198,12 @@ def get_test_time_results(request):
                         status=status.HTTP_404_NOT_FOUND)
 
     if group_by == 'day':
-        # Regroupement par jour
         results = []
-        # Implémentez la logique de regroupement par jour ici
+        # Implement daily grouping logic here
     elif group_by == 'month':
-        # Regroupement par mois
         results = []
-        # Implémentez la logique de regroupement par mois ici
+        # Implement monthly grouping logic here
     else:
-        # Par défaut: regroupement par heure (comportement actuel)
         results = [
             {
                 "reference": result.reference,
