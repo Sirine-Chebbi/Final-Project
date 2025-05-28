@@ -27,11 +27,13 @@ def extract_test_time_data(content, filename=None):
     # Pattern for the alternative test duration (MES_BTX_DUREE_TEST)
     duree_pattern = re.compile(
         r'\[(?P<heure>\d{2}):\d{2}:\d{2}:\d{3}\].*?'
-        r'Mesure\s*<(?P<mesure>MES_BTX_DUREE_TEST)>\s*:[^\n]+?Status\s(?P<status>\d+).*?\n'
+        r'Mesure\s*<(?P<mesure>\w*DUREE_TEST\w*)>\s*:[^\n]+?Status\s(?P<status>\d+).*?\n'
         r'(?:.*?\n)+?'
         r'\s*(?P<valeur>-?\d+\.\d+)\s*s\s*(?:\n|$)',
         re.DOTALL
     )
+
+    
 
     # --- MODIFICATION HERE ---
     # Pattern to extract the date from the filename (format DD_MM_YY)
