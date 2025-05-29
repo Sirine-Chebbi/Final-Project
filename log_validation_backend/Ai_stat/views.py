@@ -38,7 +38,7 @@ def analyze_data(request):
 
     try:
         response = client.chat.completions.create(
-            model="deepseek/deepseek-r1:free", 
+            model="deepseek/deepseek-prover-v2:free", 
             messages=[
                 {"role": "user", "content": prompt}
             ]
