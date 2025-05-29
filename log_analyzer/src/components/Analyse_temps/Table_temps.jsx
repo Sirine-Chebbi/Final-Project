@@ -35,6 +35,12 @@ const Table_temps = ({ tempsResults }) => {
                 scope="col"
                 className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap"
               >
+                Date
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-4 text-left text-xl font-bold text-cyan-400 whitespace-nowrap"
+              >
                 Référance
               </th>
               <th
@@ -81,6 +87,9 @@ const Table_temps = ({ tempsResults }) => {
                 <tr key={index} className="hover:bg-gray-800">
                   <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
                     {result.source_file}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
+                    {result.date}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-lg text-white">
                     {result.reference}
