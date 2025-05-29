@@ -11,9 +11,20 @@ const TableNFT = ({
   setSelectedMin,
   setSelectedMax,
   setFilteredResults,
+  selectedStat
 }) => {
+
   const filteredResults = useMemo(() => {
     let results = [...testResults];
+
+    console.log(selectedStat);
+
+    if (selectedStat != null) {
+      results = results.filter(
+        (result) =>
+          String(result.status).toLowerCase() === String(selectedStat).toLowerCase()
+      );
+    }
 
     if (mesure) {
       results = results.filter(
@@ -38,7 +49,7 @@ const TableNFT = ({
     }
 
     return results;
-  }, [testResults, mesure, antenne, bande]);
+  }, [testResults, mesure, antenne, bande, selectedStat]);
 
   const { minLimit, maxLimit } = useMemo(() => {
     if (filteredResults.length === 0) return { minLimit: 0, maxLimit: 0 };
@@ -91,7 +102,7 @@ const TableNFT = ({
       >
         Exporter en Excel
       </button>
-      <div className="mb-10 flex-auto overflow-x-auto rounded-xl h-160 border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 mt-10 bg-gray-900 max-h-max hover:scale-102 duration-200">
+      <div className="mb-10 flex-auto overflow-x-auto rounded-xl h-160 border-2 border-cyan-400 p-6 hover:shadow-2xl hover:shadow-cyan-400 mt-5 bg-gray-900 max-h-max hover:scale-102 duration-200">
         <table className="min-w-full divide-y divide-cyan-400">
           <thead className="bg-gray-900">
             <tr>
@@ -239,6 +250,7 @@ TableNFT.propTypes = {
   setSelectedMin: PropTypes.func.isRequired,
   setSelectedMax: PropTypes.func.isRequired,
   setFilteredResults: PropTypes.func.isRequired,
+  selectedStat: PropTypes.string,
 };
 
 TableNFT.defaultProps = {

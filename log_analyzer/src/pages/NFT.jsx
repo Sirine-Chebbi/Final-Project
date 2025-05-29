@@ -24,6 +24,8 @@ const NFT = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showAi, setShowAi] = useState(false);
   const [statData, setStatData] = useState({});
+  const [selectedStat, setSelectedStatus] = useState(null); 
+  
   
   const [resp, setResp] = useState("");
   const type = "NFT"
@@ -87,6 +89,7 @@ const NFT = () => {
           max={max}
           min={min}
           setSelectedPosition={setSelectedPosition}
+          setSelectedStatus={setSelectedStatus}
         />
         <TableNFT
           testResults={testResults}
@@ -97,6 +100,7 @@ const NFT = () => {
           bande={bande}
           setFilteredResults={setFilteredResults}
           setSelectedPosition={setSelectedPosition}
+          selectedStat={selectedStat}
         />
         <Nftgraph 
           filteredResults={filteredResults} 

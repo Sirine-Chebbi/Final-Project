@@ -9,22 +9,34 @@ function NftFilter({
   max,
   min,
   setSelectedPosition,
-
+  setSelectedStatus
 }) {
   const [ant, setAnt] = useState("");
   const [mesure, setMesure] = useState("");
   const [bande, setBande] = useState("");
   const [position, setPosition] = useState("");
   const inputRef = useRef(null);
+  const [selectedStat, setSelectedStat] = useState(null);
 
   const handleClickAntenne = (value) => {
     setSelectedAntenne(value);
   };
+
   const handleClickMesure = (value) => {
     setSelectedMesure(value);
   };
+
   const handleClickBande = (value) => {
     setSelectedBande(value);
+  };
+
+  const handleClickStatus = (value) => {
+    if (value == "3") {
+          setSelectedStatus(null);
+    }
+    else {
+      setSelectedStatus(value);
+    }
   };
 
   const Annuler = () => {
@@ -41,6 +53,13 @@ function NftFilter({
     setSelectedBande("");
     setPosition("");
   };
+
+  const AnnulerStatue = () => {
+    setSelectedStat(null);
+    setSelectedStatus(null);
+    document.getElementById("stat").selectedIndex = 0;
+  }
+
   const annulerPosition = () => {
     if (inputRef.current) {
       inputRef.current.value = "";
@@ -149,6 +168,7 @@ function NftFilter({
               handleClickAntenne(ant) ||
                 handleClickBande(bande) ||
                 handleClickMesure(mesure);
+                AnnulerStatue();
             }}
             className="text-black border-3 hover:border-cyan-400 hover:text-cyan-400  bg-cyan-400 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
           >
@@ -163,6 +183,31 @@ function NftFilter({
             Annuler
           </button>
         </div>
+      </div>
+      <div className="mt-5 flex justify-self-end gap-3">
+        <div className="p-3 border-2 rounded-2xl border-cyan-400 grid place-items-center">
+          <select onChange={(e) => setSelectedStat(e.target.value)} name="" id="stat" className="text-cyan-400 text-xl outline-none w-50">
+            <option className="text-black" value="3">Tout les Status</option>
+            <option className="text-black" value="0">Statut 0</option>
+            <option className="text-black" value="1">Statut 1</option>
+          </select>
+        </div>
+        <button
+          onClick={() => {
+            handleClickStatus(selectedStat)
+          }}
+          className="text-black border-3 hover:border-cyan-400 hover:text-cyan-400  bg-cyan-400 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
+        >
+          Filtrer
+        </button>
+        <button
+          onClick={() => {
+            AnnulerStatue();
+          }}
+          className="text-black border-3 hover:border-red-500 hover:text-red-500  bg-red-500 hover:bg-gray-950 focus:outline-none h-15 font-medium rounded-2xl w-30 text-xl px-4 py-2 cursor-pointer"
+        >
+          Annuler
+        </button>
       </div>
     </>
   );
@@ -180,6 +225,7 @@ NftFilter.propTypes = {
   max: PropTypes.string.isRequired,
   min: PropTypes.string.isRequired,
   setSelectedPosition: PropTypes.string,
+  setSelectedStatus: PropTypes.func.isRequired,
 };
 
 export default NftFilter;

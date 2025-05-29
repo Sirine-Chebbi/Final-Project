@@ -38,8 +38,7 @@ def extract_test_time_data(content, filename=None):
     # --- MODIFICATION HERE ---
     # Pattern to extract the date from the filename (format DD_MM_YY)
     # Changed to .*?SLOT1_ to match any characters non-greedily before SLOT1_
-    date_pattern = re.compile(r'.*?SLOT\d+(\d{2})(\d{2})(\d{2})_') 
-    # --- END MODIFICATION ---
+    date_pattern = re.compile(r'.*?SLOT\d+_(\d{2})_(\d{2})_(\d{2})_')    # --- END MODIFICATION ---
 
     cie_match = cie_pattern.search(content)
     if not cie_match:
